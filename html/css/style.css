@@ -95,10 +95,13 @@ html { scroll-behavior: smooth; }
   font-weight: 600;
   font-size: 1rem;
   letter-spacing: 0.5px;
-  transition: color 0.2s;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
   position: relative;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid rgba(255,149,0,0.4);
+  border-radius: 6px;
 }
-.nav-link:hover { color: #ff9500; }
+.nav-link:hover { color: #ff9500; border-color: #ff9500; background: rgba(255,149,0,0.08); }
 .nav-link::after {
   content: '';
   position: absolute; bottom: -2px; left: 0;

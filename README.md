@@ -4,24 +4,21 @@ A Web3 project that merges meme culture with real-world utility through a compre
 
 ## 📂 Project Structure (English Categories)
 
-All files are now organized into logical directories:
+All web‑facing assets are grouped under **html/** so the static server can serve them with simple relative paths.
 
 ```
 root/
-├── html/                 # HTML pages
+├── html/                 # Root served by the HTTP server
 │   ├── index.html        # Main landing page
 │   ├── about.html        # About page (English)
-│   └── whitepaper.html   # Full technical whitepaper (English)
-├── assets/               # Image and media assets
-│   ├── banner.png        # Hero background image
-│   └── logo.png          # Project logo (1:1 aspect ratio)
-├── css/                  # Styling files
-│   └── style.css         # Main stylesheet with modern dark theme
-├── js/                   # JavaScript files
-│   └── script.js         # Interactivity: menu toggle, scroll reveal, click effects
-├── scripts/              # Utility scripts
-│   ├── server.py         # Backend server (optional)
-│   └── start-server.sh   # Convenience script to launch the dev server
+│   ├── whitepaper.html   # Full technical whitepaper (English)
+│   ├── assets/           # Image & media assets
+│   │   ├── banner.png
+│   │   └── logo.png
+│   ├── css/              # Styling files
+│   │   └── style.css
+│   └── js/               # JavaScript files
+│       └── script.js
 ├── backup/               # Auto‑generated backups of original files before edits
 ├── .gitignore            # Git ignore patterns
 ├── README.md             # Project documentation (this file)
@@ -36,33 +33,22 @@ root/
    cd Pante
    ```
 
-2. **Install dependencies (none required)**
+2. **Run the local server (served from html/)**
    ```bash
-   # No npm or other dependencies needed – static site
-   ```
-
-3. **Run the local server**
-   ```bash
-   # Option 1: Using Python (built‑in)
+   cd html
    python3 -m http.server 12345 --bind 0.0.0.0
-
-   # Option 2: Using convenience script
-   ./scripts/start-server.sh
    ```
 
-4. **Open the application**
-   Navigate to `http://localhost:12345` in your web browser.
+3. **Open the application**
+   Navigate to `http://localhost:12345/` in your web browser.
 
 ## 📂 Directory Purpose
 
-- **html/** – Contains all HTML files: the landing page (`index.html`), the About page (`about.html`), and the full Whitepaper (`whitepaper.html`).
-- **assets/** – Holds image and media resources used by the pages (`banner.png`, `logo.png`).
-- **css/** – Stores the main stylesheet (`style.css`) that defines the dark, cyber‑inspired aesthetic, scroll effects, and responsive layout.
-- **js/** – Contains the client‑side JavaScript (`script.js`) that implements menu toggling, smooth scrolling, scroll‑reveal animations, and click ripple effects.
-- **scripts/** – Optional helper scripts for server startup and other command‑line tasks.
+- **html/** – Contains all HTML, CSS, JS, and assets. The HTTP server is run from this directory, so relative paths (e.g. `css/style.css`, `assets/logo.png`) resolve correctly.
+- **html/assets/** – Holds image and media resources used by the pages (`banner.png`, `logo.png`).
+- **html/css/** – Stores the main stylesheet (`style.css`) that defines the dark, cyber‑inspired aesthetic, scroll effects, and responsive layout.
+- **html/js/** – Contains the client‑side JavaScript (`script.js`) that implements menu toggling, smooth scrolling, scroll‑reveal animations, and click ripple effects.
 - **backup/** – Automatically stores copies of original files before any modifications, ensuring you can revert if needed.
-- **backup/** – Contains original versions of files prior to edits.
-- **scripts/** – Optional helper scripts for server startup and other command‑line tasks.
 - **README.md** – This documentation file.
 - **structure.md** – Detailed description of the project layout and file responsibilities.
 
@@ -73,11 +59,10 @@ root/
 - **Responsive Menu**: Side menu slides in from the right; menu links are displayed in white for clarity.
 - **Click Effects**: Subtle ripple animations on feature cards and menu items.
 - **Thin Border**: All major sections have a thin orange border (`#ff9500`) for visual distinction.
-- **Transparent Borders**: All main sections have a thin orange border (`#ff9500`) for visual distinction.
 
 ## 🌐 Accessing the Live Demo
 
-The application runs on a local server at port **12345**. After starting the server, open:
+The application runs on a local server at port **12345** when started from the `html/` directory. After starting the server, open:
 
 ```
 http://localhost:12345
@@ -93,13 +78,9 @@ in your preferred web browser.
 
 ## 🛠️ Customization
 
-- Adjust colors and animations in `css/style.css`.
-- Modify scroll effects by editing the `.reveal` CSS class and `js/script.js`.
+- Adjust colors and animations in `html/css/style.css`.
+- Modify scroll effects by editing the `.reveal` CSS class and `html/js/script.js`.
 - Add new sections to the landing page by updating `html/index.html`.
-
-## 📜 License
-
-This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 

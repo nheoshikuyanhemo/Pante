@@ -1,27 +1,22 @@
 # Pante Web3 dApp – Structure Documentation
 
-This document describes the organized folder layout and the purpose of each file in the Pante project. All categories are in English for clarity and consistency.
+This document describes the organized folder layout and the purpose of each file in the Pante project. All web‑facing assets now live under **html/** so the static server can be run from that directory and everything resolves with simple relative paths.
 
 ## 📂 Directory Layout
 
 ```
 root/
-├── html/                 # HTML pages
+├── html/                 # Root served by the HTTP server (run: cd html && python3 -m http.server 12345)
 │   ├── index.html        # Main landing page
 │   ├── about.html        # About page (English)
-│   └── whitepaper.html   # Full technical whitepaper (English)
-├── assets/               # Image and media assets
-│   ├── banner.png        # Hero background image
-│   └── logo.png          # Project logo (1:1 aspect ratio)
-├── css/                  # Styling files
-│   └── style.css         # Main stylesheet with modern dark theme
-├── js/                   # JavaScript files
-│   └── script.js         # Interactivity: menu toggle, scroll reveal, click effects
-├── scripts/              # Utility scripts
-│   ├── server.py         # Backend server (optional)
-│   └── start-server.sh   # Convenience script to launch the dev server
+│   ├── whitepaper.html   # Full technical whitepaper (English)
+│   ├── assets/           # Image & media assets (logo.png, banner.png)
+│   ├── css/              # Styling
+│   │   └── style.css
+│   └── js/               # Client‑side logic
+│       └── script.js
 ├── backup/               # Auto‑generated backups of original files before edits
-├── .gitignore            # Git ignore patterns
+├── .gitignore
 ├── README.md             # Project documentation
 └── structure.md          # This file – layout and file purpose description
 ```
@@ -33,12 +28,10 @@ root/
 | `html/index.html` | HTML | Main landing page: header, hero, feature cards, footer, side menu. |
 | `html/about.html` | HTML | About page: vision, core features, related links. |
 | `html/whitepaper.html` | HTML | Whitepaper: abstract, tokenomics, ecosystem, roadmap, security. |
-| `assets/banner.png` | Assets | Hero background image used on the landing page. |
-| `assets/logo.png` | Assets | Square logo (1:1) displayed in the header. |
-| `css/style.css` | CSS | All styling: dark theme, scroll reveal, RGB line, side menu, responsive layout. |
-| `js/script.js` | JS | Client‑side logic: menu toggle, smooth scroll, IntersectionObserver reveal, click ripple. |
-| `scripts/server.py` | Scripts | Optional Python HTTP server for local testing. |
-| `scripts/start-server.sh` | Scripts | Shell script to quickly start the local server on port 12345. |
+| `html/assets/logo.png` | Assets | Square logo (1:1) displayed in the header. |
+| `html/assets/banner.png` | Assets | Hero background image used on the landing page. |
+| `html/css/style.css` | CSS | All styling: dark theme, scroll reveal, RGB line, side menu, responsive layout. |
+| `html/js/script.js` | JS | Client‑side logic: menu toggle, smooth scroll, IntersectionObserver reveal, click ripple. |
 | `backup/` | Backup | Original file copies created before any edit, for safe rollback. |
 | `.gitignore` | Config | Specifies files/folders excluded from Git (e.g., `backup/`, `*.bak`). |
 | `README.md` | Docs | High‑level project overview, quick start, and feature list. |
@@ -47,8 +40,8 @@ root/
 ## 🔧 Workflow
 
 1. **Backup** – Before editing, copy the target file into `backup/` (e.g., `cp html/index.html backup/index.html.bak`).
-2. **Edit** – Modify files in their respective category folders (`css/style.css` for styling, `js/script.js` for behavior, `html/*.html` for markup).
-3. **Validate** – Run the local server (`python3 -m http.server 12345`) and verify the page in a browser.
+2. **Edit** – Modify files in their respective category folders inside `html/` (`html/css/style.css` for styling, `html/js/script.js` for behavior, `html/*.html` for markup).
+3. **Validate** – Run the local server (`cd html && python3 -m http.server 12345`) and verify the page in a browser.
 4. **Update Docs** – After structural changes, refresh `README.md` and `structure.md` to reflect the current state.
 
 ## 🎨 Key Visual Effects (Implemented)
@@ -62,7 +55,7 @@ root/
 
 ## 🌐 Runtime Context
 
-- **Local Server**: Runs on port **12345** (`python3 -m http.server 12345 --bind 0.0.0.0`).
-- **Access URL**: `http://localhost:12345` (or the appropriate host IP).
+- **Local Server**: Runs on port **12345** (`cd html && python3 -m http.server 12345 --bind 0.0.0.0`).
+- **Access URL**: `http://localhost:12345/` (redirects to `/html/index.html`).
 - **Design Aesthetic**: Dark hacker‑style theme (`#0d0d1a` background, `#ff9500` accent), monospace font, square elements.
 - **No External Dependencies**: Pure HTML/CSS/JS; no frameworks or libraries required.

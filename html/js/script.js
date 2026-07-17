@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(step, speed);
       } else {
         cursor.remove();
+        // min-height stays reserved (set by reserveAll)
       }
     })();
   }
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetTw(el) {
     el.dataset.typed = '0';
     el.textContent = '';
+    // keep min-height reserved (set by reserveAll) to avoid layout jump
   }
 
   // ===== MENU TYPEWRITER (sequential on open) =====
@@ -66,6 +68,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if (menuBackdrop) menuBackdrop.addEventListener('click', closeMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
+  // ===== SCROLL TYPEWRITER ELEMENTS (defined early for reuse) =====
+  const twEls = Array.from(document.querySelectorAll('.typewriter[data-type]'))
+    .filter(el => !el.closest('.menu-panel'));
+  twEls.forEach(el => { el.dataset.typed = '0'; });
+
+  // reserve space for all typewriter elements up-front (prevents layout jump on scroll)
+  function reserveAll() {
+    twEls.forEach(el => {
+      const text = el.getAttribute('data-type') || '';
+      if (!text) return;
+      const prev = el.textContent;
+      el.textContent = text;
+      el.style.minHeight = el.offsetHeight + 'px';
+      el.textContent = prev;
+    });
+  }
+
   // ===== WALLET CONNECT =====
   const walletBtn = document.getElementById('walletBtn');
   async function connectWallet() {
@@ -94,6 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
       walletBtn.classList.add('connected');
     }
   }
+
+  // ===== LANGUAGE SWITCH (i18n manual) =====
   const langSelect = document.getElementById('langSelect');
   function applyLang(lang) {
     if (!I18N[lang]) lang = 'en';
@@ -110,6 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (k && I18N[lang][k] !== undefined) el.setAttribute('data-type', I18N[lang][k]);
     });
     localStorage.setItem('pante_lang', lang);
+    reserveAll();
+    // re-type in-viewport elements in new language
+    twEls.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) { el.dataset.typed = '0'; runTw(el); }
+    });
   }
   if (langSelect) {
     const saved = localStorage.getItem('pante_lang') || 'en';
@@ -118,11 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
     langSelect.addEventListener('change', e => applyLang(e.target.value));
   }
 
-  // ===== SCROLL TYPEWRITER (page content only, exclude menu) =====
-  const twEls = Array.from(document.querySelectorAll('.typewriter[data-type]'))
-    .filter(el => !el.closest('.menu-panel'));
-  twEls.forEach(el => { el.dataset.typed = '0'; });
+  reserveAll();
 
+  // ===== SCROLL TYPEWRITER OBSERVER =====
   const twObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) runTw(entry.target);

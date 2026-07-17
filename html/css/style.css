@@ -33,8 +33,9 @@ html { scroll-behavior: smooth; }
 /* ==================== SCROLL REVEAL (block fade-in) ==================== */
 .reveal-block {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(15px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  will-change: opacity, transform;
 }
 .reveal-block.visible {
   opacity: 1;

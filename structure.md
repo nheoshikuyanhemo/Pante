@@ -14,8 +14,12 @@ root/
 │   ├── css/              # Styling
 │   │   └── style.css
 │   └── js/               # Client‑side logic
-│       └── script.js
-├── backup/               # Auto‑generated backups of original files before edits
+│       ├── script.js     # Menu, typewriter, i18n apply, wallet connect
+│       ├── i18n.en.js    # ENGLISH SOURCE (edit this only)
+│       └── i18n.js       # AUTO-GENERATED (15 langs) — do not edit by hand
+├── scripts/
+│   └── build_i18n.py     # Translates i18n.en.js → i18n.js via Google Translate
+├── backup/               # Timestamped backups before edits
 ├── .gitignore
 ├── README.md             # Project documentation
 └── structure.md          # This file – layout and file purpose description
@@ -31,7 +35,10 @@ root/
 | `html/assets/logo.png` | Assets | Square logo (1:1) displayed in the header. |
 | `html/assets/banner.png` | Assets | Hero background image used on the landing page. |
 | `html/css/style.css` | CSS | All styling: dark theme, scroll reveal, RGB line, side menu, responsive layout. |
-| `html/js/script.js` | JS | Client‑side logic: menu toggle, smooth scroll, IntersectionObserver reveal, click ripple. |
+| `html/js/script.js` | JS | Client‑side logic: menu toggle, typewriter, scroll reveal, language switch, wallet connect. |
+| `html/js/i18n.en.js` | JS | **English source** — the ONLY i18n file you edit. Edit text here. |
+| `html/js/i18n.js` | JS | **Auto‑generated** (15 languages) by `scripts/build_i18n.py`. Do not edit manually. |
+| `scripts/build_i18n.py` | Script | Reads `i18n.en.js`, translates to 14 langs via Google Translate (free), writes `i18n.js`. |
 | `backup/` | Backup | Original file copies created before any edit, for safe rollback. |
 | `.gitignore` | Config | Specifies files/folders excluded from Git (e.g., `backup/`, `*.bak`). |
 | `README.md` | Docs | High‑level project overview, quick start, and feature list. |
@@ -43,6 +50,7 @@ root/
 2. **Edit** – Modify files in their respective category folders inside `html/` (`html/css/style.css` for styling, `html/js/script.js` for behavior, `html/*.html` for markup).
 3. **Validate** – Run the local server (`cd html && python3 -m http.server 12345`) and verify the page in a browser.
 4. **Update Docs** – After structural changes, refresh `README.md` and `structure.md` to reflect the current state.
+5. **i18n (text translation)** – Edit ONLY `html/js/i18n.en.js` (English). Then run `python3 scripts/build_i18n.py` to auto‑translate all 14 other languages into `html/js/i18n.js`. Commit both.
 
 ## 🎨 Key Visual Effects (Implemented)
 

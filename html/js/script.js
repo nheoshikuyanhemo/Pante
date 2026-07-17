@@ -39,38 +39,44 @@ document.addEventListener('DOMContentLoaded', () => {
     step();
   }
 
-  // Pre-clear all typewriter text (hidden until scrolled into view)
+  // Collect all typewriter targets
   const twEls = Array.from(document.querySelectorAll('.typewriter[data-type]'));
-  twEls.forEach(el => { el.textContent = ''; el.dataset.typed = '0'; });
+  twEls.forEach(el => { el.dataset.typed = '0'; });
 
-  // ===== PER-ELEMENT INTERSECTION OBSERVER =====
-  // Each .typewriter types out ONLY when that specific element scrolls into view.
+  // ===== PER-ELEMENT OBSERVER (REPEATING) =====
+  // Types when scrolled into view; clears when scrolled out (so it retypes on next scroll-down).
   const twObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
+      const el = entry.target;
+      const text = el.getAttribute('data-type');
+      const speed = parseInt(el.getAttribute('data-speed')) || 30;
+
       if (entry.isIntersecting) {
-        const el = entry.target;
+        // scrolled INTO view → type it out
         if (el.dataset.typed !== '1') {
           el.dataset.typed = '1';
-          const text = el.getAttribute('data-type');
-          const speed = parseInt(el.getAttribute('data-speed')) || 30;
           typeWriter(el, text, speed);
         }
-        twObserver.unobserve(el);
+      } else {
+        // scrolled OUT of view → reset (hidden), ready to retype
+        el.dataset.typed = '0';
+        el.textContent = '';
       }
     });
-  }, { threshold: 0.4, rootMargin: '0px 0px -10% 0px' });
+  }, { threshold: 0.3, rootMargin: '0px 0px -5% 0px' });
 
   twEls.forEach(el => twObserver.observe(el));
 
-  // ===== BLOCK REVEAL (fade-in container only, no typing) =====
+  // ===== BLOCK REVEAL (fade-in container) =====
   const blockObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        blockObserver.unobserve(entry.target);
+      } else {
+        entry.target.classList.remove('visible');
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal-block').forEach(el => blockObserver.observe(el));
 

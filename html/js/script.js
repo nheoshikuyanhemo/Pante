@@ -66,7 +66,34 @@ document.addEventListener('DOMContentLoaded', () => {
   if (menuBackdrop) menuBackdrop.addEventListener('click', closeMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
-  // ===== LANGUAGE SWITCH (i18n manual) =====
+  // ===== WALLET CONNECT =====
+  const walletBtn = document.getElementById('walletBtn');
+  async function connectWallet() {
+    if (!walletBtn) return;
+    if (typeof window.ethereum === 'undefined') {
+      alert('No Ethereum wallet found. Please install MetaMask.');
+      return;
+    }
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const addr = accounts[0];
+      const short = addr.slice(0, 6) + '...' + addr.slice(-4);
+      walletBtn.textContent = short;
+      walletBtn.classList.add('connected');
+      walletBtn.title = addr;
+    } catch (e) {
+      alert('Connection rejected.');
+    }
+  }
+  if (walletBtn) {
+    walletBtn.addEventListener('click', connectWallet);
+    // auto-show if already connected
+    if (window.ethereum && window.ethereum.selectedAddress) {
+      const a = window.ethereum.selectedAddress;
+      walletBtn.textContent = a.slice(0,6) + '...' + a.slice(-4);
+      walletBtn.classList.add('connected');
+    }
+  }
   const langSelect = document.getElementById('langSelect');
   function applyLang(lang) {
     if (!I18N[lang]) lang = 'en';

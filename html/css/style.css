@@ -67,14 +67,11 @@ html { scroll-behavior: smooth; }
   background: #14141f;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 1rem;
   padding: 0 1.5rem;
   border-bottom: 1px solid #2a2a3e;
 }
 .menu-trigger {
-  position: absolute;
-  left: 1.5rem; top: 50%;
-  transform: translateY(-50%);
   display: flex; flex-direction: column; gap: 4px;
   cursor: pointer; background: none; border: none;
 }
@@ -88,14 +85,21 @@ html { scroll-behavior: smooth; }
 .menu-trigger.clicked .dot:nth-child(2) { opacity: 0; }
 .menu-trigger.clicked .dot:nth-child(3) { transform: translateY(6px) rotate(-45deg); }
 
-.logo-box { display: flex; align-items: center; justify-content: center; flex: 1; }
-.logo-img {
-  max-height: 48px; width: auto;
-  object-fit: contain;
-  transition: transform 0.3s;
+.wallet-btn {
+  background: linear-gradient(135deg, #ff9500, #ff6a00);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.logo-img:hover { transform: scale(1.05); }
+.wallet-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,149,0,0.4); }
+.wallet-btn.connected { background: #2a2a3e; color: #ff9500; border: 1px solid #ff9500; }
 
 .lang-switch select {
   background: #1e1e2e;
@@ -109,6 +113,15 @@ html { scroll-behavior: smooth; }
   outline: none;
 }
 .lang-switch select:hover { background: #2a2a3e; }
+
+.logo-box { display: flex; align-items: center; justify-content: center; margin-left: auto; }
+.logo-img {
+  max-height: 52px; width: auto;
+  object-fit: contain;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+.logo-img:hover { transform: scale(1.05); }
 
 /* ==================== NAV BAR (row 2) ==================== */
 .nav-bar {

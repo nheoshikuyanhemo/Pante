@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/html/index.html" },
+    { "source": "/index.html", "destination": "/html/index.html" },
+    { "source": "/about.html", "destination": "/html/about.html" },
+    { "source": "/whitepaper.html", "destination": "/html/whitepaper.html" },
+    { "source": "/css/(.*)", "destination": "/html/css/$1" },
+    { "source": "/js/(.*)", "destination": "/html/js/$1" },
+    { "source": "/assets/(.*)", "destination": "/html/assets/$1" }
+  ]
+}

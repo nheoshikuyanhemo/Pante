@@ -199,7 +199,7 @@ html { scroll-behavior: smooth; }
 .mc-desc { display: block; color: #a0a0b8; font-size: 0.9rem; }
 
 /* ==================== HERO ==================== */
-.hero { text-align: center; padding: 5rem 2rem; }
+.hero { text-align: center; padding: 3rem 2rem; }
 .hero-banner {
   width: 100%; max-height: 60vh;
   object-fit: contain; border-radius: 8px;
@@ -208,7 +208,7 @@ html { scroll-behavior: smooth; }
 .hero h1 { color: #ff9500; font-size: 2rem; margin-bottom: 1rem; }
 
 /* ==================== GENERIC SECTIONS ==================== */
-.vision, .ecosystem, .features { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+.vision, .ecosystem, .features { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
 .section-title { color: #ff9500; font-size: 1.8rem; margin-bottom: 1.5rem; letter-spacing: 0.5px; }
 .eco-list { list-style: none; padding: 0; }
 .eco-list li {
@@ -239,10 +239,10 @@ html { scroll-behavior: smooth; }
 .feature-card p { color: #a0a0b8; font-size: 0.95rem; line-height: 1.5; }
 
 /* ==================== PAGE CONTENT (about / whitepaper) ==================== */
-.page-content { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+.page-content { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 3rem; }
 .about-content h1, .wp-content h1 { color: #ff9500; font-size: 2.2rem; margin-bottom: 1rem; letter-spacing: 0.5px; }
 .about-content hr, .wp-content hr { border: none; border-top: 1px solid rgba(255,149,0,0.3); margin: 1rem 0 2rem; }
-.about-content section, .wp-content section { margin-bottom: 2.5rem; }
+.about-content section, .wp-content section { margin-bottom: 1.5rem; }
 .about-content h2, .wp-content h2 { color: #ff9500; font-size: 1.5rem; margin-bottom: 1rem; }
 .about-content h3, .wp-content h3 { color: #ffb347; font-size: 1.15rem; margin: 1rem 0 0.5rem; }
 .about-content p, .wp-content p { color: #c8c8e0; line-height: 1.7; margin-bottom: 0.75rem; }

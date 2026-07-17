@@ -49,20 +49,35 @@ html { scroll-behavior: smooth; }
   transform: translateY(0);
 }
 
-/* ==================== TYPEWRITER EFFECT ===== */
+/* ==================== TYPEWRITER EFFECT (JS-driven) ===== */
 .typewriter {
-  overflow: hidden;
-  white-space: nowrap;
-  width: 0;
-  border-right: 2px solid #ff9500;
+  /* hidden until JS types it out */
+  white-space: pre-wrap;
+  word-break: break-word;
 }
-.reveal.visible .typewriter {
-  animation: typing 3.5s steps(40) forwards;
-  width: 100%;
+/* blinking cursor appended by JS */
+.tw-cursor {
+  display: inline-block;
+  width: 9px;
+  height: 1.1em;
+  background: #ff9500;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: twBlink 0.8s step-end infinite;
 }
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
+@keyframes twBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+/* section that reveals as a block (fade-in container) */
+.reveal-block {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal-block.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ==================== HEADER ==================== */
@@ -223,33 +238,51 @@ html { scroll-behavior: smooth; }
 .reveal-on-scroll { opacity: 0; animation: fadeIn 1s ease-in-out 0.5s forwards; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* ============ FEATURES (CLEAN — NO BOXES) ==================== */
+/* ============ GENERIC SECTION ==================== */
+.vision, .ecosystem {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+.section-title {
+  color: #ff9500;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+}
+.eco-list { list-style: none; padding: 0; }
+.eco-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255,149,0,0.2);
+  color: #f0f0ff;
+  font-size: 1.05rem;
+}
+
+/* ============ FEATURES GRID ==================== */
 .features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2.5rem;
-  padding: 5rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 4rem 2rem;
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
 }
 .feature-card {
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  box-shadow: none;
-  text-align: center;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,149,0,0.25);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
 }
-.feature-card h2 {
-  color: #ff9500;
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
+.feature-card:hover {
+  transform: translateY(-5px);
+  border-color: #ff9500;
+  box-shadow: 0 8px 24px rgba(255,149,0,0.15);
 }
-.feature-card p {
-  color: #a0a0b8;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
+.feature-card h3 { color: #ff9500; font-size: 1.2rem; margin-bottom: 0.75rem; }
+.feature-card p { color: #a0a0b8; font-size: 0.95rem; line-height: 1.5; }
 
 /* ==================== FOOTER ============= */
 .footer {

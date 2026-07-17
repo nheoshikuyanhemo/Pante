@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
   reserveAll();
 
   // ===== REVEAL CHECK (scroll-based, manual position) =====
-  const TRIGGER_LINE = 0.9; // fire when element top reaches 90% of viewport height
+  const TRIGGER_LINE = 0.95; // fire almost as soon as element enters bottom of viewport
 
   function openEl(el) {
     if (el.dataset.typed === '1') return;

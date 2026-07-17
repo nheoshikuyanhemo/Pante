@@ -278,6 +278,28 @@ html { scroll-behavior: smooth; }
   background: #14141f; color: #777; font-size: 0.9rem;
   border-top: 2px solid #ff9500;
 }
+.footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-bottom: 1rem;
+}
+.footer-icon {
+  color: #ff9500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px; height: 42px;
+  border: 1px solid rgba(255,149,0,0.3);
+  border-radius: 50%;
+  transition: transform 0.2s, background 0.2s, color 0.2s;
+}
+.footer-icon:hover {
+  transform: translateY(-3px);
+  background: #ff9500;
+  color: #14141f;
+}
+.footer p { color: #8888a0; font-size: 0.9rem; }
 
 /* ==================== RIPPLE ==================== */
 .ripple {

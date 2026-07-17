@@ -148,12 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
   reserveAll();
 
   // ===== SCROLL TYPEWRITER OBSERVER =====
+  // Trigger line at 70% of viewport height (position-based, not % visibility)
+  // rootMargin bottom -30% shrinks the root so elements fire when they cross 70% from top
   const twObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) runTw(entry.target);
       else resetTw(entry.target);
     });
-  }, { threshold: 0.15, rootMargin: '0px 0px -5% 0px' });
+  }, { threshold: 0, rootMargin: '0px 0px -30% 0px' });
 
   twEls.forEach(el => twObserver.observe(el));
 
@@ -163,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (entry.target.closest('.hero')) return; // hero handled on load
       entry.target.classList.toggle('visible', entry.isIntersecting);
     });
-  }, { threshold: 0.01 });
+  }, { threshold: 0, rootMargin: '0px 0px -30% 0px' });
 
   document.querySelectorAll('.reveal-block').forEach(el => {
     if (!el.closest('.hero')) blockObserver.observe(el);
@@ -176,15 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
       h.classList.add('visible');
       h.querySelectorAll('.typewriter[data-type]').forEach(el => { el.dataset.typed = '0'; runTw(el); });
     });
-    // other above-fold blocks
+    // other above-fold blocks (top < 70% viewport)
     document.querySelectorAll('.reveal-block').forEach(el => {
       if (el.closest('.hero')) return;
       const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.95) el.classList.add('visible');
+      if (r.top < window.innerHeight * 0.7) el.classList.add('visible');
     });
     twEls.forEach(el => {
       const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight && r.bottom > 0) runTw(el);
+      if (r.top < window.innerHeight * 0.7 && r.bottom > 0) runTw(el);
     });
   }
   requestAnimationFrame(fireAboveFold);

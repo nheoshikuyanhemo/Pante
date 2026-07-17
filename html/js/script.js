@@ -4,26 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuBackdrop= document.getElementById('menuBackdrop');
   const menuClose   = document.getElementById('menuClose');
 
-  const openMenu = () => {
-    menuPanel.classList.add('open');
-    menuBackdrop.classList.add('open');
-    menuTrigger.classList.add('clicked');
-    document.body.style.overflow = 'hidden';
-  };
-  const closeMenu = () => {
-    menuPanel.classList.remove('open');
-    menuBackdrop.classList.remove('open');
-    menuTrigger.classList.remove('clicked');
-    document.body.style.overflow = '';
-  };
-
-  if (menuTrigger) menuTrigger.addEventListener('click', openMenu);
-  if (menuClose) menuClose.addEventListener('click', closeMenu);
-  if (menuBackdrop) menuBackdrop.addEventListener('click', closeMenu);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-
   // ===== TYPEWRITER ENGINE =====
-  function typeWriter(el, text, speed) {
+  function typeWriter(el, text, speed, done) {
     el.textContent = '';
     const cursor = document.createElement('span');
     cursor.className = 'tw-cursor';
@@ -36,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(step, speed);
       } else {
         cursor.remove();
+        if (done) done();
       }
     }
     step();
@@ -49,32 +32,71 @@ document.addEventListener('DOMContentLoaded', () => {
     typeWriter(el, text, speed);
   }
 
-  // Collect all typewriter targets
-  const twEls = Array.from(document.querySelectorAll('.typewriter[data-type]'));
+  function resetTw(el) {
+    el.dataset.typed = '0';
+    el.textContent = '';
+  }
+
+  // ===== MENU TYPEWRITER (on open) =====
+  const menuTwEls = Array.from(document.querySelectorAll('.menu-panel .typewriter[data-type]'));
+  menuTwEls.forEach(el => { el.dataset.typed = '0'; el.textContent = ''; });
+
+  function typeMenu() {
+    // sort by data-delay, type sequentially
+    const sorted = menuTwEls.slice().sort((a,b) => (parseInt(a.dataset.delay)||0) - (parseInt(b.dataset.delay)||0));
+    sorted.forEach(el => {
+      const delay = parseInt(el.dataset.delay) || 0;
+      setTimeout(() => runTw(el), delay);
+    });
+  }
+  function resetMenu() {
+    menuTwEls.forEach(resetTw);
+  }
+
+  const openMenu = () => {
+    menuPanel.classList.add('open');
+    menuBackdrop.classList.add('open');
+    menuTrigger.classList.add('clicked');
+    document.body.style.overflow = 'hidden';
+    typeMenu();
+  };
+  const closeMenu = () => {
+    menuPanel.classList.remove('open');
+    menuBackdrop.classList.remove('open');
+    menuTrigger.classList.remove('clicked');
+    document.body.style.overflow = '';
+    setTimeout(resetMenu, 300); // reset after slide-out
+  };
+
+  if (menuTrigger) menuTrigger.addEventListener('click', openMenu);
+  if (menuClose) menuClose.addEventListener('click', closeMenu);
+  if (menuBackdrop) menuBackdrop.addEventListener('click', closeMenu);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+  // ===== SCROLL TYPEWRITER (page content) =====
+  const twEls = Array.from(document.querySelectorAll('.typewriter[data-type]')).filter(el => !el.closest('.menu-panel'));
   twEls.forEach(el => { el.dataset.typed = '0'; });
 
-  // ===== PER-ELEMENT OBSERVER (REPEATING) =====
   const twObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       const el = entry.target;
       if (entry.isIntersecting) {
         runTw(el);
       } else {
-        el.dataset.typed = '0';
-        el.textContent = '';
+        resetTw(el);
       }
     });
   }, { threshold: 0.2, rootMargin: '0px 0px -5% 0px' });
 
   twEls.forEach(el => twObserver.observe(el));
 
-  // Immediately trigger elements already in viewport on load (fixes about/whitepaper top sections)
+  // Trigger in-viewport elements on load
   twEls.forEach(el => {
     const r = el.getBoundingClientRect();
     if (r.top < window.innerHeight && r.bottom > 0) runTw(el);
   });
 
-  // ===== BLOCK REVEAL (fade-in container) =====
+  // ===== BLOCK REVEAL =====
   const blockObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add('visible');
@@ -82,13 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.reveal-block').forEach(el => blockObserver.observe(el));
   document.querySelectorAll('.reveal-block').forEach(el => {
+    blockObserver.observe(el);
     const r = el.getBoundingClientRect();
     if (r.top < window.innerHeight) el.classList.add('visible');
   });
 
-  // ===== RIPPLE CLICK EFFECT =====
+  // ===== RIPPLE CLICK =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {
     el.addEventListener('click', function (e) {
       const rect = el.getBoundingClientRect();

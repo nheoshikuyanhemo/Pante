@@ -1,3 +1,7 @@
+/* ============================================================
+   PANTE — style.css  (clean, organized)
+   ============================================================ */
+
 /* ==================== RESET ==================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -8,53 +12,40 @@ body {
   font-family: 'Courier New', monospace;
   line-height: 1.6;
 }
-
-/* ==================== SMOOTH SCROLL ===== */
 html { scroll-behavior: smooth; }
 
-/* ==================== MOVING RGB LINE (thin) ==================== */
+/* ==================== MOVING RGB LINE ==================== */
 .moving-line {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100%;
-  height: 1px; /* very thin */
+  height: 1px;
   background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
   background-size: 200% 100%;
   animation: moveGradient 5s linear infinite;
   z-index: 1002;
 }
 @keyframes moveGradient {
-  0% { background-position: 0% 0; }
+  0%   { background-position: 0% 0; }
   100% { background-position: 200% 0; }
 }
 
-/* ==================== BOXED SECTIONS (solid frame) ==================== */
-.boxed {
-  border: 2px solid #ff9500;
-  border-radius: 4px;
-  padding: 1rem;
-  margin: 1rem 0;
-  background: rgba(20,20,30,0.4);
-}
-
-/* ==================== SCROLL REVEAL ===== */
-.reveal {
+/* ==================== SCROLL REVEAL (block fade-in) ==================== */
+.reveal-block {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-.reveal.visible {
+.reveal-block.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ==================== TYPEWRITER EFFECT (JS-driven) ===== */
+/* ==================== TYPEWRITER ==================== */
 .typewriter {
   white-space: pre-wrap;
   word-break: break-word;
 }
-/* blinking cursor — ONLY on the element currently being typed */
 .tw-cursor {
   display: inline-block;
   width: 9px;
@@ -68,16 +59,6 @@ html { scroll-behavior: smooth; }
   0%, 100% { opacity: 1; }
   50%      { opacity: 0; }
 }
-/* section that reveals as a block (fade-in container) */
-.reveal-block {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-.reveal-block.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
 
 /* ==================== HEADER ==================== */
 .header {
@@ -88,24 +69,17 @@ html { scroll-behavior: smooth; }
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
+  border-bottom: 2px solid #ff9500;
 }
-
-/* 3-dot trigger (kiri atas) */
 .menu-trigger {
   position: absolute;
-  left: 1.5rem;
-  top: 50%;
+  left: 1.5rem; top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  cursor: pointer;
-  background: none;
-  border: none;
+  display: flex; flex-direction: column; gap: 4px;
+  cursor: pointer; background: none; border: none;
 }
 .menu-trigger .dot {
-  width: 12px;
-  height: 2px;
+  width: 12px; height: 2px;
   background: #ff9500;
   transition: transform 0.3s;
 }
@@ -114,19 +88,7 @@ html { scroll-behavior: smooth; }
 .menu-trigger.clicked .dot:nth-child(2) { opacity: 0; }
 .menu-trigger.clicked .dot:nth-child(3) { transform: translateY(6px) rotate(-45deg); }
 
-/* Center navigation */
-.nav-menu {
-  flex: 1;
-  text-align: center;
-}
-.nav-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  gap: 28px;
-}
+.nav-menu { flex: 1; text-align: center; }
 .nav-link {
   color: #f0f0ff;
   text-decoration: none;
@@ -139,53 +101,39 @@ html { scroll-behavior: smooth; }
 .nav-link:hover { color: #ff9500; }
 .nav-link::after {
   content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
+  position: absolute; bottom: -2px; left: 0;
+  width: 0; height: 2px;
   background: #ff9500;
   transition: width 0.3s;
 }
 .nav-link:hover::after { width: 100%; }
 
-/* Logo */
 .logo-box {
-  position: absolute;
-  right: 1.5rem;
-  top: 50%;
+  position: absolute; right: 1.5rem; top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
 }
 .logo-img {
-  max-height: 56px;
-  width: auto;
+  max-height: 56px; width: auto;
   object-fit: contain;
   transition: transform 0.3s;
 }
 .logo-img:hover { transform: scale(1.05); }
 
-/* ==================== OVERLAY ==================== */
+/* ==================== MENU OVERLAY + PANEL ==================== */
 .menu-backdrop {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.6);
-  opacity: 0;
-  visibility: hidden;
+  opacity: 0; visibility: hidden;
   transition: opacity 0.3s;
   z-index: 999;
 }
 .menu-backdrop.open { opacity: 1; visibility: visible; }
 
-/* ==================== MENU PANEL (slide from right) ==================== */
 .menu-panel {
   position: fixed; top: 0; right: 0;
-  width: 50%; max-width: 420px;
-  height: 100vh;
+  width: 50%; max-width: 420px; height: 100vh;
   background: #14141f;
   border-left: 2px solid #ff9500;
   padding: 2rem;
@@ -206,8 +154,7 @@ html { scroll-behavior: smooth; }
 .menu-close {
   background: none; border: none;
   color: #ff9500; font-size: 1.5rem; cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 8px; border-radius: 4px;
 }
 .menu-close:hover { color: #ffb347; }
 
@@ -220,56 +167,32 @@ html { scroll-behavior: smooth; }
   transition: background 0.2s;
 }
 .menu-contents a:hover { background: rgba(255,255,255,0.08); }
-.menu-item__title {
+.mc-title {
   display: block; color: #ff9500; font-weight: 600;
   margin-bottom: 0.25rem; font-size: 1.1rem;
 }
-.menu-item__desc {
-  display: block; color: #a0a0b8; font-size: 0.9rem;
-}
+.mc-desc { display: block; color: #a0a0b8; font-size: 0.9rem; }
 
-/* ==================== HERO ============= */
-.hero {
-  text-align: center;
-  padding: 5rem 2rem;
-}
+/* ==================== HERO ==================== */
+.hero { text-align: center; padding: 5rem 2rem; }
 .hero-banner {
-  width: 100%;
-  max-height: 60vh;
-  object-fit: contain;
-  border-radius: 8px;
-  display: block;
-  margin: 0 auto 2rem;
+  width: 100%; max-height: 60vh;
+  object-fit: contain; border-radius: 8px;
+  display: block; margin: 0 auto 2rem;
 }
-.reveal-on-scroll { opacity: 0; animation: fadeIn 1s ease-in-out 0.5s forwards; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.hero h1 { color: #ff9500; font-size: 2rem; margin-bottom: 1rem; }
 
-/* ============ GENERIC SECTION ==================== */
-.vision, .ecosystem {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-}
-.section-title {
-  color: #ff9500;
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.5px;
-}
+/* ==================== GENERIC SECTIONS ==================== */
+.vision, .ecosystem, .features { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+.section-title { color: #ff9500; font-size: 1.8rem; margin-bottom: 1.5rem; letter-spacing: 0.5px; }
 .eco-list { list-style: none; padding: 0; }
 .eco-list li {
   padding: 0.75rem 0;
   border-bottom: 1px solid rgba(255,149,0,0.2);
-  color: #f0f0ff;
-  font-size: 1.05rem;
+  color: #f0f0ff; font-size: 1.05rem;
 }
 
-/* ============ FEATURES GRID ==================== */
-.features {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-}
+/* ==================== FEATURE GRID ==================== */
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -290,104 +213,61 @@ html { scroll-behavior: smooth; }
 .feature-card h3 { color: #ff9500; font-size: 1.2rem; margin-bottom: 0.75rem; }
 .feature-card p { color: #a0a0b8; font-size: 0.95rem; line-height: 1.5; }
 
-/* ==================== PAGE CONTENT (about/whitepaper) ===== */
-.page-content {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 3rem 2rem 5rem;
-}
-.about-content h1, .wp-content h1 {
-  color: #ff9500;
-  font-size: 2.2rem;
-  margin-bottom: 1rem;
-  letter-spacing: 0.5px;
-}
-.about-content hr, .wp-content hr {
-  border: none;
-  border-top: 1px solid rgba(255,149,0,0.3);
-  margin: 1rem 0 2rem;
-}
-.about-content section, .wp-content section {
-  margin-bottom: 2.5rem;
-}
-.about-content h2, .wp-content h2 {
-  color: #ff9500;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-.about-content h3, .wp-content h3 {
-  color: #ffb347;
-  font-size: 1.15rem;
-  margin: 1rem 0 0.5rem;
-}
-.about-content p, .wp-content p {
-  color: #c8c8e0;
-  line-height: 1.7;
-  margin-bottom: 0.75rem;
-}
-.links-grid {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: 1rem;
-}
+/* ==================== PAGE CONTENT (about / whitepaper) ==================== */
+.page-content { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+.about-content h1, .wp-content h1 { color: #ff9500; font-size: 2.2rem; margin-bottom: 1rem; letter-spacing: 0.5px; }
+.about-content hr, .wp-content hr { border: none; border-top: 1px solid rgba(255,149,0,0.3); margin: 1rem 0 2rem; }
+.about-content section, .wp-content section { margin-bottom: 2.5rem; }
+.about-content h2, .wp-content h2 { color: #ff9500; font-size: 1.5rem; margin-bottom: 1rem; }
+.about-content h3, .wp-content h3 { color: #ffb347; font-size: 1.15rem; margin: 1rem 0 0.5rem; }
+.about-content p, .wp-content p { color: #c8c8e0; line-height: 1.7; margin-bottom: 0.75rem; }
+
+.links-grid { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
 .link-card {
-  display: inline-block;
-  padding: 0.6rem 1.2rem;
-  border: 1px solid #ff9500;
-  border-radius: 6px;
-  color: #ff9500;
-  text-decoration: none;
+  display: inline-block; padding: 0.6rem 1.2rem;
+  border: 1px solid #ff9500; border-radius: 6px;
+  color: #ff9500; text-decoration: none;
   transition: background 0.2s, color 0.2s;
 }
 .link-card:hover { background: #ff9500; color: #0d0d1a; }
 
-/* tokenomics table */
+/* ==================== TOKENOMICS + ROADMAP ==================== */
 .tokenomics-wrap { display: flex; gap: 2rem; flex-wrap: wrap; }
-.tokenomics-table {
-  border-collapse: collapse;
-  min-width: 280px;
-}
+.tokenomics-table { border-collapse: collapse; min-width: 280px; }
 .tokenomics-table th, .tokenomics-table td {
   border: 1px solid rgba(255,149,0,0.3);
-  padding: 0.5rem 1rem;
-  text-align: left;
-  color: #f0f0ff;
+  padding: 0.5rem 1rem; text-align: left; color: #f0f0ff;
 }
 .tokenomics-table th { background: rgba(255,149,0,0.1); color: #ff9500; }
 .alloc-list { list-style: none; padding: 0; }
-.alloc-list li {
-  padding: 0.4rem 0;
-  border-bottom: 1px solid rgba(255,149,0,0.15);
-  color: #f0f0ff;
-}
+.alloc-list li { padding: 0.4rem 0; border-bottom: 1px solid rgba(255,149,0,0.15); color: #f0f0ff; }
 
-/* roadmap */
 .roadmap { display: grid; gap: 1rem; }
-.roadmap-item {
-  border-left: 2px solid #ff9500;
-  padding: 0.5rem 0 0.5rem 1rem;
-}
+.roadmap-item { border-left: 2px solid #ff9500; padding: 0.5rem 0 0.5rem 1rem; }
 .roadmap-item h4 { color: #ff9500; font-size: 1.1rem; margin-bottom: 0.25rem; }
 .roadmap-item p { color: #c8c8e0; }
+
+/* ==================== FOOTER ==================== */
 .footer {
-  text-align: center;
-  padding: 2rem;
-  background: #14141f;
-  color: #777;
-  font-size: 0.9rem;
+  text-align: center; padding: 2rem;
+  background: #14141f; color: #777; font-size: 0.9rem;
+  border-top: 2px solid #ff9500;
 }
+
+/* ==================== RIPPLE ==================== */
+.ripple {
+  border-radius: 50%;
+  background: rgba(255,149,0,0.4);
+  transform: scale(0);
+  animation: rippleAnim 0.6s linear;
+  pointer-events: none;
+}
+@keyframes rippleAnim { to { transform: scale(2.5); opacity: 0; } }
 
 /* ==================== MOBILE ==================== */
 @media (max-width: 640px) {
-  .nav-list { gap: 16px; }
   .nav-link { font-size: 0.9rem; }
   .logo-img { max-height: 40px; }
   .menu-panel { width: 80%; }
-}.mc-title, .mc-desc, .menu-item__title, .menu-item__desc {
-  color: #ffffff !important;
-}
-
-.menu-contents a {
-  color: #ffffff !important;
+  .hero h1 { font-size: 1.5rem; }
 }

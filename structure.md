@@ -1,37 +1,68 @@
-# Pante Web3 dApp Structure
+# Pante Web3 dApp – Structure Documentation
 
-## Project Layout
-- `/root/.hermes/Pante/` – main project directory
-  - `index.html` – main HTML page (header, hero, features, footer, menu)
-  - `style.css` – modern cyber‑security styling, responsive layout, side‑sliding menu, thin red border (`.bordered`) on header, nav, hero, features, footer
-  - `script.js` – JavaScript handling menu toggle, click effects (ripple), smooth scroll, and scroll‑reveal via IntersectionObserver
-  - `banner.png` – hero background image
-  - `logo.png` – site logo (1:1 ratio)
-  - `backup/` – folder containing backup copies of the original files before any edits
-  - `structure.md` – this file, documenting the project layout and file purposes
+This document describes the organized folder layout and the purpose of each file in the Pante project. All categories are in English for clarity and consistency.
 
-## File Purposes
-- **index.html** – Main page markup; includes header, hero, features, footer, and menu structure.
-- **style.css** – CSS styling; modern clean look, responsive, thin red border (`.bordered`) on key sections, smooth scroll, hover/click effects, moving RGB line (`.moving-line`), and scroll‑reveal (`.reveal`).
-- **script.js** – JavaScript that handles menu toggle (click), smooth scroll, click‑effects (ripple), and scroll‑reveal (IntersectionObserver).
-- **banner.png** – Hero background image.
-- **logo.png** – Site logo (square, 1:1 ratio).
-- **backup/** – Directory containing backup copies of the original files before any edits.
-- **structure.md** – This file, describing the project layout and file purposes.
+## 📂 Directory Layout
 
-## Workflow
-1. **Backup** – Copy all relevant files into the `backup/` directory before making any changes.
-2. **Edit** – Modify `style.css` for visual styling, `script.js` for interactivity, and `index.html` for structure if needed.
-3. **Validate** – Open the site, test the menu, scroll, and overall look.
-4. **Update** `structure.md` – After each change, ensure the description reflects the current state of the project.
+```
+root/
+├── html/                 # HTML pages
+│   ├── index.html        # Main landing page
+│   ├── about.html        # About page (English)
+│   └── whitepaper.html   # Full technical whitepaper (English)
+├── assets/               # Image and media assets
+│   ├── banner.png        # Hero background image
+│   └── logo.png          # Project logo (1:1 aspect ratio)
+├── css/                  # Styling files
+│   └── style.css         # Main stylesheet with modern dark theme
+├── js/                   # JavaScript files
+│   └── script.js         # Interactivity: menu toggle, scroll reveal, click effects
+├── scripts/              # Utility scripts
+│   ├── server.py         # Backend server (optional)
+│   └── start-server.sh   # Convenience script to launch the dev server
+├── backup/               # Auto‑generated backups of original files before edits
+├── .gitignore            # Git ignore patterns
+├── README.md             # Project documentation
+└── structure.md          # This file – layout and file purpose description
+```
 
-## Key Visual Enhancements
-- **Scroll Effects**: Elements with class `reveal` fade in and slide up as they enter the viewport (IntersectionObserver adds `.visible`).
-- **Moving RGB Line**: A thin 1px high element with animated gradient (`#ff0000 → #ffff00 → #00ff00 → #0000ff → #4b0082 → #9400d3`) moves left‑to‑right continuously via CSS keyframes.
-- **Click Effects**: Menu button toggles the side panel; clicking on menu items or feature cards triggers a subtle scale/ripple animation.
-- **Thin Border**: All main sections (header, navigation, hero, features, footer) have a thin red border (`border: 1px solid #ff0000;`) applied via the `.bordered` class (current implementation uses 2px solid #ff9500).
+## 📄 File Purposes
 
-## Critical Context
-- The website runs on a local server (port 12345) and is accessed via `http://localhost:12345`.
-- The design follows a “hacker‑style” aesthetic: dark background (`#0d0d1a`), bright accent color (`#ff9500`), and clean square elements.
-- All interactions are neutral and do not require any external dependencies beyond the standard web technologies.
+| File | Category | Purpose |
+|------|----------|---------|
+| `html/index.html` | HTML | Main landing page: header, hero, feature cards, footer, side menu. |
+| `html/about.html` | HTML | About page: vision, core features, related links. |
+| `html/whitepaper.html` | HTML | Whitepaper: abstract, tokenomics, ecosystem, roadmap, security. |
+| `assets/banner.png` | Assets | Hero background image used on the landing page. |
+| `assets/logo.png` | Assets | Square logo (1:1) displayed in the header. |
+| `css/style.css` | CSS | All styling: dark theme, scroll reveal, RGB line, side menu, responsive layout. |
+| `js/script.js` | JS | Client‑side logic: menu toggle, smooth scroll, IntersectionObserver reveal, click ripple. |
+| `scripts/server.py` | Scripts | Optional Python HTTP server for local testing. |
+| `scripts/start-server.sh` | Scripts | Shell script to quickly start the local server on port 12345. |
+| `backup/` | Backup | Original file copies created before any edit, for safe rollback. |
+| `.gitignore` | Config | Specifies files/folders excluded from Git (e.g., `backup/`, `*.bak`). |
+| `README.md` | Docs | High‑level project overview, quick start, and feature list. |
+| `structure.md` | Docs | Detailed folder structure and per‑file responsibility (this file). |
+
+## 🔧 Workflow
+
+1. **Backup** – Before editing, copy the target file into `backup/` (e.g., `cp html/index.html backup/index.html.bak`).
+2. **Edit** – Modify files in their respective category folders (`css/style.css` for styling, `js/script.js` for behavior, `html/*.html` for markup).
+3. **Validate** – Run the local server (`python3 -m http.server 12345`) and verify the page in a browser.
+4. **Update Docs** – After structural changes, refresh `README.md` and `structure.md` to reflect the current state.
+
+## 🎨 Key Visual Effects (Implemented)
+
+- **Scroll Reveal** – Elements with class `reveal` start hidden (`opacity:0; translateY(30px)`) and become visible when scrolled into view (IntersectionObserver adds `.visible`).
+- **Moving RGB Line** – A fixed 1px‑high `div.moving-line` at the top with an animated gradient (`#ff0000 → #ff7f00 → #ffff00 → #00ff00 → #0000ff → #4b0082 → #9400d3`) using CSS keyframes.
+- **Side Menu** – Panel slides from the right (`transform: translateX(100%) → 0`) when the 3‑dot trigger is clicked; backdrop dims the page.
+- **Click Effects** – Ripple animation on feature cards and menu items; menu trigger dots animate into an “X”.
+- **Thin Border** – Main sections use `.bordered` (2px solid `#ff9500`) for a clean framed look.
+- **White Menu Text** – All menu list items (`.mc-title`, `.mc-desc`) are forced to white (`#ffffff`) for readability.
+
+## 🌐 Runtime Context
+
+- **Local Server**: Runs on port **12345** (`python3 -m http.server 12345 --bind 0.0.0.0`).
+- **Access URL**: `http://localhost:12345` (or the appropriate host IP).
+- **Design Aesthetic**: Dark hacker‑style theme (`#0d0d1a` background, `#ff9500` accent), monospace font, square elements.
+- **No External Dependencies**: Pure HTML/CSS/JS; no frameworks or libraries required.

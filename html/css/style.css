@@ -234,7 +234,14 @@ html { scroll-behavior: smooth; }
   text-align: center;
   padding: 5rem 2rem;
 }
-.hero img { width: 100%; max-height: 55vh; border-radius: 8px; }
+.hero-banner {
+  width: 100%;
+  max-height: 50vh;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto 2rem;
+}
 .reveal-on-scroll { opacity: 0; animation: fadeIn 1s ease-in-out 0.5s forwards; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 

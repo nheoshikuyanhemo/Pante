@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
   // ===== TYPEWRITER ENGINE =====
-  function typeWriter(el, text, speed, done) {
+  function typeWriter(el, text, speed) {
     el.textContent = '';
     const cursor = document.createElement('span');
     cursor.className = 'tw-cursor';
@@ -33,27 +33,40 @@ document.addEventListener('DOMContentLoaded', () => {
       if (i < text.length) {
         cursor.insertAdjacentText('beforebegin', text.charAt(i));
         i++;
-        // speed up slightly on spaces for natural feel
         setTimeout(step, speed);
-      } else if (done) {
-        done();
       }
     }
     step();
   }
 
-  // Collect all typewriter targets (text stored in data-type)
+  // Pre-clear all typewriter text (hidden until scrolled into view)
   const twEls = Array.from(document.querySelectorAll('.typewriter[data-type]'));
-  // Pre-clear their text (hide until scrolled into view)
   twEls.forEach(el => { el.textContent = ''; el.dataset.typed = '0'; });
 
-  // ===== INTERSECTION OBSERVER: block reveal + trigger typewriter =====
+  // ===== PER-ELEMENT INTERSECTION OBSERVER =====
+  // Each .typewriter types out ONLY when that specific element scrolls into view.
+  const twObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        if (el.dataset.typed !== '1') {
+          el.dataset.typed = '1';
+          const text = el.getAttribute('data-type');
+          const speed = parseInt(el.getAttribute('data-speed')) || 30;
+          typeWriter(el, text, speed);
+        }
+        twObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.4, rootMargin: '0px 0px -10% 0px' });
+
+  twEls.forEach(el => twObserver.observe(el));
+
+  // ===== BLOCK REVEAL (fade-in container only, no typing) =====
   const blockObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        // type out any typewriter children inside this block
-        entry.target.querySelectorAll('.typewriter[data-type]').forEach(runTw);
         blockObserver.unobserve(entry.target);
       }
     });
@@ -61,18 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.reveal-block').forEach(el => blockObserver.observe(el));
 
-  // Hero typewriters (above the fold) run immediately
-  document.querySelectorAll('.hero .typewriter[data-type]').forEach(runTw);
-
-  function runTw(el) {
-    if (el.dataset.typed === '1') return;
-    el.dataset.typed = '1';
-    const text = el.getAttribute('data-type');
-    const speed = parseInt(el.getAttribute('data-speed')) || 30;
-    typeWriter(el, text, speed);
-  }
-
-  // ===== RIPPLE CLICK EFFECT ON FEATURE CARDS & MENU LINKS =====
+  // ===== RIPPLE CLICK EFFECT =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {
     el.addEventListener('click', function (e) {
       const rect = el.getBoundingClientRect();

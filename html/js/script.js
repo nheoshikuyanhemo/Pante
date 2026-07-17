@@ -153,27 +153,34 @@ document.addEventListener('DOMContentLoaded', () => {
       if (entry.isIntersecting) runTw(entry.target);
       else resetTw(entry.target);
     });
-  }, { threshold: 0.2, rootMargin: '0px 0px -5% 0px' });
+  }, { threshold: 0.15, rootMargin: '0px 0px -5% 0px' });
 
   twEls.forEach(el => twObserver.observe(el));
-  // fire immediately for elements already in viewport on load
-  twEls.forEach(el => {
-    const r = el.getBoundingClientRect();
-    if (r.top < window.innerHeight && r.bottom > 0) runTw(el);
-  });
 
   // ===== BLOCK REVEAL =====
   const blockObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       entry.target.classList.toggle('visible', entry.isIntersecting);
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.01 });
 
-  document.querySelectorAll('.reveal-block').forEach(el => {
-    blockObserver.observe(el);
-    const r = el.getBoundingClientRect();
-    if (r.top < window.innerHeight) el.classList.add('visible');
-  });
+  document.querySelectorAll('.reveal-block').forEach(el => blockObserver.observe(el));
+
+  // ===== FIRE ON LOAD (above-the-fold elements) =====
+  // Use rAF so layout (after reserveAll) is stable before measuring.
+  function fireAboveFold() {
+    document.querySelectorAll('.reveal-block').forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.95) el.classList.add('visible');
+    });
+    twEls.forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) runTw(el);
+    });
+  }
+  requestAnimationFrame(fireAboveFold);
+  // safety fallback: ensure top elements show even if rAF raced
+  setTimeout(fireAboveFold, 100);
 
   // ===== RIPPLE CLICK =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {

@@ -15,10 +15,28 @@
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
     </button>
     <nav class="nav-menu">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="about.html" class="nav-link">About</a>
-      <a href="whitepaper.html" class="nav-link">Whitepaper</a>
+      <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
+      <a href="about.html" class="nav-link" data-i18n="nav.about">About</a>
+      <a href="whitepaper.html" class="nav-link" data-i18n="nav.whitepaper">Whitepaper</a>
     </nav>
+    <div class="lang-switch">
+      <select id="langSelect" aria-label="Select language">
+        <option value="en">🇬🇧 EN</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="id">🇮🇩 ID</option>
+        <option value="vi">🇻🇳 VI</option>
+        <option value="hi">🇮🇳 हि</option>
+        <option value="es">🇪🇸 ES</option>
+        <option value="fr">🇫🇷 FR</option>
+        <option value="de">🇩🇪 DE</option>
+        <option value="pt">🇧🇷 PT</option>
+        <option value="ru">🇷🇺 RU</option>
+        <option value="ja">🇯🇵 日</option>
+        <option value="ko">🇰🇷 KO</option>
+        <option value="ar">🇸🇦 ع</option>
+        <option value="tr">🇹🇷 TR</option>
+      </select>
+    </div>
     <div class="logo-box">
       <a href="index.html"><img src="assets/logo.png" alt="Pante Logo" class="logo-img"></a>
     </div>
@@ -27,69 +45,70 @@
   <div class="menu-backdrop" id="menuBackdrop"></div>
   <aside class="menu-panel" id="menuPanel">
     <div class="menu-panel__head">
-      <span class="menu-panel__title typewriter" data-type="// PANTE" data-speed="40"></span>
+      <span class="menu-panel__title" data-i18n="menu.title">// PANTE</span>
       <button class="menu-close" id="menuClose">✕</button>
     </div>
     <ul class="menu-contents">
-      <li><a href="index.html"><span class="mc-title typewriter" data-type="Home" data-speed="30" data-delay="200"></span><span class="mc-desc typewriter" data-type="Landing — banner, tagline & core features." data-speed="14" data-delay="350"></span></a></li>
-      <li><a href="about.html"><span class="mc-title typewriter" data-type="About" data-speed="30" data-delay="500"></span><span class="mc-desc typewriter" data-type="Vision, utility & ecosystem links." data-speed="14" data-delay="650"></span></a></li>
-      <li><a href="whitepaper.html"><span class="mc-title typewriter" data-type="Whitepaper" data-speed="30" data-delay="800"></span><span class="mc-desc typewriter" data-type="Tokenomics, roadmap, DEX, staking & security." data-speed="14" data-delay="950"></span></a></li>
-      <li><a href="https://x.com/pante_coin" target="_blank"><span class="mc-title typewriter" data-type="X (Twitter)" data-speed="30" data-delay="1100"></span><span class="mc-desc typewriter" data-type="Official announcements & community." data-speed="14" data-delay="1250"></span></a></li>
-      <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title typewriter" data-type="GitHub" data-speed="30" data-delay="1400"></span><span class="mc-desc typewriter" data-type="Source code & development repository." data-speed="14" data-delay="1550"></span></a></li>
+      <li><a href="index.html"><span class="mc-title" data-i18n="menu.home">Home</span><span class="mc-desc" data-i18n="menu.home.desc">Landing — banner, tagline & core features.</span></a></li>
+      <li><a href="about.html"><span class="mc-title" data-i18n="menu.about">About</span><span class="mc-desc" data-i18n="menu.about.desc">Vision, utility & ecosystem links.</span></a></li>
+      <li><a href="whitepaper.html"><span class="mc-title" data-i18n="menu.whitepaper">Whitepaper</span><span class="mc-desc" data-i18n="menu.whitepaper.desc">Tokenomics, roadmap, DEX, staking & security.</span></a></li>
+      <li><a href="https://x.com/pante_coin" target="_blank"><span class="mc-title" data-i18n="menu.x">X (Twitter)</span><span class="mc-desc" data-i18n="menu.x.desc">Official announcements & community.</span></a></li>
+      <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title" data-i18n="menu.github">GitHub</span><span class="mc-desc" data-i18n="menu.github.desc">Source code & development repository.</span></a></li>
     </ul>
   </aside>
 
   <!-- ========== HERO ========== -->
   <section class="hero bordered reveal-block" id="hero">
     <img src="assets/banner.png" alt="Hero Banner" class="hero-banner">
-    <h1 class="typewriter" data-type="Pante: Meme with Utility & Sustainable Development" data-speed="45"></h1>
-    <p class="typewriter" data-type="Explore the future of memes — designed for utility, growth, and community-driven development." data-speed="22"></p>
+    <h1 class="typewriter" data-i18n="hero.title" data-type="Pante: Meme with Utility & Sustainable Development" data-speed="45"></h1>
+    <p class="typewriter" data-i18n="hero.tagline" data-type="Explore the future of memes — designed for utility, growth, and community-driven development." data-speed="22"></p>
   </section>
 
   <!-- ========== VISION ========== -->
   <section class="vision bordered reveal-block" id="vision">
-    <h2 class="section-title typewriter" data-type="Our Vision" data-speed="55"></h2>
-    <p class="typewriter" data-type="Pante is not just a meme — it is the evolution of meme tokens. We merge meme culture with real DeFi utility: a decentralized exchange, liquidity mining, and staking rewards." data-speed="18"></p>
+    <h2 class="section-title typewriter" data-i18n="vision.title" data-type="Our Vision" data-speed="55"></h2>
+    <p class="typewriter" data-i18n="vision.text" data-type="Pante is not just a meme — it is the evolution of meme tokens. We merge meme culture with real DeFi utility: a decentralized exchange, liquidity mining, and staking rewards." data-speed="18"></p>
   </section>
 
   <!-- ========== FEATURES ========== -->
   <section class="features bordered reveal-block" id="features">
-    <h2 class="section-title">Core Features</h2>
+    <h2 class="section-title" data-i18n="features.title">Core Features</h2>
     <div class="feature-grid">
       <div class="feature-card">
-        <h3 class="typewriter" data-type="Decentralized Exchange" data-speed="40"></h3>
-        <p class="typewriter" data-type="Swap tokens effortlessly on our decentralized exchange with low fees." data-speed="16"></p>
+        <h3 class="typewriter" data-i18n="feature.dex" data-type="Decentralized Exchange" data-speed="40"></h3>
+        <p class="typewriter" data-i18n="feature.dex.desc" data-type="Swap tokens effortlessly on our decentralized exchange with low fees." data-speed="16"></p>
       </div>
       <div class="feature-card">
-        <h3 class="typewriter" data-type="Liquidity Mining" data-speed="40"></h3>
-        <p class="typewriter" data-type="Earn rewards by providing liquidity to our pools." data-speed="16"></p>
+        <h3 class="typewriter" data-i18n="feature.liq" data-type="Liquidity Mining" data-speed="40"></h3>
+        <p class="typewriter" data-i18n="feature.liq.desc" data-type="Earn rewards by providing liquidity to our pools." data-speed="16"></p>
       </div>
       <div class="feature-card">
-        <h3 class="typewriter" data-type="Staking" data-speed="40"></h3>
-        <p class="typewriter" data-type="Stake your $PANTE tokens and earn passive income." data-speed="16"></p>
+        <h3 class="typewriter" data-i18n="feature.stake" data-type="Staking" data-speed="40"></h3>
+        <p class="typewriter" data-i18n="feature.stake.desc" data-type="Stake your $PANTE tokens and earn passive income." data-speed="16"></p>
       </div>
       <div class="feature-card">
-        <h3 class="typewriter" data-type="Governance" data-speed="40"></h3>
-        <p class="typewriter" data-type="Token holders vote on protocol upgrades and treasury." data-speed="16"></p>
+        <h3 class="typewriter" data-i18n="feature.gov" data-type="Governance" data-speed="40"></h3>
+        <p class="typewriter" data-i18n="feature.gov.desc" data-type="Token holders vote on protocol upgrades and treasury." data-speed="16"></p>
       </div>
     </div>
   </section>
 
   <!-- ========== ECOSYSTEM ========== -->
   <section class="ecosystem bordered reveal-block" id="ecosystem">
-    <h2 class="section-title typewriter" data-type="Ecosystem" data-speed="55"></h2>
+    <h2 class="section-title typewriter" data-i18n="eco.title" data-type="Ecosystem" data-speed="55"></h2>
     <ul class="eco-list">
-      <li class="typewriter" data-type="PanteSwap — AMM decentralized exchange" data-speed="20"></li>
-      <li class="typewriter" data-type="PanteStake — flexible & locked staking pools" data-speed="20"></li>
-      <li class="typewriter" data-type="PanteBridge — cross-chain liquidity bridge" data-speed="20"></li>
-      <li class="typewriter" data-type="PanteDAO — community governance" data-speed="20"></li>
+      <li class="typewriter" data-i18n="eco.1" data-type="PanteSwap — AMM decentralized exchange" data-speed="20"></li>
+      <li class="typewriter" data-i18n="eco.2" data-type="PanteStake — flexible & locked staking pools" data-speed="20"></li>
+      <li class="typewriter" data-i18n="eco.3" data-type="PanteBridge — cross-chain liquidity bridge" data-speed="20"></li>
+      <li class="typewriter" data-i18n="eco.4" data-type="PanteDAO — community governance" data-speed="20"></li>
     </ul>
   </section>
 
   <footer class="bordered footer" id="footer">
-    <p>&copy; 2026 Pante. All Rights Reserved.</p>
+    <p data-i18n="footer">© 2026 Pante. All Rights Reserved.</p>
   </footer>
 
+  <script src="js/i18n.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>

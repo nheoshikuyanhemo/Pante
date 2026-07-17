@@ -66,6 +66,33 @@ document.addEventListener('DOMContentLoaded', () => {
   if (menuBackdrop) menuBackdrop.addEventListener('click', closeMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
+  // ===== LANGUAGE SWITCH =====
+  const langSelect = document.getElementById('langSelect');
+  function applyLang(lang) {
+    if (!I18N[lang]) lang = 'en';
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (I18N[lang][key] !== undefined) {
+        el.textContent = I18N[lang][key];
+        // if it also has data-type (typewriter), update the source text
+        if (el.hasAttribute('data-type')) el.setAttribute('data-type', I18N[lang][key]);
+      }
+    });
+    // update typewriter elements that only have data-type (hero/vision/features/eco)
+    document.querySelectorAll('.typewriter[data-type]').forEach(el => {
+      const k = el.getAttribute('data-i18n');
+      if (k && I18N[lang][k] !== undefined) el.setAttribute('data-type', I18N[lang][k]);
+    });
+    localStorage.setItem('pante_lang', lang);
+  }
+  if (langSelect) {
+    const saved = localStorage.getItem('pante_lang') || 'en';
+    langSelect.value = saved;
+    applyLang(saved);
+    langSelect.addEventListener('change', e => applyLang(e.target.value));
+  }
+
   // ===== SCROLL TYPEWRITER (page content only, exclude menu) =====
   const twEls = Array.from(document.querySelectorAll('.typewriter[data-type]'))
     .filter(el => !el.closest('.menu-panel'));

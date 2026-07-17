@@ -119,6 +119,23 @@ html { scroll-behavior: smooth; }
   transition: transform 0.3s;
   cursor: pointer;
 }
+.lang-switch {
+  position: absolute;
+  right: 5.5rem; top: 50%;
+  transform: translateY(-50%);
+}
+.lang-switch select {
+  background: #1e1e2e;
+  color: #ff9500;
+  border: 1px solid #ff9500;
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+}
+.lang-switch select:hover { background: #2a2a3e; }
 .logo-img:hover { transform: scale(1.05); }
 
 /* ==================== MENU OVERLAY + PANEL ==================== */

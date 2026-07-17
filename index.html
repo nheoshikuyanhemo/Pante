@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pante – Meme with Utility</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Animated RGB line -->
+  <div class="moving-line"></div>
+
+  <header class="bordered header">
+    <button class="menu-trigger" id="menuTrigger" title="Menu">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </button>
+    <nav class="nav-menu">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="whitepaper.html" class="nav-link">Whitepaper</a>
+    </nav>
+    <div class="logo-box">
+      <img src="logo.png" alt="Pante Logo" class="logo-img">
+    </div>
+  </header>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <aside class="menu-panel" id="menuPanel">
+    <div class="menu-panel__head">
+      <span class="menu-panel__title">// PANTE</span>
+      <button class="menu-close" id="menuClose">✕</button>
+    </div>
+    <ul class="menu-contents">
+      <li><a href="index.html"><span class="mc-title">Home</span><span class="mc-desc">Landing — banner, tagline & core features.</span></a></li>
+      <li><a href="about.html"><span class="mc-title">About</span><span class="mc-desc">Vision, utility & ecosystem links.</span></a></li>
+      <li><a href="whitepaper.html"><span class="mc-title">Whitepaper</span><span class="mc-desc">Tokenomics, roadmap, DEX, staking & security.</span></a></li>
+      <li><a href="https://x.com/pante_coin" target="_blank"><span class="mc-title">X (Twitter)</span><span class="mc-desc">Official announcements & community.</span></a></li>
+      <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title">GitHub</span><span class="mc-desc">Source code & development repository.</span></a></li>
+    </ul>
+  </aside>
+
+  <section class="hero bordered reveal" id="hero">
+    <img src="banner.png" alt="Hero Banner">
+    <h1>Pante: Meme with Utility & Sustainable Development</h1>
+    <p class="reveal-on-scroll">Explore the future of memes—designed for utility, growth, and community‑driven development.</p>
+  </section>
+
+  <section class="features bordered reveal" id="features">
+    <div class="feature-card">
+      <h2>Decentralized Exchange</h2>
+      <p>Swap tokens effortlessly on our decentralized exchange.</p>
+    </div>
+    <div class="feature-card">
+      <h2>Liquidity Mining</h2>
+      <p>Earn rewards by providing liquidity to our pools.</p>
+    </div>
+    <div class="feature-card">
+      <h2>Staking</h2>
+      <p>Stake your $PANTE tokens and earn passive income.</p>
+    </div>
+  </section>
+
+  <footer class="bordered footer" id="footer">
+    <p>&copy; 2026 Pante. All Rights Reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

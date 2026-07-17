@@ -1,0 +1,20 @@
+# Backup files (generated before edits)
+backup/
+*.bak
+*.bak2
+*.bak3
+
+# Python / server artifacts
+__pycache__/
+*.pyc
+server.py
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Hermes session files
+*.session
+logs/

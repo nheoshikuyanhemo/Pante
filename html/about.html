@@ -7,12 +7,13 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- Animated RGB line -->
+  <div class="moving-line"></div>
+
   <!-- ========== HEADER ========== -->
-  <header class="header">
+  <header class="bordered header">
     <button class="menu-trigger" id="menuTrigger" title="Menu">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
     </button>
     <nav class="nav-menu">
       <a href="index.html" class="nav-link">Home</a>
@@ -24,42 +25,57 @@
     </div>
   </header>
 
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <aside class="menu-panel" id="menuPanel">
+    <div class="menu-panel__head">
+      <span class="menu-panel__title">// PANTE</span>
+      <button class="menu-close" id="menuClose">✕</button>
+    </div>
+    <ul class="menu-contents">
+      <li><a href="index.html"><span class="mc-title">Home</span><span class="mc-desc">Landing — banner, tagline & core features.</span></a></li>
+      <li><a href="about.html"><span class="mc-title">About</span><span class="mc-desc">Vision, utility & ecosystem links.</span></a></li>
+      <li><a href="whitepaper.html"><span class="mc-title">Whitepaper</span><span class="mc-desc">Tokenomics, roadmap, DEX, staking & security.</span></a></li>
+      <li><a href="https://x.com/pante_coin" target="_blank"><span class="mc-title">X (Twitter)</span><span class="mc-desc">Official announcements & community.</span></a></li>
+      <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title">GitHub</span><span class="mc-desc">Source code & development repository.</span></a></li>
+    </ul>
+  </aside>
+
   <!-- ========== MAIN CONTENT ========== -->
   <main class="page-content">
-    <div class="about-content">
-      <h1>About PANTE</h1>
-      <hr class="reveal-on-scroll">
-      <section>
-        <h2>What is PANTE?</h2>
-        <p>PANTE is a token meme with utility, designed for sustainable development. Unlike typical meme tokens that rely solely on hype, PANTE focuses on real utility through a comprehensive DeFi ecosystem.</p>
+    <div class="about-content reveal-block">
+      <h1 class="typewriter" data-type="About PANTE" data-speed="55"></h1>
+      <hr>
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="What is PANTE?" data-speed="45"></h2>
+        <p class="typewriter" data-type="PANTE is a token meme with utility, designed for sustainable development. Unlike typical meme tokens that rely solely on hype, PANTE focuses on real utility through a comprehensive DeFi ecosystem." data-speed="16"></p>
       </section>
-      <section>
-        <h2>Our Vision</h2>
-        <p>Pante is not just a meme, it is the evolution of meme tokens. We aim to evolve the meme token space by introducing genuine utility: a decentralized exchange (DEX) with swap functionality, liquidity provision, staking with rewards, and more.</p>
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="Our Vision" data-speed="45"></h2>
+        <p class="typewriter" data-type="Pante is not just a meme, it is the evolution of meme tokens. We aim to evolve the meme token space by introducing genuine utility: a decentralized exchange (DEX) with swap functionality, liquidity provision, staking with rewards, and more." data-speed="16"></p>
       </section>
-      <section>
-        <h2>Core Features</h2>
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="Core Features" data-speed="45"></h2>
         <div class="feature-grid">
           <div class="feature-card">
-            <h3>DEX Swap</h3>
-            <p>Trade tokens seamlessly on our decentralized exchange with low fees and high liquidity.</p>
+            <h3 class="typewriter" data-type="DEX Swap" data-speed="35"></h3>
+            <p class="typewriter" data-type="Trade tokens seamlessly on our decentralized exchange with low fees and high liquidity." data-speed="14"></p>
           </div>
           <div class="feature-card">
-            <h3>Add Liquidity</h3>
-            <p>Provide liquidity to trading pairs and earn a share of trading fees.</p>
+            <h3 class="typewriter" data-type="Add Liquidity" data-speed="35"></h3>
+            <p class="typewriter" data-type="Provide liquidity to trading pairs and earn a share of trading fees." data-speed="14"></p>
           </div>
           <div class="feature-card">
-            <h3>Staking Rewards</h3>
-            <p>Stake your $PANTE tokens to earn passive income through our reward mechanism.</p>
+            <h3 class="typewriter" data-type="Staking Rewards" data-speed="35"></h3>
+            <p class="typewriter" data-type="Stake your $PANTE tokens to earn passive income through our reward mechanism." data-speed="14"></p>
           </div>
           <div class="feature-card">
-            <h3>Governance</h3>
-            <p>Token holders participate in protocol governance decisions.</p>
+            <h3 class="typewriter" data-type="Governance" data-speed="35"></h3>
+            <p class="typewriter" data-type="Token holders participate in protocol governance decisions." data-speed="14"></p>
           </div>
         </div>
       </section>
-      <section>
-        <h2>Related Links</h2>
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="Related Links" data-speed="45"></h2>
         <div class="links-grid">
           <a href="https://x.com/pante_coin" target="_blank" class="link-card">X (Twitter)</a>
           <a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank" class="link-card">GitHub</a>
@@ -67,7 +83,7 @@
       </section>
     </div>
   </main>
-  <footer class="footer" id="aboutFooter">
+  <footer class="bordered footer" id="aboutFooter">
     <p>&copy; 2026 PANTE. All Rights Reserved.</p>
   </footer>
 

@@ -290,7 +290,86 @@ html { scroll-behavior: smooth; }
 .feature-card h3 { color: #ff9500; font-size: 1.2rem; margin-bottom: 0.75rem; }
 .feature-card p { color: #a0a0b8; font-size: 0.95rem; line-height: 1.5; }
 
-/* ==================== FOOTER ============= */
+/* ==================== PAGE CONTENT (about/whitepaper) ===== */
+.page-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+.about-content h1, .wp-content h1 {
+  color: #ff9500;
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+.about-content hr, .wp-content hr {
+  border: none;
+  border-top: 1px solid rgba(255,149,0,0.3);
+  margin: 1rem 0 2rem;
+}
+.about-content section, .wp-content section {
+  margin-bottom: 2.5rem;
+}
+.about-content h2, .wp-content h2 {
+  color: #ff9500;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.about-content h3, .wp-content h3 {
+  color: #ffb347;
+  font-size: 1.15rem;
+  margin: 1rem 0 0.5rem;
+}
+.about-content p, .wp-content p {
+  color: #c8c8e0;
+  line-height: 1.7;
+  margin-bottom: 0.75rem;
+}
+.links-grid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.link-card {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #ff9500;
+  border-radius: 6px;
+  color: #ff9500;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.link-card:hover { background: #ff9500; color: #0d0d1a; }
+
+/* tokenomics table */
+.tokenomics-wrap { display: flex; gap: 2rem; flex-wrap: wrap; }
+.tokenomics-table {
+  border-collapse: collapse;
+  min-width: 280px;
+}
+.tokenomics-table th, .tokenomics-table td {
+  border: 1px solid rgba(255,149,0,0.3);
+  padding: 0.5rem 1rem;
+  text-align: left;
+  color: #f0f0ff;
+}
+.tokenomics-table th { background: rgba(255,149,0,0.1); color: #ff9500; }
+.alloc-list { list-style: none; padding: 0; }
+.alloc-list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255,149,0,0.15);
+  color: #f0f0ff;
+}
+
+/* roadmap */
+.roadmap { display: grid; gap: 1rem; }
+.roadmap-item {
+  border-left: 2px solid #ff9500;
+  padding: 0.5rem 0 0.5rem 1rem;
+}
+.roadmap-item h4 { color: #ff9500; font-size: 1.1rem; margin-bottom: 0.25rem; }
+.roadmap-item p { color: #c8c8e0; }
 .footer {
   text-align: center;
   padding: 2rem;

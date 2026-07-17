@@ -7,92 +7,104 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- ========== HEADER ========== -->
-  <header class="header">
-    <!-- 3-dot trigger (left) -->
-    <button class="menu-trigger" id="menuTrigger" aria-label="Open menu">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-    </button>
+  <!-- Animated RGB line -->
+  <div class="moving-line"></div>
 
-    <!-- Center navigation (always visible) -->
+  <!-- ========== HEADER ========== -->
+  <header class="bordered header">
+    <button class="menu-trigger" id="menuTrigger" title="Menu">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </button>
     <nav class="nav-menu">
       <a href="index.html" class="nav-link">Home</a>
       <a href="about.html" class="nav-link">About</a>
-      <a href="whitepaper.html" class="nav-link active">Whitepaper</a>
+      <a href="whitepaper.html" class="nav-link">Whitepaper</a>
     </nav>
-
-    <!-- Right: logo (square, fits header height) -->
     <div class="logo-box">
       <img src="assets/logo.png" alt="Pante Logo" class="logo-img">
     </div>
   </header>
 
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <aside class="menu-panel" id="menuPanel">
+    <div class="menu-panel__head">
+      <span class="menu-panel__title">// PANTE</span>
+      <button class="menu-close" id="menuClose">✕</button>
+    </div>
+    <ul class="menu-contents">
+      <li><a href="index.html"><span class="mc-title">Home</span><span class="mc-desc">Landing — banner, tagline & core features.</span></a></li>
+      <li><a href="about.html"><span class="mc-title">About</span><span class="mc-desc">Vision, utility & ecosystem links.</span></a></li>
+      <li><a href="whitepaper.html"><span class="mc-title">Whitepaper</span><span class="mc-desc">Tokenomics, roadmap, DEX, staking & security.</span></a></li>
+      <li><a href="https://x.com/pante_coin" target="_blank"><span class="mc-title">X (Twitter)</span><span class="mc-desc">Official announcements & community.</span></a></li>
+      <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title">GitHub</span><span class="mc-desc">Source code & development repository.</span></a></li>
+    </ul>
+  </aside>
+
   <!-- ========== MAIN CONTENT ========== -->
   <main class="page-content">
-    <div class="wp-content">
-      <h1>PANTE Whitepaper</h1>
+    <div class="wp-content reveal-block">
+      <h1 class="typewriter" data-type="PANTE Whitepaper" data-speed="50"></h1>
 
-      <section>
-        <h2>Abstract</h2>
-        <p>PANTE is a meme token with utility, designed to bridge the gap between meme culture and decentralized finance (DeFi). Built on sustainable development principles, PANTE offers a comprehensive ecosystem including a DEX, liquidity mining, staking, and governance.</p>
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="Abstract" data-speed="45"></h2>
+        <p class="typewriter" data-type="PANTE is a meme token with utility, designed to bridge the gap between meme culture and decentralized finance (DeFi). Built on sustainable development principles, PANTE offers a comprehensive ecosystem including a DEX, liquidity mining, staking, and governance." data-speed="15"></p>
       </section>
 
-      <section>
-        <h2>1. Introduction</h2>
-        <p>The meme token space has been dominated by hype-driven projects with little to no utility. PANTE changes this narrative by introducing real DeFi utilities while maintaining the cultural relevance of meme tokens. Our vision: Pante is not just a meme, it is the evolution of memes.</p>
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="1. Introduction" data-speed="45"></h2>
+        <p class="typewriter" data-type="The meme token space has been dominated by hype-driven projects with little to no utility. PANTE changes this narrative by introducing real DeFi utilities while maintaining the cultural relevance of meme tokens. Our vision: Pante is not just a meme, it is the evolution of memes." data-speed="15"></p>
       </section>
 
-      <section>
-        <h2>2. Tokenomics</h2>
-        <table class="tokenomics-table">
-          <tr><th>Parameter</th><th>Value</th></tr>
-          <tr><td>Token Name</td><td>PANTE</td></tr>
-          <tr><td>Symbol</td><td>$PANTE</td></tr>
-          <tr><td>Total Supply</td><td>1,000,000,000</td></tr>
-          <tr><td>Decimals</td><td>18</td></tr>
-          <tr><td>Network</td><td>Ethereum / Polygon / BSC</td></tr>
-        </table>
-        <h3>Allocation</h3>
-        <ul>
-          <li><strong>Liquidity Pool:</strong> 40%</li>
-          <li><strong>Staking Rewards:</strong> 25%</li>
-          <li><strong>Team & Development:</strong> 15%</li>
-          <li><strong>Marketing & Partnerships:</strong> 10%</li>
-          <li><strong>Community & Airdrops:</strong> 10%</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>3. Ecosystem</h2>
-        <h3>3.1 PanteSwap (DEX)</h3>
-        <p>Our decentralized exchange allows users to swap tokens with low fees and high liquidity. Built on AMM (Automated Market Maker) model.</p>
-        <h3>3.2 Liquidity Mining</h3>
-        <p>Users provide liquidity to trading pairs and earn LP tokens. Stake LP tokens to earn $PANTE rewards.</p>
-        <h3>3.3 Staking</h3>
-        <p>Stake your $PANTE tokens to earn passive income. Flexible and locked staking options with varying APY.</p>
-        <h3>3.4 Governance</h3>
-        <p>$PANTE holders can propose and vote on protocol upgrades, fee structures, and treasury allocations.</p>
-      </section>
-
-      <section>
-        <h2>4. Roadmap</h2>
-        <div class="roadmap">
-          <div class="roadmap-item"><h4>Q1 2026</h4><p>Token Launch, Community Building, Website Launch</p></div>
-          <div class="roadmap-item"><h4>Q2 2026</h4><p>PanteSwap DEX Launch, Liquidity Mining Program</p></div>
-          <div class="roadmap-item"><h4>Q3 2026</h4><p>Staking Platform Launch, Governance DAO</p></div>
-          <div class="roadmap-item"><h4>Q4 2026</h4><p>Cross-chain Bridge, NFT Marketplace, Mobile App</p></div>
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="2. Tokenomics" data-speed="45"></h2>
+        <div class="tokenomics-wrap">
+          <table class="tokenomics-table">
+            <tr><th>Parameter</th><th>Value</th></tr>
+            <tr><td>Token Name</td><td>PANTE</td></tr>
+            <tr><td>Symbol</td><td>$PANTE</td></tr>
+            <tr><td>Total Supply</td><td>1,000,000,000</td></tr>
+            <tr><td>Decimals</td><td>18</td></tr>
+            <tr><td>Network</td><td>Ethereum / Polygon / BSC</td></tr>
+          </table>
+          <ul class="alloc-list">
+            <li class="typewriter" data-type="Liquidity Pool: 40%" data-speed="20"></li>
+            <li class="typewriter" data-type="Staking Rewards: 25%" data-speed="20"></li>
+            <li class="typewriter" data-type="Team & Development: 15%" data-speed="20"></li>
+            <li class="typewriter" data-type="Marketing & Partnerships: 10%" data-speed="20"></li>
+            <li class="typewriter" data-type="Community & Airdrops: 10%" data-speed="20"></li>
+          </ul>
         </div>
       </section>
 
-      <section>
-        <h2>5. Security</h2>
-        <p>Smart contracts audited by reputable firms. Multi-sig treasury. Time-locked contracts for team allocations. Active bug bounty program.</p>
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="3. Ecosystem" data-speed="45"></h2>
+        <h3 class="typewriter" data-type="3.1 PanteSwap (DEX)" data-speed="35"></h3>
+        <p class="typewriter" data-type="Our decentralized exchange allows users to swap tokens with low fees and high liquidity. Built on AMM (Automated Market Maker) model." data-speed="14"></p>
+        <h3 class="typewriter" data-type="3.2 Liquidity Mining" data-speed="35"></h3>
+        <p class="typewriter" data-type="Users provide liquidity to trading pairs and earn LP tokens. Stake LP tokens to earn $PANTE rewards." data-speed="14"></p>
+        <h3 class="typewriter" data-type="3.3 Staking" data-speed="35"></h3>
+        <p class="typewriter" data-type="Stake your $PANTE tokens to earn passive income. Flexible and locked staking options with varying APY." data-speed="14"></p>
+        <h3 class="typewriter" data-type="3.4 Governance" data-speed="35"></h3>
+        <p class="typewriter" data-type="$PANTE holders can propose and vote on protocol upgrades, fee structures, and treasury allocations." data-speed="14"></p>
       </section>
 
-      <section>
-        <h2>6. Links</h2>
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="4. Roadmap" data-speed="45"></h2>
+        <div class="roadmap">
+          <div class="roadmap-item"><h4 class="typewriter" data-type="Q1 2026" data-speed="30"></h4><p class="typewriter" data-type="Token Launch, Community Building, Website Launch" data-speed="14"></p></div>
+          <div class="roadmap-item"><h4 class="typewriter" data-type="Q2 2026" data-speed="30"></h4><p class="typewriter" data-type="PanteSwap DEX Launch, Liquidity Mining Program" data-speed="14"></p></div>
+          <div class="roadmap-item"><h4 class="typewriter" data-type="Q3 2026" data-speed="30"></h4><p class="typewriter" data-type="Staking Platform Launch, Governance DAO" data-speed="14"></p></div>
+          <div class="roadmap-item"><h4 class="typewriter" data-type="Q4 2026" data-speed="30"></h4><p class="typewriter" data-type="Cross-chain Bridge, NFT Marketplace, Mobile App" data-speed="14"></p></div>
+        </div>
+      </section>
+
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="5. Security" data-speed="45"></h2>
+        <p class="typewriter" data-type="Smart contracts audited by reputable firms. Multi-sig treasury. Time-locked contracts for team allocations. Active bug bounty program." data-speed="14"></p>
+      </section>
+
+      <section class="reveal-block">
+        <h2 class="typewriter" data-type="6. Links" data-speed="45"></h2>
         <div class="links-grid">
           <a href="https://x.com/pante_coin" target="_blank" class="link-card">X (Twitter)</a>
           <a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank" class="link-card">GitHub</a>
@@ -101,7 +113,7 @@
     </div>
   </main>
 
-  <footer class="footer" id="aboutFooter">
+  <footer class="bordered footer" id="aboutFooter">
     <p>&copy; 2026 PANTE. All Rights Reserved.</p>
   </footer>
 

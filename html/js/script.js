@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== SCROLL TYPEWRITER ELEMENTS (defined early for reuse) =====
   const twEls = Array.from(document.querySelectorAll('.typewriter[data-type]'))
-    .filter(el => !el.closest('.menu-panel'));
+    .filter(el => !el.closest('.menu-panel') && !el.closest('.hero'));
   twEls.forEach(el => { el.dataset.typed = '0'; });
 
   // reserve space for all typewriter elements up-front (prevents layout jump on scroll)
@@ -160,16 +160,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== BLOCK REVEAL =====
   const blockObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
+      if (entry.target.closest('.hero')) return; // hero handled on load
       entry.target.classList.toggle('visible', entry.isIntersecting);
     });
   }, { threshold: 0.01 });
 
-  document.querySelectorAll('.reveal-block').forEach(el => blockObserver.observe(el));
+  document.querySelectorAll('.reveal-block').forEach(el => {
+    if (!el.closest('.hero')) blockObserver.observe(el);
+  });
 
-  // ===== FIRE ON LOAD (above-the-fold elements) =====
-  // Use rAF so layout (after reserveAll) is stable before measuring.
+  // ===== FIRE ON LOAD (above-the-fold + hero forced) =====
   function fireAboveFold() {
+    // hero: force visible + type immediately, never wait for observer
+    document.querySelectorAll('.hero').forEach(h => {
+      h.classList.add('visible');
+      h.querySelectorAll('.typewriter[data-type]').forEach(el => { el.dataset.typed = '0'; runTw(el); });
+    });
+    // other above-fold blocks
     document.querySelectorAll('.reveal-block').forEach(el => {
+      if (el.closest('.hero')) return;
       const r = el.getBoundingClientRect();
       if (r.top < window.innerHeight * 0.95) el.classList.add('visible');
     });

@@ -108,20 +108,23 @@ html { scroll-behavior: smooth; }
 }
 .nav-link:hover::after { width: 100%; }
 
-.logo-box {
-  position: absolute; right: 1.5rem; top: 50%;
-  transform: translateY(-50%);
-  display: flex; align-items: center; justify-content: center;
+.header {
+  position: relative;
+  height: 90px;
+  background: #14141f;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  border-bottom: 2px solid #ff9500;
 }
-.logo-img {
-  max-height: 56px; width: auto;
-  object-fit: contain;
-  transition: transform 0.3s;
-  cursor: pointer;
-}
-.lang-switch {
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   position: absolute;
-  right: 5.5rem; top: 50%;
+  right: 1.5rem;
+  top: 50%;
   transform: translateY(-50%);
 }
 .lang-switch select {
@@ -136,6 +139,15 @@ html { scroll-behavior: smooth; }
   outline: none;
 }
 .lang-switch select:hover { background: #2a2a3e; }
+.logo-box {
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-img {
+  max-height: 56px; width: auto;
+  object-fit: contain;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
 .logo-img:hover { transform: scale(1.05); }
 
 /* ==================== MENU OVERLAY + PANEL ==================== */
@@ -147,7 +159,6 @@ html { scroll-behavior: smooth; }
   transition: opacity 0.3s;
   z-index: 999;
 }
-.menu-backdrop.open { opacity: 1; visibility: visible; }
 
 .menu-panel {
   position: fixed; top: 0; right: 0;

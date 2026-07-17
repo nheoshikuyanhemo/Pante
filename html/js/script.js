@@ -22,28 +22,25 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
   }
 
-  function runTw(el) {
-    if (el.dataset.typed === '1') return;
-    el.dataset.typed = '1';
-    typeWriter(el, el.getAttribute('data-type'), parseInt(el.getAttribute('data-speed')) || 30);
-  }
-  function resetTw(el) {
-    el.dataset.typed = '0';
-    el.textContent = '';
-    // keep min-height reserved (set by reserveAll) to avoid layout jump
-  }
-
   // ===== MENU TYPEWRITER (sequential on open) =====
   const menuTw = Array.from(document.querySelectorAll('.menu-panel .typewriter[data-type]'));
-  menuTw.forEach(resetTw);
+  function resetMenuEl(el) {
+    el.dataset.typed = '0';
+    el.textContent = '';
+  }
+  menuTw.forEach(resetMenuEl);
 
   function typeMenu() {
     menuTw
       .slice()
       .sort((a, b) => (parseInt(a.dataset.delay) || 0) - (parseInt(b.dataset.delay) || 0))
-      .forEach(el => setTimeout(() => runTw(el), parseInt(el.dataset.delay) || 0));
+      .forEach(el => setTimeout(() => {
+        if (el.dataset.typed === '1') return;
+        el.dataset.typed = '1';
+        typeWriter(el, el.getAttribute('data-type'), parseInt(el.getAttribute('data-speed')) || 30);
+      }, parseInt(el.dataset.delay) || 0));
   }
-  function resetMenu() { menuTw.forEach(resetTw); }
+  function resetMenu() { menuTw.forEach(resetMenuEl); }
 
   // ===== MENU OPEN / CLOSE =====
   function openMenu() {
@@ -133,10 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('pante_lang', lang);
     reserveAll();
     // re-type in-viewport elements in new language
-    twEls.forEach(el => {
-      const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight && r.bottom > 0) { el.dataset.typed = '0'; runTw(el); }
-    });
+    setTimeout(checkReveal, 50);
   }
   if (langSelect) {
     const saved = localStorage.getItem('pante_lang') || 'en';
@@ -147,51 +141,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
   reserveAll();
 
-  // ===== SCROLL TYPEWRITER OBSERVER =====
-  // Trigger line at 70% of viewport height (position-based, not % visibility)
-  // rootMargin bottom -30% shrinks the root so elements fire when they cross 70% from top
-  const twObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) runTw(entry.target);
-      else resetTw(entry.target);
-    });
-  }, { threshold: 0, rootMargin: '0px 0px -30% 0px' });
+  // ===== REVEAL CHECK (scroll-based, manual position) =====
+  const TRIGGER_LINE = 0.85; // fire when element top reaches 85% of viewport height
 
-  twEls.forEach(el => twObserver.observe(el));
+  function openEl(el) {
+    if (el.dataset.typed === '1') return;
+    el.dataset.typed = '1';
+    const txt = el.getAttribute('data-type') || el.textContent;
+    typeWriter(el, txt, parseInt(el.getAttribute('data-speed')) || 30);
+  }
+  function closeEl(el) {
+    el.dataset.typed = '0';
+    el.textContent = '';
+  }
 
-  // ===== BLOCK REVEAL =====
-  const blockObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.target.closest('.hero')) return; // hero handled on load
-      entry.target.classList.toggle('visible', entry.isIntersecting);
-    });
-  }, { threshold: 0, rootMargin: '0px 0px -30% 0px' });
-
-  document.querySelectorAll('.reveal-block').forEach(el => {
-    if (!el.closest('.hero')) blockObserver.observe(el);
-  });
-
-  // ===== FIRE ON LOAD (above-the-fold + hero forced) =====
-  function fireAboveFold() {
-    // hero: force visible + type immediately, never wait for observer
+  function checkReveal() {
+    const vh = window.innerHeight;
+    // hero forced open
     document.querySelectorAll('.hero').forEach(h => {
       h.classList.add('visible');
-      h.querySelectorAll('.typewriter[data-type]').forEach(el => { el.dataset.typed = '0'; runTw(el); });
+      h.querySelectorAll('.typewriter[data-type]').forEach(openEl);
     });
-    // other above-fold blocks (top < 70% viewport)
-    document.querySelectorAll('.reveal-block').forEach(el => {
-      if (el.closest('.hero')) return;
-      const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.7) el.classList.add('visible');
-    });
+    // scroll typewriter elements (exclude hero + menu)
     twEls.forEach(el => {
       const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.7 && r.bottom > 0) runTw(el);
+      if (r.top < vh * TRIGGER_LINE && r.bottom > 0) {
+        el.closest('.reveal-block')?.classList.add('visible');
+        openEl(el);
+      } else if (r.top > vh) {
+        closeEl(el);
+        el.closest('.reveal-block')?.classList.remove('visible');
+      }
+    });
+    // standalone reveal-blocks (no typewriter inside, e.g. wrappers)
+    document.querySelectorAll('.reveal-block').forEach(blk => {
+      if (blk.closest('.hero')) return;
+      if (blk.querySelector('.typewriter')) return; // handled above
+      const r = blk.getBoundingClientRect();
+      if (r.top < vh * TRIGGER_LINE) blk.classList.add('visible');
+      else if (r.top > vh) blk.classList.remove('visible');
     });
   }
-  requestAnimationFrame(fireAboveFold);
-  // safety fallback: ensure top elements show even if rAF raced
-  setTimeout(fireAboveFold, 100);
+
+  window.addEventListener('scroll', checkReveal, { passive: true });
+  window.addEventListener('resize', checkReveal);
+  // run on load (rAF + fallback)
+  requestAnimationFrame(checkReveal);
+  setTimeout(checkReveal, 150);
 
   // ===== RIPPLE CLICK =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {

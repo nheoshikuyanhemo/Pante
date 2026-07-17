@@ -51,11 +51,10 @@ html { scroll-behavior: smooth; }
 
 /* ==================== TYPEWRITER EFFECT (JS-driven) ===== */
 .typewriter {
-  /* hidden until JS types it out */
   white-space: pre-wrap;
   word-break: break-word;
 }
-/* blinking cursor appended by JS */
+/* blinking cursor — ONLY on the element currently being typed */
 .tw-cursor {
   display: inline-block;
   width: 9px;

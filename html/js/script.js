@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
         cursor.insertAdjacentText('beforebegin', text.charAt(i));
         i++;
         setTimeout(step, speed);
+      } else {
+        // typing done → remove cursor so only ONE blinks at a time
+        cursor.remove();
       }
     }
     step();

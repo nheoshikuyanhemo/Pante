@@ -63,13 +63,13 @@ html { scroll-behavior: smooth; }
 /* ==================== HEADER ==================== */
 .header {
   position: relative;
-  height: 90px;
+  height: 70px;
   background: #14141f;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
-  border-bottom: 2px solid #ff9500;
+  border-bottom: 1px solid #2a2a3e;
 }
 .menu-trigger {
   position: absolute;
@@ -88,34 +88,15 @@ html { scroll-behavior: smooth; }
 .menu-trigger.clicked .dot:nth-child(2) { opacity: 0; }
 .menu-trigger.clicked .dot:nth-child(3) { transform: translateY(6px) rotate(-45deg); }
 
-.nav-menu { flex: 1; text-align: center; padding-left: 3rem; }
-.nav-link {
-  color: #f0f0ff;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
-  position: relative;
-  padding: 0.4rem 0.9rem;
-  border: 1px solid rgba(255,149,0,0.4);
-  border-radius: 6px;
+.logo-box { display: flex; align-items: center; justify-content: center; flex: 1; }
+.logo-img {
+  max-height: 48px; width: auto;
+  object-fit: contain;
+  transition: transform 0.3s;
+  cursor: pointer;
 }
-.nav-link:hover { color: #ff9500; border-color: #ff9500; background: rgba(255,149,0,0.08); }
-.nav-link::after {
-  content: '';
-  position: absolute; bottom: -2px; left: 0;
-  width: 0; height: 2px;
-  background: #ff9500;
-  transition: width 0.3s;
-}
-.nav-link:hover::after { width: 100%; }
+.logo-img:hover { transform: scale(1.05); }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
 .lang-switch select {
   background: #1e1e2e;
   color: #ff9500;
@@ -128,16 +109,28 @@ html { scroll-behavior: smooth; }
   outline: none;
 }
 .lang-switch select:hover { background: #2a2a3e; }
-.logo-box {
-  display: flex; align-items: center; justify-content: center;
+
+/* ==================== NAV BAR (row 2) ==================== */
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  background: #14141f;
+  border-bottom: 2px solid #ff9500;
+  padding: 0.6rem 1rem;
 }
-.logo-img {
-  max-height: 56px; width: auto;
-  object-fit: contain;
-  transition: transform 0.3s;
-  cursor: pointer;
+.nav-link {
+  color: #f0f0ff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid rgba(255,149,0,0.4);
+  border-radius: 6px;
 }
-.logo-img:hover { transform: scale(1.05); }
+.nav-link:hover { color: #ff9500; border-color: #ff9500; background: rgba(255,149,0,0.08); }
 
 /* ==================== MENU OVERLAY + PANEL ==================== */
 .menu-backdrop {

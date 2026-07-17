@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = '';
   };
 
-  menuTrigger.addEventListener('click', openMenu);
-  menuClose.addEventListener('click', closeMenu);
-  menuBackdrop.addEventListener('click', closeMenu);
+  if (menuTrigger) menuTrigger.addEventListener('click', openMenu);
+  if (menuClose) menuClose.addEventListener('click', closeMenu);
+  if (menuBackdrop) menuBackdrop.addEventListener('click', closeMenu);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
   // ===== TYPEWRITER ENGINE =====
@@ -35,11 +35,18 @@ document.addEventListener('DOMContentLoaded', () => {
         i++;
         setTimeout(step, speed);
       } else {
-        // typing done → remove cursor so only ONE blinks at a time
         cursor.remove();
       }
     }
     step();
+  }
+
+  function runTw(el) {
+    if (el.dataset.typed === '1') return;
+    el.dataset.typed = '1';
+    const text = el.getAttribute('data-type');
+    const speed = parseInt(el.getAttribute('data-speed')) || 30;
+    typeWriter(el, text, speed);
   }
 
   // Collect all typewriter targets
@@ -47,41 +54,39 @@ document.addEventListener('DOMContentLoaded', () => {
   twEls.forEach(el => { el.dataset.typed = '0'; });
 
   // ===== PER-ELEMENT OBSERVER (REPEATING) =====
-  // Types when scrolled into view; clears when scrolled out (so it retypes on next scroll-down).
   const twObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       const el = entry.target;
-      const text = el.getAttribute('data-type');
-      const speed = parseInt(el.getAttribute('data-speed')) || 30;
-
       if (entry.isIntersecting) {
-        // scrolled INTO view → type it out
-        if (el.dataset.typed !== '1') {
-          el.dataset.typed = '1';
-          typeWriter(el, text, speed);
-        }
+        runTw(el);
       } else {
-        // scrolled OUT of view → reset (hidden), ready to retype
         el.dataset.typed = '0';
         el.textContent = '';
       }
     });
-  }, { threshold: 0.3, rootMargin: '0px 0px -5% 0px' });
+  }, { threshold: 0.2, rootMargin: '0px 0px -5% 0px' });
 
   twEls.forEach(el => twObserver.observe(el));
+
+  // Immediately trigger elements already in viewport on load (fixes about/whitepaper top sections)
+  twEls.forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) runTw(el);
+  });
 
   // ===== BLOCK REVEAL (fade-in container) =====
   const blockObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      } else {
-        entry.target.classList.remove('visible');
-      }
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+      else entry.target.classList.remove('visible');
     });
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal-block').forEach(el => blockObserver.observe(el));
+  document.querySelectorAll('.reveal-block').forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight) el.classList.add('visible');
+  });
 
   // ===== RIPPLE CLICK EFFECT =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {

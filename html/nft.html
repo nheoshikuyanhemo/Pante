@@ -70,13 +70,15 @@
 
   <!-- NFT Main -->
   <main>
-    <section class="nft-wrap bordered reveal-block" id="nft">
-      <h1 class="typewriter" data-i18n="nft.title" data-type="Community Creation NFT" data-speed="50"></h1>
-      <p class="typewriter" data-i18n="nft.tagline" data-type="Upload cat-themed art, photos, or animations. AI-verified cat content required. Mint & trade on our marketplace." data-speed="25"></p>
+    <section class="nft-wrap bordered" id="nft">
+      <div class="nft-intro reveal-block">
+        <h1 class="typewriter" data-i18n="nft.title" data-type="Community Creation NFT" data-speed="50"></h1>
+        <p class="typewriter" data-i18n="nft.tagline" data-type="Upload cat-themed art, photos, or animations. AI-verified cat content required. Mint & trade on our marketplace." data-speed="25"></p>
+      </div>
 
       <!-- Upload & Mint Section -->
       <div class="nft-grid">
-        <div class="nft-upload-panel">
+        <div class="nft-upload-panel reveal-block">
           <div class="panel-header">
             <h2 data-i18n="nft.create">Create NFT</h2>
             <span class="wallet-status" id="nftWalletStatus">Wallet not connected</span>
@@ -153,7 +155,7 @@
         </div>
 
         <!-- Marketplace Section -->
-        <div class="nft-marketplace-panel">
+        <div class="nft-marketplace-panel reveal-block">
           <div class="panel-header">
             <h2 data-i18n="nft.marketplace">Marketplace</h2>
             <div class="market-filters">

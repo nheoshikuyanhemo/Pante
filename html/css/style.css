@@ -340,7 +340,25 @@ html { scroll-behavior: smooth; }
 .menu-close:hover { color: #ffb347; }
 
 .menu-contents { list-style: none; margin: 0; padding: 0; }
-.menu-contents li { margin-bottom: 1rem; }
+.menu-contents li {
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+.menu-panel.open .menu-contents li {
+  opacity: 1;
+  transform: translateX(0);
+}
+/* sequential stagger so items open one-by-one (matches scroll reveal rhythm) */
+.menu-panel.open .menu-contents li:nth-child(1) { transition-delay: 0.05s; }
+.menu-panel.open .menu-contents li:nth-child(2) { transition-delay: 0.10s; }
+.menu-panel.open .menu-contents li:nth-child(3) { transition-delay: 0.15s; }
+.menu-panel.open .menu-contents li:nth-child(4) { transition-delay: 0.20s; }
+.menu-panel.open .menu-contents li:nth-child(5) { transition-delay: 0.25s; }
+.menu-panel.open .menu-contents li:nth-child(6) { transition-delay: 0.30s; }
+.menu-panel.open .menu-contents li:nth-child(7) { transition-delay: 0.35s; }
+.menu-panel.open .menu-contents li:nth-child(8) { transition-delay: 0.40s; }
 .menu-contents a {
   display: block; padding: 0.75rem 1rem;
   border-radius: 6px; text-decoration: none;

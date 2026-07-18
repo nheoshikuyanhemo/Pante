@@ -65,13 +65,15 @@
       <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title typewriter" data-i18n="menu.github" data-type="GitHub" data-speed="30" data-delay="2000"></span><span class="mc-desc typewriter" data-i18n="menu.github.desc" data-type="Source code & development repository." data-speed="14" data-delay="2150"></span></a></li>
     </ul>
   </aside>
-    <section class="dex-wrap bordered reveal-block" id="dex">
-      <h1 class="typewriter" data-i18n="dex.title" data-type="Pante DEX" data-speed="50"></h1>
-      <p class="typewriter" data-i18n="dex.tagline" data-type="Decentralized trading with real-time charting and liquidity tools." data-speed="25"></p>
+    <section class="dex-wrap bordered" id="dex">
+      <div class="dex-intro reveal-block">
+        <h1 class="typewriter" data-i18n="dex.title" data-type="Pante DEX" data-speed="50"></h1>
+        <p class="typewriter" data-i18n="dex.tagline" data-type="Decentralized trading with real-time charting and liquidity tools." data-speed="25"></p>
+      </div>
       
       <div class="dex-grid">
         <!-- Chart Panel -->
-        <div class="dex-chart-panel">
+        <div class="dex-chart-panel reveal-block">
           <div class="trading-header">
             <span class="pair-label">PANTE/USDC</span>
             <span class="pair-price" id="pair-price">$0.000000</span>
@@ -83,7 +85,7 @@
         </div>
 
         <!-- Swap Panel -->
-        <div class="dex-swap-panel">
+        <div class="dex-swap-panel reveal-block">
           <div class="swap-header">
             <span data-i18n="dex.swap">Swap</span>
           </div>
@@ -113,7 +115,7 @@
       </div>
 
       <!-- Liquidity / Stake Tabs -->
-      <div class="dex-tabs">
+      <div class="dex-tabs reveal-block">
         <button class="tab-btn active" data-tab="liquidity" data-i18n="dex.liquidity">Liquidity</button>
         <button class="tab-btn" data-tab="stake" data-i18n="dex.stake">Stake</button>
         <button class="tab-btn" data-tab="bridge" data-i18n="dex.bridge">Bridge</button>

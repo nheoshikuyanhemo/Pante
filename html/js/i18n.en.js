@@ -28,6 +28,8 @@ window.I18N_EN = {
   "feature.stake.desc": "Stake your $PANTE tokens to earn passive income through our reward mechanism.",
   "feature.gov": "Governance",
   "feature.gov.desc": "Token holders participate in protocol governance decisions.",
+  "feature.nft": "Community Creation NFT",
+  "feature.nft.desc": "Upload cat-themed art, photos, or animations. AI-verified cat content required. Mint & trade on our marketplace.",
   "eco.title": "Ecosystem",
   "eco.1": "PanteSwap — Decentralized Exchange",
   "eco.2": "PanteStake — Staking Platform",

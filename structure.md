@@ -63,6 +63,15 @@ root/
 - **Thin Border** – Main sections use `.bordered` (2px solid `#ff9500`) for a clean framed look.
 - **White Menu Text** – All menu list items (`.mc-title`, `.mc-desc`) are forced to white (`#ffffff`) for readability.
 
+## 🌐 Deployment & Preview Links
+
+- **Production**: `https://pante.vercel.app` (auto-deploy dari branch `main`)
+- **Testnet / Preview**: `https://testnet.pante.vercel.app` (auto-deploy dari branch `testnet`)
+  - Setup di Vercel Dashboard → Project → **Settings → Git** → tambahkan `testnet` ke Production Branches
+  - **Settings → Domains** → Add `testnet.pante.vercel.app` → assign ke branch `testnet` (Vercel auto-SSL)
+  - Konten SAMA PERSIS dengan production, hanya beda URL (untuk user preview/testing)
+- **Local**: `http://localhost:8000/html/` (server dari root Pante) atau `http://localhost:8001/` (server dari `html/`)
+
 ## 🌐 Runtime Context
 
 - **Local Server**: Runs on port **12345** (`cd html && python3 -m http.server 12345 --bind 0.0.0.0`).

@@ -142,9 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el.dataset.typed === '1') return;
     el.dataset.typed = '1';
     const txt = el.getAttribute('data-type') || el.textContent;
-    // Clamp speed so typing rhythm matches the box fade-in (~0.4-0.5s), not slower
+    // Clamp speed so typing is snappy; box fade is the slower element now
     const raw = parseInt(el.getAttribute('data-speed')) || 30;
-    const speed = Math.min(raw, 32);
+    const speed = Math.min(raw, 20);
     typeWriter(el, txt, speed);
   }
 

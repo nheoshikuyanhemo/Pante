@@ -1,101 +1,96 @@
-// Pante — Reown AppKit wallet connection (lazy-loaded on first click to avoid heavy initial load)
+// Pante — Reown AppKit wallet connection (local bundled build, lazy-loaded on first click)
 // Loaded as <script type="module" src="js/wallet-reown.js"></script>
-// AppKit is imported ONLY when the user clicks Connect Wallet (dynamic import from esm.sh CDN),
-// so the initial page load stays light.
+// The heavy AppKit+wagmi+viem bundle lives in js/appkit-bundle.js so the page loads light,
+// and only fetches it when the user clicks "Connect Wallet". Works in ANY browser via the
+// WalletConnect QR modal (scan with phone) — no MetaMask extension required.
 
-const projectId = '17e1a3b695d76f2fe901e769d20b1a86'
-let appKitReady = false
-let modal = null
+let appKitModal = null;
+let initPromise = null;
 
 async function initAppKit() {
-  if (appKitReady) return modal
-  // Dynamic import — does not block initial page render
-  const [{ createAppKit }, { WagmiAdapter }, networksMod] = await Promise.all([
-    import('https://esm.sh/@reown/appkit@1.8.22'),
-    import('https://esm.sh/@reown/appkit-adapter-wagmi@1.8.22'),
-    import('https://esm.sh/@reown/appkit@1.8.22/networks'),
-  ])
-  const { mainnet, base, arbitrum, optimism, polygon, bsc, sepolia } = networksMod
-  const networks = [mainnet, base, arbitrum, optimism, polygon, bsc, sepolia]
-
-  const wagmiAdapter = new WagmiAdapter({ networks, projectId })
-  modal = createAppKit({
-    adapters: [wagmiAdapter],
-    networks,
-    projectId,
-    metadata: {
-      name: 'Pante',
-      description: 'Pante — Meme with Utility. Cat-themed Web3 ecosystem.',
-      url: 'https://pante.vercel.app',
-      icons: ['https://pante.vercel.app/assets/logo.png'],
-    },
-    features: { analytics: false, email: false, socials: [] },
-    allWallets: 'SHOW',
-    themeMode: 'dark',
-    themeVariables: { '--w3m-color-mix': '#ff9500', '--w3m-accent': '#ff9500' },
-  })
-
-  window.__panteAppKit = { modal, wagmiAdapter }
-
-  // Reflect connection state in the header button
-  modal.subscribeAccount((account) => {
-    const walletBtn = document.getElementById('walletBtn')
-    if (!walletBtn) return
-    if (account.isConnected && account.address) {
-      const addr = account.address
-      walletBtn.textContent = addr.slice(0, 6) + '...' + addr.slice(-4)
-      walletBtn.classList.add('connected')
-      walletBtn.title = addr
-      document.dispatchEvent(new CustomEvent('walletConnected', { detail: { address: addr } }))
-    } else {
-      walletBtn.textContent = 'Connect Wallet'
-      walletBtn.classList.remove('connected')
-      walletBtn.title = ''
-      document.dispatchEvent(new CustomEvent('walletDisconnected'))
-    }
-  })
-
-  appKitReady = true
-  return modal
-}
-
-function bindWalletButton() {
-  const walletBtn = document.getElementById('walletBtn')
-  if (!walletBtn) return
-
-  walletBtn.addEventListener('click', async () => {
+  if (initPromise) return initPromise;
+  initPromise = (async () => {
     try {
-      const m = await initAppKit()
-      if (walletBtn.classList.contains('connected')) {
-        m.open({ view: 'Account' })
-      } else {
-        m.open()
-      }
+      const { createAppKit } = await import('./appkit-bundle.js');
+      const { WagmiAdapter } = await import('./appkit-bundle.js');
+      const networksMod = await import('./appkit-bundle.js');
+      const mainnet = networksMod.mainnet, base = networksMod.base,
+            arbitrum = networksMod.arbitrum, optimism = networksMod.optimism,
+            polygon = networksMod.polygon, bsc = networksMod.bsc, sepolia = networksMod.sepolia;
+
+      const projectId = '17e1a3b695d76f2fe901e769d20b1a86';
+      const networks = [mainnet, base, arbitrum, optimism, polygon, bsc, sepolia];
+
+      const wagmiAdapter = new WagmiAdapter({ networks, projectId });
+      appKitModal = createAppKit({
+        adapters: [wagmiAdapter],
+        networks,
+        projectId,
+        metadata: {
+          name: 'Pante',
+          description: 'Community Creation meme-coin with cat-themed NFT ecosystem.',
+          url: 'https://pante.vercel.app',
+          icons: ['https://pante.vercel.app/favicon.ico']
+        },
+        features: { analytics: false, email: false, socials: false },
+        themeVariables: { '--w3m-accent': '#ff9500' }
+      });
+
+      // Reflect account changes on the Connect button
+      appKitModal.subscribeAccount((account) => {
+        const btn = document.getElementById('walletBtn');
+        if (btn) {
+          if (account.isConnected && account.address) {
+            btn.textContent = account.address.slice(0, 6) + '…' + account.address.slice(-4);
+            btn.classList.add('connected');
+            window.dispatchEvent(new CustomEvent('walletConnected', { detail: account }));
+          } else {
+            btn.textContent = 'Connect Wallet';
+            btn.classList.remove('connected');
+          }
+        }
+      });
+      return appKitModal;
     } catch (err) {
-      console.error('Reown AppKit failed to load:', err)
-      fallbackConnect(walletBtn)
+      console.error('[Pante] Reown AppKit failed to load:', err);
+      appKitModal = null;
+      initPromise = null;
+      throw err;
     }
-  })
+  })();
+  return initPromise;
 }
 
-// Simple fallback if CDN/Reown unavailable (e.g. offline)
-function fallbackConnect(walletBtn) {
-  if (typeof window.ethereum === 'undefined') {
-    alert('Wallet not available. Install MetaMask or use a Web3 browser. (Reown AppKit failed to load)')
-    return
+async function openWallet() {
+  try {
+    const modal = await initAppKit();
+    if (modal && typeof modal.open === 'function') modal.open();
+  } catch (err) {
+    // Fallback: WalletConnect is the universal path; if the bundle failed, guide the user.
+    fallbackNotice();
   }
-  window.ethereum.request({ method: 'eth_requestAccounts' })
-    .then((accounts) => {
-      const addr = accounts[0]
-      walletBtn.textContent = addr.slice(0, 6) + '...' + addr.slice(-4)
-      walletBtn.classList.add('connected')
-      walletBtn.title = addr
-    })
-    .catch(() => alert('Connection rejected.'))
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bindWalletButton)
-} else {
-  bindWalletButton()
+function fallbackNotice() {
+  const hasMM = typeof window.ethereum !== 'undefined';
+  if (hasMM) {
+    window.ethereum.request({ method: 'eth_requestAccounts' })
+      .then(accs => {
+        const btn = document.getElementById('walletBtn');
+        if (btn && accs[0]) {
+          btn.textContent = accs[0].slice(0,6) + '…' + accs[0].slice(-4);
+          btn.classList.add('connected');
+          window.dispatchEvent(new CustomEvent('walletConnected', { detail: { address: accs[0], isConnected: true } }));
+        }
+      })
+      .catch(() => alert('Wallet connection cancelled.'));
+  } else {
+    alert('Wallet not available.\n\nInstall MetaMask or use a Web3 browser (Brave, Opera, Trust) to connect.\n\nOn mobile, open this site in the WalletConnect or MetaMask app to scan a QR code.');
+  }
+}
+
+// Bind the Connect Wallet button (present on every page)
+const walletBtn = document.getElementById('walletBtn');
+if (walletBtn) {
+  walletBtn.addEventListener('click', (e) => { e.preventDefault(); openWallet(); });
 }

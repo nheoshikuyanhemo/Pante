@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pante NFT - Community Creation Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dex-nft.css">
+</head>
+<body>
+  <!-- Animated RGB line -->
+  <div class="moving-line"></div>
+
+  <header class="bordered header">
+    <button class="menu-trigger" id="menuTrigger" title="Menu">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </button>
+
+    <nav class="header-nav">
+      <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
+      <a href="dex.html" class="nav-link" data-i18n="nav.dex">DEX</a>
+      <a href="nft.html" class="nav-link" data-i18n="nav.nft">NFT</a>
+      <a href="about.html" class="nav-link" data-i18n="nav.about">About</a>
+      <a href="whitepaper.html" class="nav-link" data-i18n="nav.whitepaper">Whitepaper</a>
+    </nav>
+
+    <div class="logo-box">
+      <a href="index.html"><img src="assets/logo.png" alt="Pante Logo" class="logo-img"></a>
+    </div>
+
+    <div class="header-right">
+      <div class="lang-switch">
+        <select id="langSelect" aria-label="Select language">
+          <option value="en">🇬🇧 EN</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="id">🇮🇩 ID</option>
+          <option value="vi">🇻🇳 VI</option>
+          <option value="hi">🇮🇳 हि</option>
+          <option value="es">🇪🇸 ES</option>
+          <option value="fr">🇫🇷 FR</option>
+          <option value="de">🇩🇪 DE</option>
+          <option value="pt">🇧🇷 PT</option>
+          <option value="ru">🇷🇺 RU</option>
+          <option value="ja">🇯🇵 日</option>
+          <option value="ko">🇰🇷 KO</option>
+          <option value="ar">🇸🇦 ع</option>
+          <option value="tr">🇹🇷 TR</option>
+          <option value="tl">🇵🇭 TL</option>
+        </select>
+      </div>
+      <button class="wallet-btn" id="walletBtn">Connect Wallet</button>
+    </div>
+  </header>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <aside class="menu-panel" id="menuPanel">
+    <div class="menu-panel__head">
+      <span class="menu-panel__title" data-i18n="menu.title">// PANTE</span>
+      <button class="menu-close" id="menuClose">✕</button>
+    </div>
+    <ul class="menu-contents">
+      <li><a href="index.html"><span class="mc-title typewriter" data-i18n="menu.home" data-type="Home" data-speed="30" data-delay="200"></span><span class="mc-desc typewriter" data-i18n="menu.home.desc" data-type="Landing — banner, tagline & core features." data-speed="14" data-delay="350"></span></a></li>
+      <li><a href="dex.html"><span class="mc-title typewriter" data-i18n="menu.dex" data-type="DEX" data-speed="30" data-delay="500"></span><span class="mc-desc typewriter" data-i18n="menu.dex.desc" data-type="Swap tokens on our decentralized exchange" data-speed="14" data-delay="650"></span></a></li>
+      <li><a href="nft.html"><span class="mc-title typewriter" data-i18n="menu.nft" data-type="NFT Marketplace" data-speed="30" data-delay="800"></span><span class="mc-desc typewriter" data-i18n="menu.nft.desc" data-type="Cat-themed NFT creation & trading" data-speed="14" data-delay="950"></span></a></li>
+      <li><a href="about.html"><span class="mc-title typewriter" data-i18n="menu.about" data-type="About" data-speed="30" data-delay="1100"></span><span class="mc-desc typewriter" data-i18n="menu.about.desc" data-type="Vision, utility & ecosystem links." data-speed="14" data-delay="1250"></span></a></li>
+      <li><a href="whitepaper.html"><span class="mc-title typewriter" data-i18n="menu.whitepaper" data-type="Whitepaper" data-speed="30" data-delay="1400"></span><span class="mc-desc typewriter" data-i18n="menu.whitepaper.desc" data-type="Tokenomics, roadmap, DEX, staking & security." data-speed="14" data-delay="1550"></span></a></li>
+      <li><a href="https://x.com/pante_coin" target="_blank"><span class="mc-title typewriter" data-i18n="menu.x" data-type="X (Twitter)" data-speed="30" data-delay="1700"></span><span class="mc-desc typewriter" data-i18n="menu.x.desc" data-type="Official announcements & community." data-speed="14" data-delay="1850"></span></a></li>
+      <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title typewriter" data-i18n="menu.github" data-type="GitHub" data-speed="30" data-delay="2000"></span><span class="mc-desc typewriter" data-i18n="menu.github.desc" data-type="Source code & development repository." data-speed="14" data-delay="2150"></span></a></li>
+    </ul>
+  </aside>
+
+  <!-- NFT Main -->
+  <main>
+    <section class="nft-wrap bordered reveal-block" id="nft">
+      <h1 class="typewriter" data-i18n="nft.title" data-type="Community Creation NFT" data-speed="50"></h1>
+      <p class="typewriter" data-i18n="nft.tagline" data-type="Upload cat-themed art, photos, or animations. AI-verified cat content required. Mint & trade on our marketplace." data-speed="25"></p>
+
+      <!-- Upload & Mint Section -->
+      <div class="nft-grid">
+        <div class="nft-upload-panel">
+          <div class="panel-header">
+            <h2 data-i18n="nft.create">Create NFT</h2>
+            <span class="wallet-status" id="nftWalletStatus">Wallet not connected</span>
+          </div>
+
+          <div class="upload-area" id="uploadArea">
+            <input type="file" id="nftFileInput" accept="image/*,video/*" hidden>
+            <div class="upload-placeholder" id="uploadPlaceholder">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+              <p data-i18n="nft.drag_drop">Drag & drop or click to upload</p>
+              <span data-i18n="nft.formats">PNG, JPG, GIF, WEBP, MP4, WEBM • Max 50MB</span>
+            </div>
+            <div class="upload-preview hidden" id="uploadPreview">
+              <img id="previewImage" alt="Preview">
+              <video id="previewVideo" controls hidden></video>
+              <button class="remove-btn" id="removeFile" data-i18n="nft.remove">Remove</button>
+            </div>
+          </div>
+
+          <div class="cat-detection" id="catDetection">
+            <div class="detection-header">
+              <h3 data-i18n="nft.cat_check">Cat Content Verification</h3>
+              <span class="detection-status" id="detectionStatus">Pending</span>
+            </div>
+            <div class="detection-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <p class="detection-text" id="detectionText" data-i18n="nft.analyzing">Analyzing image for cat content...</p>
+            </div>
+            <div class="detection-result hidden" id="detectionResult">
+              <div class="result-success" id="resultSuccess">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#00ff88" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span data-i18n="nft.cat_found">✓ Cat detected! Ready to mint.</span>
+              </div>
+              <div class="result-fail hidden" id="resultFail">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#ff4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                <span data-i18n="nft.no_cat">✗ No cat detected. Upload must contain a cat.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="nft-metadata">
+            <h3 data-i18n="nft.details">NFT Details</h3>
+            <div class="form-group">
+              <label data-i18n="nft.name">Name</label>
+              <input type="text" id="nftName" placeholder="My Awesome Cat NFT" maxlength="100">
+            </div>
+            <div class="form-group">
+              <label data-i18n="nft.description">Description</label>
+              <textarea id="nftDescription" placeholder="Tell the story of your cat..." maxlength="500" rows="3"></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="nft.category">Category</label>
+                <select id="nftCategory">
+                  <option value="art" data-i18n="nft.cat_art">Digital Art</option>
+                  <option value="photo" data-i18n="nft.cat_photo">Photography</option>
+                  <option value="animation" data-i18n="nft.cat_animation">Animation</option>
+                  <option value="meme" data-i18n="nft.cat_meme">Meme</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="nft.royalty">Royalty %</label>
+                <input type="number" id="nftRoyalty" min="0" max="50" value="5" step="0.5">
+              </div>
+            </div>
+          </div>
+
+          <button class="nft-action-btn primary" id="mintBtn" disabled data-i18n="nft.mint">Mint NFT</button>
+          <p class="mint-info" data-i18n="nft.mint_info">Requires wallet connection & cat verification. Gas fees apply.</p>
+        </div>
+
+        <!-- Marketplace Section -->
+        <div class="nft-marketplace-panel">
+          <div class="panel-header">
+            <h2 data-i18n="nft.marketplace">Marketplace</h2>
+            <div class="market-filters">
+              <select id="sortFilter" data-i18n="nft.sort">
+                <option value="newest" data-i18n="nft.newest">Newest</option>
+                <option value="price_asc" data-i18n="nft.price_low">Price: Low to High</option>
+                <option value="price_desc" data-i18n="nft.price_high">Price: High to Low</option>
+                <option value="popular" data-i18n="nft.popular">Most Popular</option>
+              </select>
+              <select id="categoryFilter">
+                <option value="all" data-i18n="nft.all">All Categories</option>
+                <option value="art" data-i18n="nft.cat_art">Digital Art</option>
+                <option value="photo" data-i18n="nft.cat_photo">Photography</option>
+                <option value="animation" data-i18n="nft.cat_animation">Animation</option>
+                <option value="meme" data-i18n="nft.cat_meme">Meme</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="nft-grid" id="nftGrid">
+            <!-- NFT cards will be rendered here -->
+          </div>
+
+          <div class="load-more">
+            <button class="nft-action-btn secondary" id="loadMore" data-i18n="nft.load_more">Load More</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- My NFTs Tab -->
+      <div class="nft-tabs">
+        <button class="tab-btn active" data-tab="marketplace" data-i18n="nft.marketplace">Marketplace</button>
+        <button class="tab-btn" data-tab="my-nfts" data-i18n="nft.my_nfts">My NFTs</button>
+        <button class="tab-btn" data-tab="create" data-i18n="nft.create">Create</button>
+      </div>
+
+      <div class="tab-content">
+        <div class="tab-panel active" id="marketplace-panel">
+          <!-- Marketplace content rendered above -->
+        </div>
+        <div class="tab-panel hidden" id="my-nfts-panel">
+          <h3 data-i18n="nft.my_collection">My Collection</h3>
+          <div class="nft-grid" id="myNftGrid">
+            <p class="empty-state" data-i18n="nft.no_nfts">Connect wallet to view your NFTs</p>
+          </div>
+        </div>
+        <div class="tab-panel hidden" id="create-panel">
+          <!-- Create content rendered above -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bordered footer" id="footer">
+    <div class="footer-social">
+      <a href="https://x.com/pante_coin" target="_blank" rel="noopener" title="X (Twitter)" class="footer-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank" rel="noopener" title="GitHub" class="footer-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 .5C5.37.5 0 5.78 0 12.292c0 5.211 3.438 9.63 8.205 11.188.6.111.82-.254.82-.567 0-.28-.01-1.022-.015-2.005-3.338.711-4.042-1.582-4.042-1.582-.546-1.361-1.335-1.724-1.335-1.724-1.09-.731.083-.716.083-.716 1.205.082 1.838 1.215 1.838 1.215 1.07 1.797 2.809 1.278 3.495.977.108-.76.418-1.279.762-1.573-2.665-.297-5.466-1.296-5.466-5.759 0-1.273.462-2.313 1.22-3.129-.122-.296-.53-1.487.115-3.098 0 0 .995-.314 3.26 1.195a11.5 11.5 0 0 1 2.97-.395c1.007 0 2.023.132 2.97.395 2.262-1.509 3.256-1.195 3.256-1.195.646 1.611.24 2.802.118 3.098.759.816 1.22 1.856 1.22 3.129 0 4.476-2.805 5.459-5.476 5.749.429.364.812 1.084.812 2.186 0 1.578-.014 2.85-.014 3.238 0 .314.216.685.825.568C20.565 21.917 24 17.495 24 12.292 24 5.78 18.63.5 12 .5z"/></svg>
+      </a>
+    </div>
+    <p data-i18n="footer">© 2026 Pante. All Rights Reserved.</p>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/nft.js"></script>
+</body>
+</html>

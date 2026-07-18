@@ -29,9 +29,11 @@ root/
 
 | File | Category | Purpose |
 |------|----------|---------|
-| `html/index.html` | HTML | Main landing page: header, hero, feature cards, footer, side menu. |
-| `html/about.html` | HTML | About page: vision, core features, related links. |
-| `html/whitepaper.html` | HTML | Whitepaper: abstract, tokenomics, ecosystem, roadmap, security. |
+| `html/index.html` | HTML | Main landing page: header (Menu + nav links + Languages + Connect Wallet), hero, feature cards, footer, side menu. |
+| `html/about.html` | HTML | About page: vision, core features, related links. Header same as index. |
+| `html/whitepaper.html` | HTML | Whitepaper: abstract, tokenomics, ecosystem, roadmap, security. Header same as index. |
+| `html/dex.html` | HTML | DEX page: TradingView chart, swap, liquidity, staking, bridge. Header same as index. |
+| `html/nft.html` | HTML | NFT marketplace: upload, cat detection, mint, marketplace. Header same as index. |
 | `html/assets/logo.png` | Assets | Square logo (1:1) displayed in the header. |
 | `html/assets/banner.png` | Assets | Hero background image used on the landing page. |
 | `html/css/style.css` | CSS | All styling: dark theme, scroll reveal, RGB line, side menu, responsive layout. |
@@ -56,7 +58,7 @@ root/
 
 - **Scroll Reveal** – Elements with class `reveal` start hidden (`opacity:0; translateY(30px)`) and become visible when scrolled into view (IntersectionObserver adds `.visible`).
 - **Moving RGB Line** – A fixed 1px‑high `div.moving-line` at the top with an animated gradient (`#ff0000 → #ff7f00 → #ffff00 → #00ff00 → #0000ff → #4b0082 → #9400d3`) using CSS keyframes.
-- **Side Menu** – Panel slides from the right (`transform: translateX(100%) → 0`) when the 3‑dot trigger is clicked; backdrop dims the page.
+- **Header Layout** – Single responsive row: `Menu (≡)` → `Home / DEX / NFT / About / Whitepaper` nav links → `Logo` (right) → `Languages (🇬🇧 EN)` + `Connect Wallet` button. Orange bottom border (`2px solid #ff9500`). Active page nav-link gets orange underline (box-shadow). On mobile (<900px) nav links hidden, shown in slide menu instead.
 - **Click Effects** – Ripple animation on feature cards and menu items; menu trigger dots animate into an “X”.
 - **Thin Border** – Main sections use `.bordered` (2px solid `#ff9500`) for a clean framed look.
 - **White Menu Text** – All menu list items (`.mc-title`, `.mc-desc`) are forced to white (`#ffffff`) for readability.

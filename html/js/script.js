@@ -133,8 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   reserveAll();
 
-  // ===== REVEAL CHECK (IntersectionObserver — robust, no inverted math) =====
-  // Elements appear as soon as they enter the viewport (small rootMargin so no far scroll needed)
+  // ===== REVEAL: bidirectional (show on enter, hide on leave) + per-card stagger =====
   function openEl(el) {
     if (el.dataset.typed === '1') return;
     el.dataset.typed = '1';
@@ -142,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
     typeWriter(el, txt, parseInt(el.getAttribute('data-speed')) || 30);
   }
 
-  // ===== TYPEWRITER SEQUENTIAL QUEUE =====
   // Type elements one-by-one with a small gap so text "follows" the section opening
   function typeSequence(elements) {
     let i = 0;
@@ -151,49 +149,54 @@ document.addEventListener('DOMContentLoaded', () => {
       const el = elements[i++];
       if (el.dataset.typed === '1') { next(); return; }
       openEl(el);
-      // wait for this element to finish typing, then start the next
       const txt = el.getAttribute('data-type') || '';
       const speed = parseInt(el.getAttribute('data-speed')) || 30;
-      const est = txt.length * speed + 150; // estimated typing duration
+      const est = txt.length * speed + 150;
       setTimeout(next, est);
     }
     next();
   }
 
-  // Hero forced open immediately (top of page)
-  document.querySelectorAll('.hero').forEach(h => {
-    h.classList.add('visible');
-    typeSequence(Array.from(h.querySelectorAll('.typewriter[data-type]')));
-  });
-
-  // Observe all reveal-blocks below the hero.
-  // When a section scrolls into view: (1) fade/slide it open, (2) type its text sequentially.
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const blk = entry.target;
-          blk.classList.add('visible');              // section opens (CSS fade + slide)
-          const tws = Array.from(blk.querySelectorAll('.typewriter[data-type]'));
-          typeSequence(tws);                          // text types in order, following the opening
-          io.unobserve(blk);                          // reveal once
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -12% 0px' });
-    document.querySelectorAll('.reveal-block').forEach(blk => {
-      if (!blk.classList.contains('hero')) io.observe(blk);
-    });
-  } else {
-    // Fallback: no IO support — just show everything
-    document.querySelectorAll('.reveal-block').forEach(blk => {
-      blk.classList.add('visible');
-      typeSequence(Array.from(blk.querySelectorAll('.typewriter[data-type]')));
+  function openBlock(blk) {
+    if (blk.classList.contains('visible')) return;
+    blk.classList.add('visible');                       // section fades + slides in
+    const tws = Array.from(blk.querySelectorAll('.typewriter[data-type]'));
+    typeSequence(tws);                                  // heading text types in order
+    // child cards/items appear one-by-one (stagger) after the section opens
+    blk.querySelectorAll('.reveal-item').forEach((card, i) => {
+      setTimeout(() => card.classList.add('visible'), 200 + i * 130);
     });
   }
 
-  // NOTE: No forced-visible safety timeout. Sections stay hidden (opacity:0) until the
-  // user actually scrolls them into view via IntersectionObserver. Once revealed they
-  // stay visible (unobserved) — they do NOT re-hide or re-reveal on scroll-back.
+  function closeBlock(blk) {
+    if (!blk.classList.contains('visible')) return;
+    blk.classList.remove('visible');                    // section hides (opacity 0) on scroll-away
+    blk.querySelectorAll('.typewriter[data-type]').forEach(el => {
+      el.dataset.typed = '0';
+      el.textContent = '';                              // reset so it re-types next time
+    });
+    blk.querySelectorAll('.reveal-item').forEach(card => card.classList.remove('visible'));
+  }
+
+  // Hero: visible at load (top of page). It still hides when scrolled far away & re-shows on return.
+  const heroEls = Array.from(document.querySelectorAll('.hero'));
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) openBlock(entry.target);
+        else closeBlock(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('.reveal-block').forEach(blk => io.observe(blk));
+  } else {
+    // Fallback: no IO — show all
+    document.querySelectorAll('.reveal-block').forEach(blk => openBlock(blk));
+  }
+
+  // NOTE: No forced-visible safety timeout. Sections stay hidden (opacity:0) until scrolled
+  // into view, and hide again when scrolled away — so scrolling back up closes the lower
+  // content (per requirement). Cards inside a section reveal one-by-one via stagger.
 
   // ===== RIPPLE CLICK =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {

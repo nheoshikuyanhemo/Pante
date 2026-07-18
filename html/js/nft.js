@@ -426,7 +426,7 @@
     }[nft.category] || nft.category;
     
     return `
-      <div class="nft-card" data-id="${nft.id}">
+      <div class="nft-card reveal-item" data-id="${nft.id}">
         <div class="nft-image">
           <img src="${nft.image}" alt="${nft.name}" loading="lazy">
           <span class="nft-category">${categoryLabel}</span>

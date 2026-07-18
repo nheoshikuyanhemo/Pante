@@ -191,17 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // SAFETY: if a reveal-block is ABOVE the fold (already visible at load) but never triggered,
-  // force it open after 2s. Blocks below the fold stay hidden until scrolled (intended effect).
-  setTimeout(() => {
-    document.querySelectorAll('.reveal-block:not(.visible)').forEach(blk => {
-      const r = blk.getBoundingClientRect();
-      if (r.top < window.innerHeight && r.bottom > 0) {
-        blk.classList.add('visible');
-        typeSequence(Array.from(blk.querySelectorAll('.typewriter[data-type]')));
-      }
-    });
-  }, 2000);
+  // NOTE: No forced-visible safety timeout. Sections stay hidden (opacity:0) until the
+  // user actually scrolls them into view via IntersectionObserver. Once revealed they
+  // stay visible (unobserved) — they do NOT re-hide or re-reveal on scroll-back.
 
   // ===== RIPPLE CLICK =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {

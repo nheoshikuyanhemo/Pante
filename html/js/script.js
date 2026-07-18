@@ -142,7 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el.dataset.typed === '1') return;
     el.dataset.typed = '1';
     const txt = el.getAttribute('data-type') || el.textContent;
-    typeWriter(el, txt, parseInt(el.getAttribute('data-speed')) || 30);
+    // Clamp speed so typing rhythm matches the box fade-in (~0.4-0.5s), not slower
+    const raw = parseInt(el.getAttribute('data-speed')) || 30;
+    const speed = Math.min(raw, 32);
+    typeWriter(el, txt, speed);
   }
 
   // Type elements one-by-one with a small gap so text "follows" the section opening
@@ -168,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     typeSequence(tws);                                  // heading text types in order
     // child cards/items appear one-by-one (stagger) after the section opens
     blk.querySelectorAll('.reveal-item').forEach((card, i) => {
-      setTimeout(() => card.classList.add('visible'), 200 + i * 130);
+      setTimeout(() => card.classList.add('visible'), 150 + i * 100);
     });
   }
 
@@ -191,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (entry.isIntersecting) openBlock(entry.target);
         else closeBlock(entry.target);
       });
-    }, { threshold: 0.2, rootMargin: '0px 0px -15% 0px' });
+    }, { threshold: 0.05, rootMargin: '0px 0px -5% 0px' });
     document.querySelectorAll('.reveal-block').forEach(blk => io.observe(blk));
   } else {
     // Fallback: no IO — show all

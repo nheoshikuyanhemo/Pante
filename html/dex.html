@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pante – Meme with Utility</title>
+  <title>Pante DEX - Decentralized Trading</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.min.css">
 </head>
 <body>
-  <!-- Animated RGB line -->
-  <div class="moving-line"></div>
-
   <header class="bordered header">
     <button class="menu-trigger" id="menuTrigger" title="Menu">
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
@@ -39,6 +37,7 @@
       <a href="dex.html" class="dex-btn" data-i18n="nav.dex">DEX</a>
     </div>
   </header>
+
   <nav class="nav-bar">
     <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
     <a href="about.html" class="nav-link" data-i18n="nav.about">About</a>
@@ -62,53 +61,112 @@
     </ul>
   </aside>
 
-  <!-- ========== HERO ========== -->
-  <section class="hero bordered reveal-block" id="hero">
-    <img src="assets/banner.png" alt="Hero Banner" class="hero-banner">
-    <h1 class="typewriter" data-i18n="hero.title" data-type="Pante: Meme with Utility & Sustainable Development" data-speed="45"></h1>
-    <p class="typewriter" data-i18n="hero.tagline" data-type="Explore the future of memes — designed for utility, growth, and community-driven development." data-speed="22"></p>
-  </section>
+  <!-- DEX Main -->
+  <main>
+    <section class="dex-wrap bordered reveal-block" id="dex">
+      <h1 class="typewriter" data-i18n="dex.title" data-type="Pante DEX" data-speed="50"></h1>
+      <p class="typewriter" data-i18n="dex.tagline" data-type="Decentralized trading with real-time charting and liquidity tools." data-speed="25"></p>
+      
+      <div class="dex-grid">
+        <!-- Chart Panel -->
+        <div class="dex-chart-panel">
+          <div class="trading-header">
+            <span class="pair-label">PANTE/USDC</span>
+            <span class="pair-price" id="pair-price">$0.000000</span>
+          </div>
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget" id="tradingview-chart"></div>
+            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+          </div>
+        </div>
 
-  <!-- ========== VISION ========== -->
-  <section class="vision bordered reveal-block" id="vision">
-    <h2 class="section-title typewriter" data-i18n="vision.title" data-type="Our Vision" data-speed="55"></h2>
-    <p class="typewriter" data-i18n="vision.text" data-type="Pante is not just a meme — it is the evolution of meme tokens. We merge meme culture with real DeFi utility: a decentralized exchange, liquidity mining, and staking rewards." data-speed="18"></p>
-  </section>
+        <!-- Swap Panel -->
+        <div class="dex-swap-panel">
+          <div class="swap-header">
+            <span data-i18n="dex.swap">Swap</span>
+          </div>
+          <div class="swap-body">
+            <div class="swap-input">
+              <label data-i18n="dex.from">From</label>
+              <input type="text" id="from-amount" placeholder="0.0" />
+              <select id="from-token">
+                <option value="PANTE">PANTE</option>
+                <option value="USDC">USDC</option>
+                <option value="ETH">ETH</option>
+              </select>
+            </div>
+            <button class="swap-switch" id="swap-switch">↓</button>
+            <div class="swap-input">
+              <label data-i18n="dex.to">To</label>
+              <input type="text" id="to-amount" placeholder="0.0" readonly />
+              <select id="to-token">
+                <option value="USDC">USDC</option>
+                <option value="PANTE">PANTE</option>
+                <option value="ETH">ETH</option>
+              </select>
+            </div>
+            <button class="dex-action-btn" id="swap-btn" data-i18n="dex.swap">Swap</button>
+          </div>
+        </div>
+      </div>
 
-  <!-- ========== FEATURES ========== -->
-  <section class="features bordered reveal-block" id="features">
-    <h2 class="section-title" data-i18n="features.title">Core Features</h2>
-    <div class="feature-grid">
-      <div class="feature-card" data-dex="swap">
-        <h3 class="typewriter" data-i18n="feature.dex" data-type="Decentralized Exchange" data-speed="40"></h3>
-        <p class="typewriter" data-i18n="feature.dex.desc" data-type="Swap tokens effortlessly on our decentralized exchange with low fees." data-speed="16"></p>
+      <!-- Liquidity / Stake Tabs -->
+      <div class="dex-tabs">
+        <button class="tab-btn active" data-tab="liquidity" data-i18n="dex.liquidity">Liquidity</button>
+        <button class="tab-btn" data-tab="stake" data-i18n="dex.stake">Stake</button>
+        <button class="tab-btn" data-tab="bridge" data-i18n="dex.bridge">Bridge</button>
       </div>
-      <div class="feature-card" data-dex="liquidity">
-        <h3 class="typewriter" data-i18n="feature.liq" data-type="Liquidity Mining" data-speed="40"></h3>
-        <p class="typewriter" data-i18n="feature.liq.desc" data-type="Earn rewards by providing liquidity to our pools." data-speed="16"></p>
-      </div>
-      <div class="feature-card" data-dex="stake">
-        <h3 class="typewriter" data-i18n="feature.stake" data-type="Staking" data-speed="40"></h3>
-        <p class="typewriter" data-i18n="feature.stake.desc" data-type="Stake your $PANTE tokens and earn passive income." data-speed="16"></p>
-      </div>
-      <div class="feature-card" data-dex="governance">
-        <h3 class="typewriter" data-i18n="feature.gov" data-type="Governance" data-speed="40"></h3>
-        <p class="typewriter" data-i18n="feature.gov.desc" data-type="Token holders vote on protocol upgrades and treasury." data-speed="16"></p>
-      </div>
-    </div>
-  </section>
 
-  <!-- ========== ECOSYSTEM ========== -->
-  <section class="ecosystem bordered reveal-block" id="ecosystem">
-    <h2 class="section-title typewriter" data-i18n="eco.title" data-type="Ecosystem" data-speed="55"></h2>
-    <ul class="eco-list">
-      <li class="typewriter" data-i18n="eco.1" data-type="PanteSwap — AMM decentralized exchange" data-speed="20" data-dex="swap"></li>
-      <li class="typewriter" data-i18n="eco.2" data-type="PanteStake — flexible & locked staking pools" data-speed="20" data-dex="stake"></li>
-      <li class="typewriter" data-i18n="eco.3" data-type="PanteBridge — cross-chain liquidity bridge" data-speed="20" data-dex="bridge"></li>
-      <li class="typewriter" data-i18n="eco.4" data-type="PanteDAO — community governance" data-speed="20" data-dex="governance"></li>
-    </ul>
-  </section>
+      <div class="dex-tab-content" id="liquidity-tab">
+        <h3 data-i18n="dex.add_liquidity">Add Liquidity</h3>
+        <div class="lp-inputs">
+          <div class="swap-input">
+            <label>PANTE</label>
+            <input type="text" id="lp-pante" placeholder="0.0" />
+          </div>
+          <div class="swap-input">
+            <label>USDC</label>
+            <input type="text" id="lp-usdc" placeholder="0.0" />
+          </div>
+        </div>
+        <button class="dex-action-btn" id="lp-btn" data-i18n="dex.add_liquidity">Add Liquidity</button>
+      </div>
 
+      <div class="dex-tab-content hidden" id="stake-tab">
+        <h3 data-i18n="dex.staking">Staking</h3>
+        <div class="stake-info">
+          <div class="stake-apy">APY: <span id="stake-apy">0%</span></div>
+          <div class="stake-tvl">TVL: <span id="stake-tvl">$0</span></div>
+        </div>
+        <div class="swap-input">
+          <label data-i18n="dex.amount">Amount</label>
+          <input type="text" id="stake-amount" placeholder="0.0 PANTE" />
+        </div>
+        <button class="dex-action-btn" id="stake-btn" data-i18n="dex.stake">Stake</button>
+      </div>
+
+      <div class="dex-tab-content hidden" id="bridge-tab">
+        <h3 data-i18n="dex.bridge_title">Cross-chain Bridge</h3>
+        <p data-i18n="dex.bridge_desc">Transfer PANTE across Ethereum, Polygon, BNB Chain and more.</p>
+        <div class="bridge-form">
+          <select id="bridge-from">
+            <option value="ethereum">Ethereum</option>
+            <option value="polygon">Polygon</option>
+            <option value="bsc">BNB Chain</option>
+          </select>
+          <span>→</span>
+          <select id="bridge-to">
+            <option value="polygon">Polygon</option>
+            <option value="bsc">BNB Chain</option>
+            <option value="ethereum">Ethereum</option>
+          </select>
+        </div>
+        <button class="dex-action-btn" id="bridge-btn" data-i18n="dex.bridge">Bridge</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
   <footer class="bordered footer" id="footer">
     <div class="footer-social">
       <a href="https://x.com/pante_coin" target="_blank" rel="noopener" title="X (Twitter)" class="footer-icon">
@@ -123,5 +181,8 @@
 
   <script src="js/i18n.js"></script>
   <script src="js/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script src="js/dex.js"></script>
 </body>
 </html>

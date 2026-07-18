@@ -170,13 +170,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // FAILSAFE: if anything is still hidden after 1.5s (e.g. observer quirk), force-show all
+  // SAFETY (not failsafe-type): if a reveal-block is ABOVE the fold (already in viewport at load)
+  // but somehow never got observed/triggered, force it visible after 2s. Blocks below the fold
+  // stay hidden until scrolled — that is the intended typewriter-on-scroll effect.
   setTimeout(() => {
-    document.querySelectorAll('.reveal-block').forEach(blk => {
-      blk.classList.add('visible');
-      blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+    document.querySelectorAll('.reveal-block:not(.visible)').forEach(blk => {
+      const r = blk.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        blk.classList.add('visible');
+        blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+      }
     });
-  }, 1500);
+  }, 2000);
 
   // ===== RIPPLE CLICK =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {

@@ -120,5 +120,7 @@ window.I18N_EN = {
   "nft.cat_photo": "Photography",
   "nft.cat_animation": "Animation",
   "nft.cat_meme": "Meme",
-  "nft.load_more": "Load More"
+  "nft.load_more": "Load More",
+  "nft.coming_soon_title": "Marketplace Coming Soon",
+  "nft.coming_soon_desc": "NFT trading will be available once our smart contract is deployed."
 };

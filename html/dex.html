@@ -76,7 +76,7 @@
         <div class="dex-chart-panel reveal-block">
           <div class="trading-header">
             <span class="pair-label">PANTE/USDC</span>
-            <span class="pair-price" id="pair-price">$0.000000</span>
+            <span class="pair-price" id="pair-price">—</span>
           </div>
           <div class="tradingview-widget-container">
             <div class="tradingview-widget-container__widget" id="tradingview-chart"></div>
@@ -109,7 +109,7 @@
                 <option value="ETH">ETH</option>
               </select>
             </div>
-            <button class="dex-action-btn" id="swap-btn" data-i18n="dex.swap">Swap</button>
+            <button class="dex-action-btn" id="swap-btn" data-i18n="dex.swap" disabled>Swap</button>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@
             <input type="text" id="lp-usdc" placeholder="0.0" />
           </div>
         </div>
-        <button class="dex-action-btn" id="lp-btn" data-i18n="dex.add_liquidity">Add Liquidity</button>
+        <button class="dex-action-btn" id="lp-btn" data-i18n="dex.add_liquidity" disabled>Add Liquidity</button>
       </div>
 
       <div class="dex-tab-content hidden" id="stake-tab">
@@ -146,7 +146,7 @@
           <label data-i18n="dex.amount">Amount</label>
           <input type="text" id="stake-amount" placeholder="0.0 PANTE" />
         </div>
-        <button class="dex-action-btn" id="stake-btn" data-i18n="dex.stake">Stake</button>
+        <button class="dex-action-btn" id="stake-btn" data-i18n="dex.stake" disabled>Stake</button>
       </div>
 
       <div class="dex-tab-content hidden" id="bridge-tab">
@@ -165,7 +165,7 @@
             <option value="ethereum">Ethereum</option>
           </select>
         </div>
-        <button class="dex-action-btn" id="bridge-btn" data-i18n="dex.bridge">Bridge</button>
+        <button class="dex-action-btn" id="bridge-btn" data-i18n="dex.bridge" disabled>Bridge</button>
       </div>
     </section>
   </main>

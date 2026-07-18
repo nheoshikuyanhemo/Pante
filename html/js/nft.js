@@ -55,53 +55,10 @@
     }
   }
 
-  // ===== NFT MARKETPLACE DATA (Mock - replace with blockchain data) =====
-  const mockNFTs = [
-    {
-      id: '1',
-      name: 'Cosmic Cat',
-      description: 'A celestial feline exploring the universe',
-      image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTFmIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNmZjk1MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5DYXQgQXJ0PC90ZXh0Pjwvc3ZnPg==',
-      price: '0.05 ETH',
-      category: 'art',
-      creator: '0x1234...abcd',
-      likes: 42,
-      views: 128
-    },
-    {
-      id: '2',
-      name: 'Whiskers in Space',
-      description: 'Real photo of my cat wearing astronaut helmet',
-      image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTFmIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNmZjk1MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5QaG90bzwvdGV4dD48L3N2Zz4=',
-      price: '0.12 ETH',
-      category: 'photo',
-      creator: '0x5678...efgh',
-      likes: 89,
-      views: 356
-    },
-    {
-      id: '3',
-      name: 'Dancing Kitty',
-      description: 'Looping animation of a happy cat',
-      image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTFmIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNmZjk1MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5BbmltYXRpb248L3RleHQ+PC9zdmc+',
-      price: '0.08 ETH',
-      category: 'animation',
-      creator: '0x9abc...def0',
-      likes: 67,
-      views: 203
-    },
-    {
-      id: '4',
-      name: 'Grumpy Cat Meme',
-      description: 'Classic grumpy cat expression - community favorite',
-      image: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWExYTFmIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiNmZjk1MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5NZW1lPC90ZXh0Pjwvc3ZnPg==',
-      price: '0.03 ETH',
-      category: 'meme',
-      creator: '0xfedc...ba98',
-      likes: 156,
-      views: 892
-    }
-  ];
+  // ===== NFT MARKETPLACE DATA =====
+  // Smart contract not deployed yet — marketplace shows "Coming soon".
+  // Real NFT data will be loaded from blockchain once the contract is live.
+  const mockNFTs = [];
 
   // ===== STATE =====
   let currentTab = 'marketplace';
@@ -195,8 +152,10 @@
       renderMarketplace();
     });
     elements.loadMore.addEventListener('click', () => {
-      // In real app, load more from blockchain
-      alert('Load more - connect to blockchain to fetch additional NFTs');
+      // Marketplace data loads from blockchain after contract deployment
+      const grid = elements.nftGrid;
+      if (grid && grid.querySelector('.marketplace-coming-soon')) return;
+      alert(t('nft.coming_soon_desc') || 'NFT trading will be available once our smart contract is deployed.');
     });
     
     // Tabs
@@ -379,6 +338,15 @@
 
   // ===== MARKETPLACE RENDERING =====
   function renderMarketplace() {
+    if (mockNFTs.length === 0) {
+      elements.nftGrid.innerHTML = `<div class="marketplace-coming-soon">
+        <div class="cs-icon">🐱</div>
+        <h3>${t('nft.coming_soon_title') || 'Marketplace Coming Soon'}</h3>
+        <p>${t('nft.coming_soon_desc') || 'NFT trading will be available once our smart contract is deployed.'}</p>
+      </div>`;
+      return;
+    }
+
     let filtered = mockNFTs.filter(nft => currentFilter === 'all' || nft.category === currentFilter);
     
     // Sort

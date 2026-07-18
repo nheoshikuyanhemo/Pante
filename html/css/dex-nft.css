@@ -294,6 +294,40 @@
 .dex-action-btn.secondary { background: transparent; border: 1px solid #ff9500; color: #ff9500; }
 .dex-action-btn.secondary:hover { background: rgba(255,149,0,0.1); }
 
+/* ==================== COMING SOON (no smart contract yet) ==================== */
+.marketplace-coming-soon {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  border: 1px dashed rgba(255,149,0,0.3);
+  border-radius: 12px;
+  background: rgba(255,149,0,0.03);
+}
+.marketplace-coming-soon .cs-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+.marketplace-coming-soon h3 {
+  color: #ff9500;
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+}
+.marketplace-coming-soon p {
+  color: #a0a0b8;
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.dex-coming-soon {
+  text-align: center;
+  padding: 2rem;
+  color: #a0a0b8;
+  border: 1px dashed rgba(255,149,0,0.3);
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
 /* ==================== MOBILE ==================== */
 @media (max-width: 900px) {
   .dex-grid, .nft-grid { grid-template-columns: 1fr; }

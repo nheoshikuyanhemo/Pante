@@ -117,11 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     localStorage.setItem('pante_lang', lang);
     reserveAll();
-    // Re-run reveal for any in-viewport blocks (checkReveal replaced by IO; force-show all as safety)
+    // Re-type any currently-visible blocks sequentially in the new language
     setTimeout(() => {
-      document.querySelectorAll('.reveal-block').forEach(blk => {
-        blk.classList.add('visible');
-        blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+      document.querySelectorAll('.reveal-block.visible').forEach(blk => {
+        typeSequence(Array.from(blk.querySelectorAll('.typewriter[data-type]')));
       });
     }, 50);
   }
@@ -143,42 +142,63 @@ document.addEventListener('DOMContentLoaded', () => {
     typeWriter(el, txt, parseInt(el.getAttribute('data-speed')) || 30);
   }
 
-  // Hero forced open immediately
+  // ===== TYPEWRITER SEQUENTIAL QUEUE =====
+  // Type elements one-by-one with a small gap so text "follows" the section opening
+  function typeSequence(elements) {
+    let i = 0;
+    function next() {
+      if (i >= elements.length) return;
+      const el = elements[i++];
+      if (el.dataset.typed === '1') { next(); return; }
+      openEl(el);
+      // wait for this element to finish typing, then start the next
+      const txt = el.getAttribute('data-type') || '';
+      const speed = parseInt(el.getAttribute('data-speed')) || 30;
+      const est = txt.length * speed + 150; // estimated typing duration
+      setTimeout(next, est);
+    }
+    next();
+  }
+
+  // Hero forced open immediately (top of page)
   document.querySelectorAll('.hero').forEach(h => {
     h.classList.add('visible');
-    h.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+    typeSequence(Array.from(h.querySelectorAll('.typewriter[data-type]')));
   });
 
-  // Observe all reveal-blocks; add .visible + type their inner typewriters when intersecting
+  // Observe all reveal-blocks below the hero.
+  // When a section scrolls into view: (1) fade/slide it open, (2) type its text sequentially.
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const blk = entry.target;
-          blk.classList.add('visible');
-          blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
-          io.unobserve(blk); // reveal once, no flicker / no blank on scroll back
+          blk.classList.add('visible');              // section opens (CSS fade + slide)
+          const tws = Array.from(blk.querySelectorAll('.typewriter[data-type]'));
+          typeSequence(tws);                          // text types in order, following the opening
+          io.unobserve(blk);                          // reveal once
         }
       });
-    }, { threshold: 0.05, rootMargin: '0px 0px -8% 0px' });
-    document.querySelectorAll('.reveal-block').forEach(blk => io.observe(blk));
+    }, { threshold: 0.15, rootMargin: '0px 0px -12% 0px' });
+    document.querySelectorAll('.reveal-block').forEach(blk => {
+      if (!blk.classList.contains('hero')) io.observe(blk);
+    });
   } else {
     // Fallback: no IO support — just show everything
     document.querySelectorAll('.reveal-block').forEach(blk => {
       blk.classList.add('visible');
-      blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+      typeSequence(Array.from(blk.querySelectorAll('.typewriter[data-type]')));
     });
   }
 
-  // SAFETY (not failsafe-type): if a reveal-block is ABOVE the fold (already in viewport at load)
-  // but somehow never got observed/triggered, force it visible after 2s. Blocks below the fold
-  // stay hidden until scrolled — that is the intended typewriter-on-scroll effect.
+  // SAFETY: if a reveal-block is ABOVE the fold (already visible at load) but never triggered,
+  // force it open after 2s. Blocks below the fold stay hidden until scrolled (intended effect).
   setTimeout(() => {
     document.querySelectorAll('.reveal-block:not(.visible)').forEach(blk => {
       const r = blk.getBoundingClientRect();
       if (r.top < window.innerHeight && r.bottom > 0) {
         blk.classList.add('visible');
-        blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+        typeSequence(Array.from(blk.querySelectorAll('.typewriter[data-type]')));
       }
     });
   }, 2000);

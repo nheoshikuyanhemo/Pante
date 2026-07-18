@@ -82,32 +82,95 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== WALLET CONNECT =====
+  // ===== WALLET CONNECT (Uniswap-style multi-wallet picker) =====
   const walletBtn = document.getElementById('walletBtn');
-  async function connectWallet() {
-    if (!walletBtn) return;
-    if (typeof window.ethereum === 'undefined') {
-      alert('No Ethereum wallet found. Please install MetaMask.');
-      return;
-    }
+
+  // Available wallet providers (universal + injected)
+  const WALLETS = [
+    { id: 'metamask',    name: 'MetaMask',        icon: '🦊', kind: 'injected',  check: () => !!window.ethereum?.isMetaMask,     req: () => window.ethereum },
+    { id: 'coinbase',    name: 'Coinbase Wallet', icon: '🔵', kind: 'injected',  check: () => !!window.ethereum?.isCoinbaseWallet, req: () => window.ethereum },
+    { id: 'rabby',       name: 'Rabby',           icon: '🐰', kind: 'injected',  check: () => !!window.ethereum?.isRabby,          req: () => window.ethereum },
+    { id: 'trust',       name: 'Trust Wallet',    icon: '🛡️', kind: 'injected',  check: () => !!window.ethereum?.isTrust,          req: () => window.ethereum },
+    { id: 'walletconnect', name: 'WalletConnect', icon: '🔗', kind: 'wc',         check: () => true,                              req: () => null },
+    { id: 'binance',     name: 'Binance Wallet',  icon: '🟡', kind: 'injected',  check: () => !!window.BinanceChain,               req: () => window.BinanceChain },
+  ];
+
+  async function connectProvider(provider) {
+    const accounts = await provider.request({ method: 'eth_requestAccounts' });
+    return accounts[0];
+  }
+
+  function setConnected(addr) {
+    if (!walletBtn || !addr) return;
+    const short = addr.slice(0, 6) + '...' + addr.slice(-4);
+    walletBtn.textContent = short;
+    walletBtn.classList.add('connected');
+    walletBtn.title = addr;
+    // notify page-specific handlers (DEX / NFT)
+    document.dispatchEvent(new CustomEvent('walletConnected', { detail: { address: addr } }));
+  }
+
+  async function doConnect(wallet) {
     try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const addr = accounts[0];
-      const short = addr.slice(0, 6) + '...' + addr.slice(-4);
-      walletBtn.textContent = short;
-      walletBtn.classList.add('connected');
-      walletBtn.title = addr;
+      if (wallet.kind === 'wc') {
+        // WalletConnect universal — placeholder for real WC integration
+        alert('WalletConnect: integrate @walletconnect/modal here. Universal QR support coming.');
+        return;
+      }
+      const provider = wallet.req();
+      if (!provider) { alert(wallet.name + ' not detected. Please install the extension.'); return; }
+      const addr = await connectProvider(provider);
+      setConnected(addr);
+      closeWalletModal();
     } catch (e) {
-      alert('Connection rejected.');
+      alert('Connection rejected or failed.');
     }
   }
+
+  // ===== WALLET MODAL UI =====
+  let walletModal = null;
+  function openWalletModal() {
+    if (walletModal) { walletModal.style.display = 'flex'; return; }
+    walletModal = document.createElement('div');
+    walletModal.className = 'wallet-modal';
+    walletModal.innerHTML = `
+      <div class="wallet-modal__box">
+        <div class="wallet-modal__head">
+          <span>Connect a Wallet</span>
+          <button class="wallet-modal__close" aria-label="Close">✕</button>
+        </div>
+        <div class="wallet-modal__list"></div>
+        <p class="wallet-modal__hint">What is a wallet? A wallet lets you connect to Web3 & on-chain apps securely.</p>
+      </div>`;
+    document.body.appendChild(walletModal);
+    const list = walletModal.querySelector('.wallet-modal__list');
+    WALLETS.forEach(w => {
+      const item = document.createElement('button');
+      item.className = 'wallet-modal__item';
+      item.innerHTML = `<span class="wi-icon">${w.icon}</span><span class="wi-name">${w.name}</span><span class="wi-tag">${w.kind === 'wc' ? 'QR / Universal' : 'Browser'}</span>`;
+      item.addEventListener('click', () => doConnect(w));
+      list.appendChild(item);
+    });
+    walletModal.querySelector('.wallet-modal__close').addEventListener('click', closeWalletModal);
+    walletModal.addEventListener('click', e => { if (e.target === walletModal) closeWalletModal(); });
+  }
+  function closeWalletModal() { if (walletModal) walletModal.style.display = 'none'; }
+
   if (walletBtn) {
-    walletBtn.addEventListener('click', connectWallet);
+    walletBtn.addEventListener('click', () => {
+      // if already connected, disconnect
+      if (walletBtn.classList.contains('connected')) {
+        walletBtn.textContent = 'Connect Wallet';
+        walletBtn.classList.remove('connected');
+        walletBtn.title = '';
+        document.dispatchEvent(new CustomEvent('walletDisconnected'));
+      } else {
+        openWalletModal();
+      }
+    });
     // auto-show if already connected
     if (window.ethereum && window.ethereum.selectedAddress) {
-      const a = window.ethereum.selectedAddress;
-      walletBtn.textContent = a.slice(0,6) + '...' + a.slice(-4);
-      walletBtn.classList.add('connected');
+      setConnected(window.ethereum.selectedAddress);
     }
   }
 
@@ -116,6 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyLang(lang) {
     if (!I18N[lang]) lang = 'en';
     document.documentElement.lang = lang;
+
+    // 1) Update all static [data-i18n] text (headings, paragraphs, buttons, etc.)
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (I18N[lang][key] !== undefined) {
@@ -123,14 +188,34 @@ document.addEventListener('DOMContentLoaded', () => {
         if (el.hasAttribute('data-type')) el.setAttribute('data-type', I18N[lang][key]);
       }
     });
+
+    // 2) Update every typewriter's data-type from its i18n key (covers menu + scroll els)
     document.querySelectorAll('.typewriter[data-type]').forEach(el => {
       const k = el.getAttribute('data-i18n');
-      if (k && I18N[lang][k] !== undefined) el.setAttribute('data-type', I18N[lang][k]);
+      if (k && I18N[lang][k] !== undefined) {
+        el.setAttribute('data-type', I18N[lang][k]);
+      }
     });
+
+    // 3) Re-type elements that are currently visible/typed in the new language
+    document.querySelectorAll('.typewriter[data-type]').forEach(el => {
+      if (el.dataset.typed === '1' || el.closest('.reveal-block.visible') || el.closest('.hero') || el.closest('.menu-panel.open')) {
+        el.dataset.typed = '0';
+        el.textContent = '';
+        if (el.closest('.menu-panel') && !menuPanel.classList.contains('open')) return; // skip closed menu
+        openEl(el);
+      }
+    });
+
     localStorage.setItem('pante_lang', lang);
     reserveAll();
-    // re-type in-viewport elements in new language
-    setTimeout(checkReveal, 50);
+    // Re-run reveal for any in-viewport blocks (checkReveal replaced by IO; force-show all as safety)
+    setTimeout(() => {
+      document.querySelectorAll('.reveal-block').forEach(blk => {
+        blk.classList.add('visible');
+        blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+      });
+    }, 50);
   }
   if (langSelect) {
     const saved = localStorage.getItem('pante_lang') || 'en';
@@ -141,53 +226,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
   reserveAll();
 
-  // ===== REVEAL CHECK (scroll-based, manual position) =====
-  const TRIGGER_LINE = 0.95; // fire almost as soon as element enters bottom of viewport
-
+  // ===== REVEAL CHECK (IntersectionObserver — robust, no inverted math) =====
+  // Elements appear as soon as they enter the viewport (small rootMargin so no far scroll needed)
   function openEl(el) {
     if (el.dataset.typed === '1') return;
     el.dataset.typed = '1';
     const txt = el.getAttribute('data-type') || el.textContent;
     typeWriter(el, txt, parseInt(el.getAttribute('data-speed')) || 30);
   }
-  function closeEl(el) {
-    el.dataset.typed = '0';
-    el.textContent = '';
-  }
 
-  function checkReveal() {
-    const vh = window.innerHeight;
-    // hero forced open
-    document.querySelectorAll('.hero').forEach(h => {
-      h.classList.add('visible');
-      h.querySelectorAll('.typewriter[data-type]').forEach(openEl);
-    });
-    // scroll typewriter elements (exclude hero + menu)
-    twEls.forEach(el => {
-      const r = el.getBoundingClientRect();
-      if (r.top < vh * TRIGGER_LINE && r.bottom > 0) {
-        el.closest('.reveal-block')?.classList.add('visible');
-        openEl(el);
-      } else if (r.top > vh) {
-        closeEl(el);
-        el.closest('.reveal-block')?.classList.remove('visible');
-      }
-    });
-    // standalone reveal-blocks (no typewriter inside, e.g. wrappers)
+  // Hero forced open immediately
+  document.querySelectorAll('.hero').forEach(h => {
+    h.classList.add('visible');
+    h.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+  });
+
+  // Observe all reveal-blocks; add .visible + type their inner typewriters when intersecting
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const blk = entry.target;
+          blk.classList.add('visible');
+          blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+          io.unobserve(blk); // reveal once, no flicker / no blank on scroll back
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal-block').forEach(blk => io.observe(blk));
+  } else {
+    // Fallback: no IO support — just show everything
     document.querySelectorAll('.reveal-block').forEach(blk => {
-      if (blk.closest('.hero')) return;
-      if (blk.querySelector('.typewriter')) return; // handled above
-      const r = blk.getBoundingClientRect();
-      if (r.top < vh * TRIGGER_LINE) blk.classList.add('visible');
-      else if (r.top > vh) blk.classList.remove('visible');
+      blk.classList.add('visible');
+      blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
     });
   }
 
-  window.addEventListener('scroll', checkReveal, { passive: true });
-  window.addEventListener('resize', checkReveal);
-  // run on load (rAF + fallback)
-  requestAnimationFrame(checkReveal);
-  setTimeout(checkReveal, 150);
+  // FAILSAFE: if anything is still hidden after 1.5s (e.g. observer quirk), force-show all
+  setTimeout(() => {
+    document.querySelectorAll('.reveal-block').forEach(blk => {
+      blk.classList.add('visible');
+      blk.querySelectorAll('.typewriter[data-type]').forEach(openEl);
+    });
+  }, 1500);
 
   // ===== RIPPLE CLICK =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {

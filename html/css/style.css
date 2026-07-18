@@ -2,8 +2,82 @@
    PANTE — style.css  (clean, organized)
    ============================================================ */
 
-/* ==================== RESET ==================== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ==================== WALLET MODAL (Uniswap-style) ==================== */
+.wallet-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(3px);
+}
+.wallet-modal__box {
+  width: min(400px, 90vw);
+  background: #14141f;
+  border: 1px solid rgba(255,149,0,0.4);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.wallet-modal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ff9500;
+  margin-bottom: 1.2rem;
+}
+.wallet-modal__close {
+  background: none;
+  border: none;
+  color: #a0a0b8;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.wallet-modal__close:hover { color: #ff9500; }
+.wallet-modal__list { display: flex; flex-direction: column; gap: 0.5rem; }
+.wallet-modal__item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  background: #1e1e2e;
+  border: 1px solid rgba(255,149,0,0.2);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: #f0f0ff;
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.wallet-modal__item:hover {
+  background: rgba(255,149,0,0.1);
+  border-color: #ff9500;
+}
+.wi-icon { font-size: 1.4rem; }
+.wi-name { flex: 1; text-align: left; font-weight: 600; }
+.wi-tag {
+  font-size: 0.7rem;
+  color: #a0a0b8;
+  background: rgba(255,255,255,0.06);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+.wallet-modal__hint {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #a0a0b8;
+  text-align: center;
+}
+.wallet-btn.connected {
+  background: rgba(0,255,136,0.15);
+  color: #00ff88;
+  border: 1px solid #00ff88;
+}
 
 /* ==================== BASE ==================== */
 body {
@@ -90,9 +164,10 @@ html { scroll-behavior: smooth; }
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   flex-wrap: nowrap;
   min-width: 0;
+  margin-right: auto; /* push header-right group to the far right edge */
   overflow: hidden;
 }
 .header-nav .nav-link {
@@ -122,9 +197,8 @@ html { scroll-behavior: smooth; }
 .logo-box {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 0.5rem;
-  margin-left: auto;
   flex: 0 0 auto;
   min-width: 0;
 }
@@ -151,13 +225,13 @@ html { scroll-behavior: smooth; }
 }
 .dex-btn:hover { background: #ff9500; color: #14141f; }
 
-/* Header right group: language + wallet */
+/* Header right group: language + wallet + logo — LOCKED to far right edge */
 .header-right {
   display: flex;
   align-items: center;
   gap: 0.6rem;
   flex: 0 0 auto;
-  margin-left: 0.5rem;
+  margin-left: auto; /* lock group to the right side, separated from nav */
 }
 .lang-switch select {
   background: #1e1e2e;

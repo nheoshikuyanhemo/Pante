@@ -88,12 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!I18N[lang]) lang = 'en';
     document.documentElement.lang = lang;
 
-    // 1) Update all static [data-i18n] text (headings, paragraphs, buttons, etc.)
+    // 1) Update all static [data-i18n] text — but SKIP typewriter elements (their text is
+    //    typed by openBlock on scroll; filling them here would make content "appear instantly").
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
-      if (I18N[lang][key] !== undefined) {
+      if (I18N[lang][key] === undefined) return;
+      if (el.hasAttribute('data-type')) {
+        // typewriter: only update the data-type source, leave textContent empty until scrolled
+        el.setAttribute('data-type', I18N[lang][key]);
+      } else {
         el.textContent = I18N[lang][key];
-        if (el.hasAttribute('data-type')) el.setAttribute('data-type', I18N[lang][key]);
       }
     });
 
@@ -187,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (entry.isIntersecting) openBlock(entry.target);
         else closeBlock(entry.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+    }, { threshold: 0.2, rootMargin: '0px 0px -15% 0px' });
     document.querySelectorAll('.reveal-block').forEach(blk => io.observe(blk));
   } else {
     // Fallback: no IO — show all

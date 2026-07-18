@@ -189,24 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
   requestAnimationFrame(checkReveal);
   setTimeout(checkReveal, 150);
 
-  // ===== DEX FEATURE CLICK NAVIGATION =====
-  const dexTypes = {
-    swap: 'dex.html',
-    liquidity: 'dex.html',
-    stake: 'dex.html',
-    governance: 'dex.html',
-    bridge: 'dex.html'
-  };
-  document.querySelectorAll('[data-dex]').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', () => {
-      const mode = el.getAttribute('data-dex');
-      if (mode && dexTypes[mode]) {
-        window.location.href = dexTypes[mode] + (mode !== 'swap' ? '#' + mode : '');
-      }
-    });
-  });
-
   // ===== RIPPLE CLICK =====
   document.querySelectorAll('.feature-card, .menu-contents a').forEach(el => {
     el.addEventListener('click', function (e) {

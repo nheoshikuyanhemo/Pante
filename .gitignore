@@ -17,4 +17,5 @@ Thumbs.db
 
 # Hermes session files
 *.session
-logs/
+logs/*.env
+wallet-reown.js

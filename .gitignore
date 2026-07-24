@@ -19,3 +19,46 @@ Thumbs.db
 *.session
 logs/*.env
 wallet-reown.js
+
+# Build artifacts
+build/
+cache/
+out/
+flattened.sol
+
+# Dependencies
+node_modules/
+venv/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+*.swp
+*.swo
+*~
+
+# Foundry
+foundry.lock
+foundry.toml
+
+# Hardhat
+hardhat.config.js
+
+# Contracts source (keep, but ignore compiled output)
+contracts/
+
+# ABI generated (we'll commit abi folder in html/abi)
+# html/abi/ is kept
+
+# Scripts
+scripts/
+
+# Package files
+package-lock.json
+package.json
+
+# Remappings
+remappings.txt

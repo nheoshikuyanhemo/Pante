@@ -1,193 +1,299 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pante DEX - Decentralized Trading</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/dex-nft.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.min.css">
+  <title>PanteSwap DEX</title>
+  <!-- Load ethers.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    body {font-family: Arial, sans-serif; margin: 2rem; line-height: 1.5;}
+    h1 {color: #2c3e50;}
+    .section {margin-top: 2rem;}
+    input, button {margin: 0.5rem 0;}
+    label {display: block; margin-top: 0.5rem;}
+    .log {background:#f0f0f0; padding:1rem; border-radius:5px; min-height:150px; overflow-y:auto;}
+    .success {color:green;}
+    .error {color:red;}
+  </style>
 </head>
 <body>
-  <header class="bordered header">
-    <button class="menu-trigger" id="menuTrigger" title="Menu">
-      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-    </button>
+  <h1>🦖 PanteSwap Decentralized Exchange</h1>
 
-    <nav class="header-nav">
-      <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
-      <a href="dex.html" class="nav-link" data-i18n="nav.dex">DEX</a>
-      <a href="nft.html" class="nav-link" data-i18n="nav.nft">NFT</a>
-      <a href="about.html" class="nav-link" data-i18n="nav.about">About</a>
-      <a href="whitepaper.html" class="nav-link" data-i18n="nav.whitepaper">Whitepaper</a>
-    </nav>
+  <!-- ========================================================= -->
+  <!-- 1️⃣ Connect Wallet -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>1️⃣ Hubungkan Wallet</h2>
+    <button id="connectBtn">Hubungkan MetaMask</button>
+    <div id="walletInfo"></div>
+  </div>
 
-    <div class="header-right">
-      <div class="lang-switch">
-        <select id="langSelect" aria-label="Select language">
-          <option value="en">🇬🇧 EN</option>
-          <option value="zh">🇨🇳 中文</option>
-          <option value="id">🇮🇩 ID</option>
-          <option value="vi">🇻🇳 VI</option>
-          <option value="hi">🇮🇳 हि</option>
-          <option value="es">🇪🇸 ES</option>
-          <option value="fr">🇫🇷 FR</option>
-          <option value="de">🇩🇪 DE</option>
-          <option value="pt">🇧🇷 PT</option>
-          <option value="ru">🇷🇺 RU</option>
-          <option value="ja">🇯🇵 日</option>
-          <option value="ko">🇰🇷 KO</option>
-          <option value="ar">🇸🇦 ع</option>
-          <option value="tr">🇹🇷 TR</option>
-          <option value="tl">🇵🇭 TL</option>
-        </select>
-      </div>
-      <button class="wallet-btn" id="walletBtn">Connect Wallet</button>
-      <div class="logo-box">
-        <a href="index.html"><img src="assets/logo.png" alt="Pante Logo" class="logo-img"></a>
-      </div>
+  <!-- ========================================================= -->
+  <!-- 2️⃣ Token Info -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>2️⃣ Informasi Token (PanteToken)</h2>
+    <p>Alamat Token: <strong>0x42e73bD665FF561fAdE39F014411aB7234b16DB1</strong></p>
+    <p>Nama: <strong>Pante Token</strong></p>
+    <p>Simbol: <strong>PANTE</strong></p>
+    <p>Desimal: <strong>18</strong></p>
+
+    <button id="refreshBalanceBtn">Cek Saldo</button>
+    <div id="tokenBalance">--</div>
+
+    <button id="transferBtn">Transfer PANTE</button>
+    <div id="transferForm" style="display:none;">
+      <label>Tujuan: <input type="text" id="toAddress"/></label>
+      <label>Jumlah: <input type="text" id="amount"/></label>
+      <button id="doTransfer">Kirim</button>
     </div>
-  </header>
+  </div>
 
-  <div class="menu-backdrop" id="menuBackdrop"></div>
-  <aside class="menu-panel" id="menuPanel">
-    <div class="menu-panel__head">
-      <span class="menu-panel__title" data-i18n="menu.title">// PANTE</span>
-      <button class="menu-close" id="menuClose">✕</button>
-    </div>
-    <ul class="menu-contents">
-      <li><a href="index.html"><span class="mc-title typewriter" data-i18n="menu.home" data-type="Home" data-speed="30" data-delay="200"></span><span class="mc-desc typewriter" data-i18n="menu.home.desc" data-type="Landing — banner, tagline & core features." data-speed="14" data-delay="350"></span></a></li>
-      <li><a href="dex.html"><span class="mc-title typewriter" data-i18n="menu.dex" data-type="DEX" data-speed="30" data-delay="500"></span><span class="mc-desc typewriter" data-i18n="menu.dex.desc" data-type="Swap tokens on our decentralized exchange" data-speed="14" data-delay="650"></span></a></li>
-      <li><a href="nft.html"><span class="mc-title typewriter" data-i18n="menu.nft" data-type="NFT Marketplace" data-speed="30" data-delay="800"></span><span class="mc-desc typewriter" data-i18n="menu.nft.desc" data-type="Cat-themed NFT creation & trading" data-speed="14" data-delay="950"></span></a></li>
-      <li><a href="about.html"><span class="mc-title typewriter" data-i18n="menu.about" data-type="About" data-speed="30" data-delay="1100"></span><span class="mc-desc typewriter" data-i18n="menu.about.desc" data-type="Vision, utility & ecosystem links." data-speed="14" data-delay="1250"></span></a></li>
-      <li><a href="whitepaper.html"><span class="mc-title typewriter" data-i18n="menu.whitepaper" data-type="Whitepaper" data-speed="30" data-delay="1400"></span><span class="mc-desc typewriter" data-i18n="menu.whitepaper.desc" data-type="Tokenomics, roadmap, DEX, staking & security." data-speed="14" data-delay="1550"></span></a></li>
-      <li><a href="https://x.com/pante_coin" target="_blank"><span class="mc-title typewriter" data-i18n="menu.x" data-type="X (Twitter)" data-speed="30" data-delay="1700"></span><span class="mc-desc typewriter" data-i18n="menu.x.desc" data-type="Official announcements & community." data-speed="14" data-delay="1850"></span></a></li>
-      <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title typewriter" data-i18n="menu.github" data-type="GitHub" data-speed="30" data-delay="2000"></span><span class="mc-desc typewriter" data-i18n="menu.github.desc" data-type="Source code & development repository." data-speed="14" data-delay="2150"></span></a></li>
-    </ul>
-  </aside>
-    <section class="dex-wrap bordered" id="dex">
-      <div class="dex-intro reveal-block">
-        <h1 class="typewriter" data-i18n="dex.title" data-type="Pante DEX" data-speed="50"></h1>
-        <p class="typewriter" data-i18n="dex.tagline" data-type="Decentralized trading with real-time charting and liquidity tools." data-speed="25"></p>
-      </div>
-      
-      <div class="dex-grid">
-        <!-- Chart Panel -->
-        <div class="dex-chart-panel reveal-block">
-          <div class="trading-header">
-            <span class="pair-label">PANTE/USDC</span>
-            <span class="pair-price" id="pair-price">—</span>
-          </div>
-          <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget" id="tradingview-chart"></div>
-            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-          </div>
-        </div>
+  <!-- ========================================================= -->
+  <!-- 3️⃣ DEX Functions -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>3️⃣ Interaksi PanteSwap</h2>
+    <p>Alamat Kontrak DEX: <strong>0x0568e0909055Bb4b9362EA8bc7397b844adAde60</strong></p>
 
-        <!-- Swap Panel -->
-        <div class="dex-swap-panel reveal-block">
-          <div class="swap-header">
-            <span data-i18n="dex.swap">Swap</span>
-          </div>
-          <div class="swap-body">
-            <div class="swap-input">
-              <label data-i18n="dex.from">From</label>
-              <input type="text" id="from-amount" placeholder="0.0" />
-              <select id="from-token">
-                <option value="PANTE">PANTE</option>
-                <option value="USDC">USDC</option>
-                <option value="ETH">ETH</option>
-              </select>
-            </div>
-            <button class="swap-switch" id="swap-switch">↓</button>
-            <div class="swap-input">
-              <label data-i18n="dex.to">To</label>
-              <input type="text" id="to-amount" placeholder="0.0" readonly />
-              <select id="to-token">
-                <option value="USDC">USDC</option>
-                <option value="PANTE">PANTE</option>
-                <option value="ETH">ETH</option>
-              </select>
-            </div>
-            <button class="dex-action-btn" id="swap-btn" data-i18n="dex.swap" disabled>Swap</button>
-          </div>
-        </div>
-      </div>
+    <!-- Add Liquidity -->
+    <h3>Tambah Likuiditas</h3>
+    <label>Token A (misal, alamat PANTE): <input type="text" id="addTokenA"/></label><br>
+    <label>Token B (misal, alamat stablecoin): <input type="text" id="addTokenB"/></label><br>
+    <label>Jumlah A: <input type="text" id="addAmtA"/></label><br>
+    <label>Jumlah B: <input type="text" id="addAmtB"/></label><br>
+    <label>Likuiditas yang diinginkan (opsional): <input type="text" id="desiredLiq"/></label><br>
+    <button id="addLiqBtn">Tambah Likuiditas</button>
+    <div id="addLiqResult"></div>
 
-      <!-- Liquidity / Stake Tabs -->
-      <div class="dex-tabs reveal-block">
-        <button class="tab-btn active" data-tab="liquidity" data-i18n="dex.liquidity">Liquidity</button>
-        <button class="tab-btn" data-tab="stake" data-i18n="dex.stake">Stake</button>
-        <button class="tab-btn" data-tab="bridge" data-i18n="dex.bridge">Bridge</button>
-      </div>
+    <!-- Remove Liquidity -->
+    <h3>Hapus Likuiditas</h3>
+    <label>Jumlah Likuiditas yang akan dihingkapi: <input type="text" id="removeLiq"/></label><br>
+    <label>Token A: <input type="text" id="rmTokenA"/></label><br>
+    <label>Token B: <input type="text" id="rmTokenB"/></label><br>
+    <button id="rmLiqBtn">Hapus Likuiditas</button>
+    <div id="rmLiqResult"></div>
 
-      <div class="dex-tab-content" id="liquidity-tab">
-        <h3 data-i18n="dex.add_liquidity">Add Liquidity</h3>
-        <div class="lp-inputs">
-          <div class="swap-input">
-            <label>PANTE</label>
-            <input type="text" id="lp-pante" placeholder="0.0" />
-          </div>
-          <div class="swap-input">
-            <label>USDC</label>
-            <input type="text" id="lp-usdc" placeholder="0.0" />
-          </div>
-        </div>
-        <button class="dex-action-btn" id="lp-btn" data-i18n="dex.add_liquidity" disabled>Add Liquidity</button>
-      </div>
+    <!-- Swap Tokens -->
+    <h3>Swap Token</h3>
+    <label>Swap Dari Token: <input type="text" id="swapFromToken"/></label><br>
+    <label>Swap Ke Token: <input type="text" id="swapToToken"/></label><br>
+    <label>Jumlah In: <input type="text" id="swapAmtIn"/></label><br>
+    <label>Alamat Penerima: <input type="text" id="swapToAddr"/></label><br>
+    <button id="swapBtn">Swap</button>
+    <div id="swapResult"></div>
+  </div>
 
-      <div class="dex-tab-content hidden" id="stake-tab">
-        <h3 data-i18n="dex.staking">Staking</h3>
-        <div class="stake-info">
-          <div class="stake-apy">APY: <span id="stake-apy">0%</span></div>
-          <div class="stake-tvl">TVL: <span id="stake-tvl">$0</span></div>
-        </div>
-        <div class="swap-input">
-          <label data-i18n="dex.amount">Amount</label>
-          <input type="text" id="stake-amount" placeholder="0.0 PANTE" />
-        </div>
-        <button class="dex-action-btn" id="stake-btn" data-i18n="dex.stake" disabled>Stake</button>
-      </div>
+  <!-- ========================================================= -->
+  <!-- 4️⃣ Log -->
+  <!-- ========================================================= -->
+  <div class="section">
+    <h2>🗒️ Log Aktivitas</h2>
+    <div id="log" class="log"></div>
+  </div>
 
-      <div class="dex-tab-content hidden" id="bridge-tab">
-        <h3 data-i18n="dex.bridge_title">Cross-chain Bridge</h3>
-        <p data-i18n="dex.bridge_desc">Transfer PANTE across Ethereum, Polygon, BNB Chain and more.</p>
-        <div class="bridge-form">
-          <select id="bridge-from">
-            <option value="ethereum">Ethereum</option>
-            <option value="polygon">Polygon</option>
-            <option value="bsc">BNB Chain</option>
-          </select>
-          <span>→</span>
-          <select id="bridge-to">
-            <option value="polygon">Polygon</option>
-            <option value="bsc">BNB Chain</option>
-            <option value="ethereum">Ethereum</option>
-          </select>
-        </div>
-        <button class="dex-action-btn" id="bridge-btn" data-i18n="dex.bridge" disabled>Bridge</button>
-      </div>
-    </section>
-  </main>
+  <script>
+    // -----------------------------------------------------------
+    // 0️⃣ Helper: Logging
+    // -----------------------------------------------------------
+    const LOG = (msg) => {
+      const el = document.getElementById('log');
+      const line = document.createElement('div');
+      line.textContent = msg;
+      line.className = 'success';
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    };
+    const ERR = (msg) => {
+      const el = document.getElementById('log');
+      const line = document.createElement('div');
+      line.textContent = msg;
+      line.className = 'error';
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    };
 
-  <!-- Footer -->
-  <footer class="bordered footer" id="footer">
-    <div class="footer-social">
-      <a href="https://x.com/pante_coin" target="_blank" rel="noopener" title="X (Twitter)" class="footer-icon">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      </a>
-      <a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank" rel="noopener" title="GitHub" class="footer-icon">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 .5C5.37.5 0 5.78 0 12.292c0 5.211 3.438 9.63 8.205 11.188.6.111.82-.254.82-.567 0-.28-.01-1.022-.015-2.005-3.338.711-4.042-1.582-4.042-1.582-.546-1.361-1.335-1.724-1.335-1.724-1.09-.731.083-.716.083-.716 1.205.082 1.838 1.215 1.838 1.215 1.07 1.797 2.809 1.278 3.495.977.108-.76.418-1.279.762-1.573-2.665-.297-5.466-1.296-5.466-5.759 0-1.273.462-2.313 1.22-3.129-.122-.296-.53-1.487.115-3.098 0 0 .995-.314 3.26 1.195a11.5 11.5 0 0 1 2.97-.395c1.007 0 2.023.132 2.97.395 2.262-1.509 3.256-1.195 3.256-1.195.646 1.611.24 2.802.118 3.098.759.816 1.22 1.856 1.22 3.129 0 4.476-2.805 5.459-5.476 5.749.429.364.812 1.084.812 2.186 0 1.578-.014 2.85-.014 3.238 0 .314.216.685.825.568C20.565 21.917 24 17.495 24 12.292 24 5.78 18.63.5 12 .5z"/></svg>
-      </a>
-    </div>
-    <p data-i18n="footer">© 2026 Pante. All Rights Reserved.</p>
-  </footer>
+    // -----------------------------------------------------------
+    // 1️⃣ Provider & Signer Management
+    // -----------------------------------------------------------
+    let provider, signer;
+    const connectBtn = document.getElementById('connectBtn');
+    const walletInfo = document.getElementById('walletInfo');
 
-  <script src="js/i18n.js"></script>
-  <script src="js/script.js"></script>
-  <script type="module" src="js/wallet-reown.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-  <script src="js/dex.js"></script>
+    connectBtn.onclick = async () => {
+      if (window.ethereum) {
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        signer = provider.getSigner();
+        const addr = await signer.getAddress();
+        walletInfo.textContent = `Terhubung: ${addr}`;
+        LOG(`Terhubung ke ${addr}`);
+        detectNetwork(); // auto-check network
+      } else {
+        ERR('MetaMask tidak terdeteksi');
+      }
+    };
+
+    // -----------------------------------------------------------
+    // 2️⃣ Contract ABIs
+    // -----------------------------------------------------------
+    const tokenAddress = "0x42e73bD665FF561fAdE39F014411aB7234b16DB1";
+    const tokenAbi = [
+      "function name() view returns (string)",
+      "function symbol() view returns (string)",
+      "function decimals() view returns (uint8)",
+      "function totalSupply() view returns (uint256)",
+      "function balanceOf(address) view returns (uint256)",
+      "function transfer(address,uint256) returns (bool)",
+      "function allowance(address,address) view returns (uint256)",
+      "function approve(address,uint256) returns (bool)",
+      "function transferFrom(address,address,uint256) returns (bool)"
+    ];
+
+    const swapAbi = [
+      // Core DEX functions
+      "function swapExactTokensForTokens(address tokenIn, address tokenOut, uint256 amountIn, address to) external returns (uint256 amountOut)",
+      "function addLiquidity(address tokenA, address tokenB, uint256 amountA, uint256 amountB, uint128 liquidityDesired) external",
+      "function removeLiquidity(address tokenA, address tokenB, uint128 liquidity) external",
+      "function setFeeBP(uint256 newFeeBP) external",
+      // Event (optional)
+      "event Swapped(address indexed pair, address indexed sender, uint256 amountIn, uint256 amountOut)"
+    ];
+
+    const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
+    const swapContract = new ethers.Contract(
+      "0x0568e0909055Bb4b9362EA8bc7397b844adAde60",
+      swapAbi,
+      signer
+    );
+
+    // -----------------------------------------------------------
+    // 3️⃣ Balance Check
+    // -----------------------------------------------------------
+    document.getElementById('refreshBalanceBtn').onclick = async () => {
+      if (!signer) { ERR('Connect wallet dulu'); return; }
+      const bal = await tokenContract.balanceOf(await signer.getAddress());
+      document.getElementById('tokenBalance').textContent =
+        bal.toString() + " PANTE";
+      LOG(`Saldo: ${bal.toString()} PANTE`);
+    };
+
+    // -----------------------------------------------------------
+    // 4️⃣ Transfer PANTE
+    // -----------------------------------------------------------
+    document.getElementById('transferBtn').onclick = () => {
+      document.getElementById('transferForm').style.display = 'block';
+    };
+    document.getElementById('doTransfer').onclick = async () => {
+      const to = document.getElementById('toAddress').value;
+      const amt = document.getElementById('amount').value;
+      if (!to || !amt) { ERR('Isi alamat & jumlah'); return; }
+      try {
+        const tx = await tokenContract.transfer(to, ethers.utils.parseUnits(amt, 18));
+        LOG(`Transfer tx: ${tx.hash}`);
+        await tx.wait();
+        LOG('Transfer selesai');
+        document.getElementById('transferForm').style.display = 'none';
+      } catch (e) { ERR('Transfer gagal: ' + e.message); }
+    };
+
+    // -----------------------------------------------------------
+    // 5️⃣ Helper: Parse amounts with 18 decimals
+    // -----------------------------------------------------------
+    const toWei = (raw) => ethers.utils.parseUnits(raw, 18);
+    const fromWei = (wei) => ethers.utils.formatUnits(wei, 18);
+
+    // -----------------------------------------------------------
+    // 6️⃣ Add Liquidity
+    // -----------------------------------------------------------
+    document.getElementById('addLiqBtn').onclick = async () => {
+      const tokenA = document.getElementById('addTokenA').value;
+      const tokenB = document.getElementById('addTokenB').value;
+      const amtA = document.getElementById('addAmtA').value;
+      const amtB = document.getElementById('addAmtB').value;
+      const desired = document.getElementById('desiredLiq').value;
+      if (!tokenA || !tokenB || !amtA || !amtB) {
+        ERR('Semua field token & jumlah wajib diisi');
+        return;
+      }
+      try {
+        const tx = await swapContract.addLiquidity(
+          tokenA,
+          tokenB,
+          toWei(amtA),
+          toWei(amtB),
+          desired ? toWei(desired) : 0
+        );
+        LOG(`Add liquidity tx: ${tx.hash}`);
+        await tx.wait();
+        LOG('Likuiditas ditambahkan');
+        document.getElementById('addLiqResult').textContent = 'Berhasil menambah likuiditas';
+      } catch (e) { ERR('Gagal menambah likuiditas: ' + e.message); }
+    };
+
+    // -----------------------------------------------------------
+    // 7️⃣ Remove Liquidity
+    // -----------------------------------------------------------
+    document.getElementById('rmLiqBtn').onclick = async () => {
+      const tokenA = document.getElementById('rmTokenA').value;
+      const tokenB = document.getElementById('rmTokenB').value;
+      const liq = document.getElementById('removeLiq').value;
+      if (!tokenA || !tokenB || !liq) {
+        ERR('Isi semua field');
+        return;
+      }
+      try {
+        const tx = await swapContract.removeLiquidity(
+          tokenA,
+          tokenB,
+          toWei(liq)
+        );
+        LOG(`Remove liquidity tx: ${tx.hash}`);
+        await tx.wait();
+        LOG('Likuiditas dihapus');
+        document.getElementById('rmLiqResult').textContent = 'Berhasil menghapus likuiditas';
+      } catch (e) { ERR('Gagal menghapus likuiditas: ' + e.message); }
+    };
+
+    // -----------------------------------------------------------
+    // 8️⃣ Swap Tokens
+    // -----------------------------------------------------------
+    document.getElementById('swapBtn').onclick = async () => {
+      const tokenIn = document.getElementById('swapFromToken').value;
+      const tokenOut = document.getElementById('swapToToken').value;
+      const amountIn = document.getElementById('swapAmtIn').value;
+      const to = document.getElementById('swapToAddr').value;
+      if (!tokenIn || !tokenOut || !amountIn || !to) {
+        ERR('Semua field wajib diisi');
+        return;
+      }
+      try {
+        const tx = await swapContract.swapExactTokensForTokens(
+          tokenIn,
+          tokenOut,
+          toWei(amountIn),
+          to
+        );
+        LOG(`Swap tx: ${tx.hash}`);
+        await tx.wait();
+        LOG('Swap selesai');
+        document.getElementById('swapResult').textContent = 'Swap berhasil';
+      } catch (e) { ERR('Swap gagal: ' + e.message); }
+    };
+
+    // -----------------------------------------------------------
+    // 9️⃣ Auto‑detect network (optional sanity check)
+    // -----------------------------------------------------------
+    async function detectNetwork() {
+      if (!provider) return;
+      const chainId = await provider.getNetwork().chainId;
+      const netName = (chainId === 1) ? 'Mainnet' : 
+                      (chainId === 11155111) ? 'Sepolia' : 
+                      (chainId === 28893) ? 'Arc Testnet' : 'Unknown';
+      LOG(`Jaringan terdeteksi: ${netName}`);
+      // If you want to restrict to Arc testnet only, uncomment below:
+      // if (chainId !== 28893) ERR('Hanya dijalankan di jaringan Arc Testnet');
+    }
+  </script>
 </body>
 </html>

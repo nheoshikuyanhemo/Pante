@@ -4,9 +4,10 @@
 // light, and only fetches it when the user clicks "Connect Wallet". Works in ANY browser
 // via the WalletConnect QR modal (scan with phone) + email/social login (AppKit Auth).
 
-// Reown credentials (kept in sync with /root/.hermes/.env)
-const REOWN_PROJECT_ID = '17e1a3b695d76f2fe901e769d20b1a86'
-const REOWN_APPKIT_AUTH_API_KEY = 'e195f364-bda6-412a-8d5e-ee5960b26e85'
+// Reown credentials – will be injected at build/deploy time.
+// DO NOT commit actual values. Replace placeholders with real keys via build step or Vercel env.
+const REOWN_PROJECT_ID = '{{REOWN_PROJECT_ID}}';
+const REOWN_APPKIT_AUTH_API_KEY = '{{REOWN_APPKIT_AUTH_API_KEY}}';
 
 let appKitModal = null
 let initPromise = null

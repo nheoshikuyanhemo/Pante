@@ -1,6 +1,6 @@
 {
-  "outputDirectory": "html",
-  "redirects": [
-    { "source": "/html/(.*)", "destination": "/$1", "permanent": true }
+  "rewrites": [
+    { "source": "/dex.html", "destination": "/html/dex.html" },
+    { "source": "/dex", "destination": "/html/dex.html" }
   ]
 }

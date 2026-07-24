@@ -5,8 +5,8 @@
   <title>PanteSwap DEX</title>
   <!-- Load ethers.js from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/style.css">
+  <!-- Custom CSS - fixed path for Vercel deployment -->
+  <link rel="stylesheet" href="../css/style.css">
   <style>
     /* Override or add specific styles if needed */
     .log {background:#f0f0f0; padding:1rem; border-radius:5px; min-height:150px; overflow-y:auto;}
@@ -14,6 +14,8 @@
     .error {color:red;}
     /* Ensure sections have some spacing */
     section {padding: 2rem 0;}
+    /* Fix for header menu links */
+    .nav-link { cursor: pointer; }
   </style>
 </head>
 <body>
@@ -23,7 +25,7 @@
   <!-- Header -->
   <header class="header">
     <div class="logo-box">
-      <img src="logo.png" alt="PanteSwap Logo" class="logo-img">
+      <img src="../logo.png" alt="PanteSwap Logo" class="logo-img" onerror="this.style.display='none'">
     </div>
     <nav class="header-nav">
       <a href="#home" class="nav-link active">Home</a>
@@ -172,6 +174,29 @@
       </div>
     </section>
 
+    <!-- About Section -->
+    <section id="about" class="reveal-block">
+      <div class="reveal-item">
+        <div class="section-title">About PanteSwap</div>
+        <p>PanteSwap is a decentralized exchange built on the Arc Network, providing fast, low-cost token swaps and liquidity provision.</p>
+      </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="reveal-block">
+      <div class="reveal-item">
+        <div class="section-title">Roadmap</div>
+        <ul>
+          <li>✅ Token Deployment</li>
+          <li>✅ DEX Contract Deployment</li>
+          <li>🔄 Frontend Integration</li>
+          <li>⏳ Liquidity Mining</li>
+          <li>⏳ Governance DAO</li>
+          <li>⏳ Cross-chain Bridge</li>
+        </ul>
+      </div>
+    </section>
+
     <!-- Activity Log Section -->
     <section id="log-section" class="reveal-block">
       <div class="reveal-item">
@@ -212,9 +237,9 @@
       };
 
       // =============================================================
-      // Provider & Signer Management
+      // State variables
       // =============================================================
-      let provider, signer;
+      let provider, signer, tokenContract, swapContract;
       const connectBtn = document.getElementById('walletBtn');
       const walletInfo = document.createElement('div');
       walletInfo.id = 'walletInfo';
@@ -224,25 +249,26 @@
       document.querySelector('.header-right').appendChild(walletInfo);
 
       connectBtn.onclick = async () => {
-        if (window.ethereum) {
-          provider = new ethers.providers.Web3Provider(window.ethereum);
-          await provider.send('eth_requestAccounts', []);
-          signer = provider.getSigner();
-          const addr = await signer.getAddress();
-          walletInfo.textContent = `Connected: ${addr}`;
-          LOG(`Connected to ${addr}`);
-          detectNetwork();
-          // Update button text
-          connectBtn.textContent = 'Connected';
-          connectBtn.classList.add('connected');
-        } else {
+        if (!window.ethereum) {
           ERR('MetaMask not detected');
+          return;
         }
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        signer = provider.getSigner();
+        const addr = await signer.getAddress();
+        walletInfo.textContent = `Connected: ${addr}`;
+        LOG(`Connected to ${addr}`);
+
+        // Initialize contracts AFTER signer is available
+        initContracts();
+        detectNetwork();
+
+        connectBtn.textContent = 'Connected';
+        connectBtn.classList.add('connected');
       };
 
-      // =============================================================
-      // Contract ABIs
-      // =============================================================
+      // ---- ABI Token & DEX -------------------------------------------------
       const tokenAddress = "0x42e73bD665FF561fAdE39F014411aB7234b16DB1";
       const tokenAbi = [
         "function name() view returns (string)",
@@ -257,21 +283,22 @@
       ];
 
       const swapAbi = [
-        // Core DEX functions
         "function swapExactTokensForTokens(address tokenIn, address tokenOut, uint256 amountIn, address to) external returns (uint256 amountOut)",
         "function addLiquidity(address tokenA, address tokenB, uint256 amountA, uint256 amountB, uint128 liquidityDesired) external",
         "function removeLiquidity(address tokenA, address tokenB, uint128 liquidity) external",
         "function setFeeBP(uint256 newFeeBP) external",
-        // Event (optional)
         "event Swapped(address indexed pair, address indexed sender, uint256 amountIn, uint256 amountOut)"
       ];
 
-      const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
-      const swapContract = new ethers.Contract(
-        "0x0568e0909055Bb4b9362EA8bc7397b844adAde60",
-        swapAbi,
-        signer
-      );
+      function initContracts() {
+        tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
+        swapContract = new ethers.Contract(
+          "0x0568e0909055Bb4b9362EA8bc7397b844adAde60",
+          swapAbi,
+          signer
+        );
+        LOG('Contracts initialized');
+      }
 
       // =============================================================
       // Helper: Parse amounts with 18 decimals
@@ -284,6 +311,7 @@
       // =============================================================
       document.getElementById('refreshBalanceBtn').onclick = async () => {
         if (!signer) { ERR('Connect wallet first'); return; }
+        if (!tokenContract) { ERR('Contracts not initialized'); return; }
         const bal = await tokenContract.balanceOf(await signer.getAddress());
         document.getElementById('tokenBalance').textContent =
           bal.toString() + " PANTE";
@@ -294,9 +322,11 @@
       // Transfer PANTE
       // =============================================================
       document.getElementById('transferBtn').onclick = () => {
+        if (!signer) { ERR('Connect wallet first'); return; }
         document.getElementById('transferForm').style.display = 'block';
       };
       document.getElementById('doTransfer').onclick = async () => {
+        if (!signer) { ERR('Connect wallet first'); return; }
         const to = document.getElementById('toAddress').value;
         const amt = document.getElementById('amount').value;
         if (!to || !amt) { ERR('Please fill both address and amount'); return; }
@@ -313,6 +343,8 @@
       // Add Liquidity
       // =============================================================
       document.getElementById('addLiqBtn').onclick = async () => {
+        if (!signer) { ERR('Connect wallet first'); return; }
+        if (!swapContract) { ERR('Contracts not initialized'); return; }
         const tokenA = document.getElementById('addTokenA').value;
         const tokenB = document.getElementById('addTokenB').value;
         const amtA = document.getElementById('addAmtA').value;
@@ -341,6 +373,8 @@
       // Remove Liquidity
       // =============================================================
       document.getElementById('rmLiqBtn').onclick = async () => {
+        if (!signer) { ERR('Connect wallet first'); return; }
+        if (!swapContract) { ERR('Contracts not initialized'); return; }
         const tokenA = document.getElementById('rmTokenA').value;
         const tokenB = document.getElementById('rmTokenB').value;
         const liq = document.getElementById('removeLiq').value;
@@ -365,6 +399,8 @@
       // Swap Tokens
       // =============================================================
       document.getElementById('swapBtn').onclick = async () => {
+        if (!signer) { ERR('Connect wallet first'); return; }
+        if (!swapContract) { ERR('Contracts not initialized'); return; }
         const tokenIn = document.getElementById('swapFromToken').value;
         const tokenOut = document.getElementById('swapToToken').value;
         const amountIn = document.getElementById('swapAmtIn').value;
@@ -391,13 +427,13 @@
       // Auto-detect network (optional sanity check)
       // =============================================================
       async function detectNetwork() {
-        if (!provider) return;
+        if (!signer) return;
         const chainId = await provider.getNetwork().chainId;
         const netName = (chainId === 1) ? 'Ethereum Mainnet' :
                         (chainId === 11155111) ? 'Sepolia Testnet' :
                         (chainId === 28893) ? 'Arc Testnet' : 'Unknown';
         LOG(`Network detected: ${netName}`);
-        // Uncomment to restrict to Arc testnet only:
+        // Uncomment to force Arc Testnet only:
         // if (chainId !== 28893) ERR('Please switch to Arc Testnet');
       }
 
@@ -430,8 +466,6 @@
       });
 
       // Wallet modal (simple placeholder)
-      // In a real dApp you'd connect directly via MetaMask; this modal is just UI.
-      const walletBtn = document.getElementById('walletBtn');
       walletBtn.addEventListener('click', () => {
         walletModal.style.display = 'flex';
       });
@@ -445,13 +479,43 @@
       // Language selector (placeholder - does not actually change language)
       const langSelect = document.getElementById('langSelect');
       const menuLangSelect = document.getElementById('menuLangSelect');
-      // For demo, just log change
       const handleLangChange = (e) => {
         LOG(`Language changed to: ${e.target.value}`);
-        // In a real app, you would reload i18n content here.
+        // In a real app you would reload i18n content here.
       };
       langSelect.addEventListener('change', handleLangChange);
       menuLangSelect.addEventListener('change', handleLangChange);
+
+      // Smooth scroll for header nav links
+      document.querySelectorAll('.header-nav .nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href');
+          const target = document.querySelector(targetId);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+            // Update active state
+            document.querySelectorAll('.header-nav .nav-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+          }
+        });
+      });
+
+      // Smooth scroll for mobile menu links
+      document.querySelectorAll('.menu-contents a').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href');
+          const target = document.querySelector(targetId);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+            // Close mobile menu
+            menuBackdrop.style.opacity = '0';
+            menuBackdrop.style.visibility = 'hidden';
+            menuPanel.classList.remove('open');
+          }
+        });
+      });
 
       // =============================================================
       // Scroll Reveal Animation (simple IntersectionObserver fix)

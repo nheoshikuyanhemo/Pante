@@ -189,311 +189,314 @@
   </footer>
 
   <script>
-    // =============================================================
-    // Helper: Logging
-    // =============================================================
-    const LOG = (msg) => {
-      const el = document.getElementById('log');
-      const line = document.createElement('div');
-      line.textContent = msg;
-      line.className = 'success';
-      el.appendChild(line);
-      el.scrollTop = el.scrollHeight;
-    };
-    const ERR = (msg) => {
-      const el = document.getElementById('log');
-      const line = document.createElement('div');
-      line.textContent = msg;
-      line.className = 'error';
-      el.appendChild(line);
-      el.scrollTop = el.scrollHeight;
-    };
+    // Wrap everything in DOMContentLoaded to ensure elements exist
+    document.addEventListener('DOMContentLoaded', () => {
+      // =============================================================
+      // Helper: Logging
+      // =============================================================
+      const LOG = (msg) => {
+        const el = document.getElementById('log');
+        const line = document.createElement('div');
+        line.textContent = msg;
+        line.className = 'success';
+        el.appendChild(line);
+        el.scrollTop = el.scrollHeight;
+      };
+      const ERR = (msg) => {
+        const el = document.getElementById('log');
+        const line = document.createElement('div');
+        line.textContent = msg;
+        line.className = 'error';
+        el.appendChild(line);
+        el.scrollTop = el.scrollHeight;
+      };
 
-    // =============================================================
-    // Provider & Signer Management
-    // =============================================================
-    let provider, signer;
-    const connectBtn = document.getElementById('walletBtn');
-    const walletInfo = document.createElement('div');
-    walletInfo.id = 'walletInfo';
-    walletInfo.style.marginLeft = '1rem';
-    walletInfo.style.fontSize = '0.9rem';
-    walletInfo.style.color = '#a0a0b8';
-    document.querySelector('.header-right').appendChild(walletInfo);
+      // =============================================================
+      // Provider & Signer Management
+      // =============================================================
+      let provider, signer;
+      const connectBtn = document.getElementById('walletBtn');
+      const walletInfo = document.createElement('div');
+      walletInfo.id = 'walletInfo';
+      walletInfo.style.marginLeft = '1rem';
+      walletInfo.style.fontSize = '0.9rem';
+      walletInfo.style.color = '#a0a0b8';
+      document.querySelector('.header-right').appendChild(walletInfo);
 
-    connectBtn.onclick = async () => {
-      if (window.ethereum) {
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send('eth_requestAccounts', []);
-        signer = provider.getSigner();
-        const addr = await signer.getAddress();
-        walletInfo.textContent = `Connected: ${addr}`;
-        LOG(`Connected to ${addr}`);
-        detectNetwork();
-        // Update button text
-        connectBtn.textContent = 'Connected';
-        connectBtn.classList.add('connected');
-      } else {
-        ERR('MetaMask not detected');
-      }
-    };
-
-    // =============================================================
-    // Contract ABIs
-    // =============================================================
-    const tokenAddress = "0x42e73bD665FF561fAdE39F014411aB7234b16DB1";
-    const tokenAbi = [
-      "function name() view returns (string)",
-      "function symbol() view returns (string)",
-      "function decimals() view returns (uint8)",
-      "function totalSupply() view returns (uint256)",
-      "function balanceOf(address) view returns (uint256)",
-      "function transfer(address,uint256) returns (bool)",
-      "function allowance(address,address) view returns (uint256)",
-      "function approve(address,uint256) returns (bool)",
-      "function transferFrom(address,address,uint256) returns (bool)"
-    ];
-
-    const swapAbi = [
-      // Core DEX functions
-      "function swapExactTokensForTokens(address tokenIn, address tokenOut, uint256 amountIn, address to) external returns (uint256 amountOut)",
-      "function addLiquidity(address tokenA, address tokenB, uint256 amountA, uint256 amountB, uint128 liquidityDesired) external",
-      "function removeLiquidity(address tokenA, address tokenB, uint128 liquidity) external",
-      "function setFeeBP(uint256 newFeeBP) external",
-      // Event (optional)
-      "event Swapped(address indexed pair, address indexed sender, uint256 amountIn, uint256 amountOut)"
-    ];
-
-    const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
-    const swapContract = new ethers.Contract(
-      "0x0568e0909055Bb4b9362EA8bc7397b844adAde60",
-      swapAbi,
-      signer
-    );
-
-    // =============================================================
-    // Helper: Parse amounts with 18 decimals
-    // =============================================================
-    const toWei = (raw) => ethers.utils.parseUnits(raw, 18);
-    const fromWei = (wei) => ethers.utils.formatUnits(wei, 18);
-
-    // =============================================================
-    // Balance Check
-    // =============================================================
-    document.getElementById('refreshBalanceBtn').onclick = async () => {
-      if (!signer) { ERR('Connect wallet first'); return; }
-      const bal = await tokenContract.balanceOf(await signer.getAddress());
-      document.getElementById('tokenBalance').textContent =
-        bal.toString() + " PANTE";
-      LOG(`Balance: ${bal.toString()} PANTE`);
-    };
-
-    // =============================================================
-    // Transfer PANTE
-    // =============================================================
-    document.getElementById('transferBtn').onclick = () => {
-      document.getElementById('transferForm').style.display = 'block';
-    };
-    document.getElementById('doTransfer').onclick = async () => {
-      const to = document.getElementById('toAddress').value;
-      const amt = document.getElementById('amount').value;
-      if (!to || !amt) { ERR('Please fill both address and amount'); return; }
-      try {
-        const tx = await tokenContract.transfer(to, ethers.utils.parseUnits(amt, 18));
-        LOG(`Transfer tx: ${tx.hash}`);
-        await tx.wait();
-        LOG('Transfer completed');
-        document.getElementById('transferForm').style.display = 'none';
-      } catch (e) { ERR('Transfer failed: ' + e.message); }
-    };
-
-    // =============================================================
-    // Add Liquidity
-    // =============================================================
-    document.getElementById('addLiqBtn').onclick = async () => {
-      const tokenA = document.getElementById('addTokenA').value;
-      const tokenB = document.getElementById('addTokenB').value;
-      const amtA = document.getElementById('addAmtA').value;
-      const amtB = document.getElementById('addAmtB').value;
-      const desired = document.getElementById('desiredLiq').value;
-      if (!tokenA || !tokenB || !amtA || !amtB) {
-        ERR('All token and amount fields are required');
-        return;
-      }
-      try {
-        const tx = await swapContract.addLiquidity(
-          tokenA,
-          tokenB,
-          toWei(amtA),
-          toWei(amtB),
-          desired ? toWei(desired) : 0
-        );
-        LOG(`Add liquidity tx: ${tx.hash}`);
-        await tx.wait();
-        LOG('Liquidity added');
-        document.getElementById('addLiqResult').textContent = 'Successfully added liquidity';
-      } catch (e) { ERR('Failed to add liquidity: ' + e.message); }
-    };
-
-    // =============================================================
-    // Remove Liquidity
-    // =============================================================
-    document.getElementById('rmLiqBtn').onclick = async () => {
-      const tokenA = document.getElementById('rmTokenA').value;
-      const tokenB = document.getElementById('rmTokenB').value;
-      const liq = document.getElementById('removeLiq').value;
-      if (!tokenA || !tokenB || !liq) {
-        ERR('Please fill all fields');
-        return;
-      }
-      try {
-        const tx = await swapContract.removeLiquidity(
-          tokenA,
-          tokenB,
-          toWei(liq)
-        );
-        LOG(`Remove liquidity tx: ${tx.hash}`);
-        await tx.wait();
-        LOG('Liquidity removed');
-        document.getElementById('rmLiqResult').textContent = 'Successfully removed liquidity';
-      } catch (e) { ERR('Failed to remove liquidity: ' + e.message); }
-    };
-
-    // =============================================================
-    // Swap Tokens
-    // =============================================================
-    document.getElementById('swapBtn').onclick = async () => {
-      const tokenIn = document.getElementById('swapFromToken').value;
-      const tokenOut = document.getElementById('swapToToken').value;
-      const amountIn = document.getElementById('swapAmtIn').value;
-      const to = document.getElementById('swapToAddr').value;
-      if (!tokenIn || !tokenOut || !amountIn || !to) {
-        ERR('All fields are required');
-        return;
-      }
-      try {
-        const tx = await swapContract.swapExactTokensForTokens(
-          tokenIn,
-          tokenOut,
-          toWei(amountIn),
-          to
-        );
-        LOG(`Swap tx: ${tx.hash}`);
-        await tx.wait();
-        LOG('Swap completed');
-        document.getElementById('swapResult').textContent = 'Swap successful';
-      } catch (e) { ERR('Swap failed: ' + e.message); }
-    };
-
-    // =============================================================
-    // Auto-detect network (optional sanity check)
-    // =============================================================
-    async function detectNetwork() {
-      if (!provider) return;
-      const chainId = await provider.getNetwork().chainId;
-      const netName = (chainId === 1) ? 'Ethereum Mainnet' :
-                      (chainId === 11155111) ? 'Sepolia Testnet' :
-                      (chainId === 28893) ? 'Arc Testnet' : 'Unknown';
-      LOG(`Network detected: ${netName}`);
-      // Uncomment to restrict to Arc testnet only:
-      // if (chainId !== 28893) ERR('Please switch to Arc Testnet');
-    }
-
-    // =============================================================
-    // Menu & Wallet Modal UI
-    // =============================================================
-    const menuToggle = document.getElementById('menuToggle');
-    const menuBackdrop = document.getElementById('menuBackdrop');
-    const menuPanel = document.getElementById('menuPanel');
-    const menuClose = document.getElementById('menuClose');
-    const walletModal = document.getElementById('walletModal');
-    const walletModalClose = document.getElementById('walletModalClose');
-
-    // Open menu
-    menuToggle.addEventListener('click', () => {
-      menuBackdrop.style.opacity = '1';
-      menuBackdrop.style.visibility = 'visible';
-      menuPanel.classList.add('open');
-    });
-    // Close menu via backdrop or close button
-    menuBackdrop.addEventListener('click', () => {
-      menuBackdrop.style.opacity = '0';
-      menuBackdrop.style.visibility = 'hidden';
-      menuPanel.classList.remove('open');
-    });
-    menuClose.addEventListener('click', () => {
-      menuBackdrop.style.opacity = '0';
-      menuBackdrop.style.visibility = 'hidden';
-      menuPanel.classList.remove('open');
-    });
-
-    // Wallet modal (simple placeholder)
-    // In a real dApp you'd connect directly via MetaMask; this modal is just UI.
-    const walletBtn = document.getElementById('walletBtn');
-    walletBtn.addEventListener('click', () => {
-      walletModal.style.display = 'flex';
-    });
-    walletModalClose.addEventListener('click', () => {
-      walletModal.style.display = 'none';
-    });
-    window.addEventListener('click', (e) => {
-      if (e.target === walletModal) walletModal.style.display = 'none';
-    });
-
-    // Language selector (placeholder - does not actually change language)
-    const langSelect = document.getElementById('langSelect');
-    const menuLangSelect = document.getElementById('menuLangSelect');
-    // For demo, just log change
-    const handleLangChange = (e) => {
-      LOG(`Language changed to: ${e.target.value}`);
-      // In a real app, you would reload i18n content here.
-    };
-    langSelect.addEventListener('change', handleLangChange);
-    menuLangSelect.addEventListener('change', handleLangChange);
-
-    // =============================================================
-    // Scroll Reveal Animation (simple IntersectionObserver)
-    // =============================================================
-    const revealElements = document.querySelectorAll('.reveal-block');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          // Reveal inner items with staggered delay
-          const items = Array.from(target.target.querySelectorAll('.reveal-item'));
-          items.forEach((item, idx) => {
-            setTimeout(() => item.classList.add('visible'), 100 * idx);
-          });
-        }
-      });
-    }, { threshold: 0.1 });
-    revealElements.forEach(el => observer.observe(el));
-
-    // Also observe reveal-items directly for staggered effect if needed
-    const revealItems = document.querySelectorAll('.reveal-item');
-    revealItems.forEach(item => {
-      // Initially hidden via CSS; will be revealed by observer above
-    });
-
-    // Initialize typewriter effect if present
-    const typewriter = document.querySelector('.typewriter');
-    if (typewriter) {
-      const text = typewriter.textContent.trim();
-      typewriter.textContent = '';
-      let i = 0;
-      const type = () => {
-        if (i < text.length) {
-          typewriter.textContent += text.charAt(i);
-          i++;
-          setTimeout(type, 100);
+      connectBtn.onclick = async () => {
+        if (window.ethereum) {
+          provider = new ethers.providers.Web3Provider(window.ethereum);
+          await provider.send('eth_requestAccounts', []);
+          signer = provider.getSigner();
+          const addr = await signer.getAddress();
+          walletInfo.textContent = `Connected: ${addr}`;
+          LOG(`Connected to ${addr}`);
+          detectNetwork();
+          // Update button text
+          connectBtn.textContent = 'Connected';
+          connectBtn.classList.add('connected');
         } else {
-          // Show cursor after typing
-          const cursor = document.querySelector('.tw-cursor');
-          if (cursor) cursor.style.opacity = '1';
+          ERR('MetaMask not detected');
         }
       };
-      type();
-    }
+
+      // =============================================================
+      // Contract ABIs
+      // =============================================================
+      const tokenAddress = "0x42e73bD665FF561fAdE39F014411aB7234b16DB1";
+      const tokenAbi = [
+        "function name() view returns (string)",
+        "function symbol() view returns (string)",
+        "function decimals() view returns (uint8)",
+        "function totalSupply() view returns (uint256)",
+        "function balanceOf(address) view returns (uint256)",
+        "function transfer(address,uint256) returns (bool)",
+        "function allowance(address,address) view returns (uint256)",
+        "function approve(address,uint256) returns (bool)",
+        "function transferFrom(address,address,uint256) returns (bool)"
+      ];
+
+      const swapAbi = [
+        // Core DEX functions
+        "function swapExactTokensForTokens(address tokenIn, address tokenOut, uint256 amountIn, address to) external returns (uint256 amountOut)",
+        "function addLiquidity(address tokenA, address tokenB, uint256 amountA, uint256 amountB, uint128 liquidityDesired) external",
+        "function removeLiquidity(address tokenA, address tokenB, uint128 liquidity) external",
+        "function setFeeBP(uint256 newFeeBP) external",
+        // Event (optional)
+        "event Swapped(address indexed pair, address indexed sender, uint256 amountIn, uint256 amountOut)"
+      ];
+
+      const tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
+      const swapContract = new ethers.Contract(
+        "0x0568e0909055Bb4b9362EA8bc7397b844adAde60",
+        swapAbi,
+        signer
+      );
+
+      // =============================================================
+      // Helper: Parse amounts with 18 decimals
+      // =============================================================
+      const toWei = (raw) => ethers.utils.parseUnits(raw, 18);
+      const fromWei = (wei) => ethers.utils.formatUnits(wei, 18);
+
+      // =============================================================
+      // Balance Check
+      // =============================================================
+      document.getElementById('refreshBalanceBtn').onclick = async () => {
+        if (!signer) { ERR('Connect wallet first'); return; }
+        const bal = await tokenContract.balanceOf(await signer.getAddress());
+        document.getElementById('tokenBalance').textContent =
+          bal.toString() + " PANTE";
+        LOG(`Balance: ${bal.toString()} PANTE`);
+      };
+
+      // =============================================================
+      // Transfer PANTE
+      // =============================================================
+      document.getElementById('transferBtn').onclick = () => {
+        document.getElementById('transferForm').style.display = 'block';
+      };
+      document.getElementById('doTransfer').onclick = async () => {
+        const to = document.getElementById('toAddress').value;
+        const amt = document.getElementById('amount').value;
+        if (!to || !amt) { ERR('Please fill both address and amount'); return; }
+        try {
+          const tx = await tokenContract.transfer(to, ethers.utils.parseUnits(amt, 18));
+          LOG(`Transfer tx: ${tx.hash}`);
+          await tx.wait();
+          LOG('Transfer completed');
+          document.getElementById('transferForm').style.display = 'none';
+        } catch (e) { ERR('Transfer failed: ' + e.message); }
+      };
+
+      // =============================================================
+      // Add Liquidity
+      // =============================================================
+      document.getElementById('addLiqBtn').onclick = async () => {
+        const tokenA = document.getElementById('addTokenA').value;
+        const tokenB = document.getElementById('addTokenB').value;
+        const amtA = document.getElementById('addAmtA').value;
+        const amtB = document.getElementById('addAmtB').value;
+        const desired = document.getElementById('desiredLiq').value;
+        if (!tokenA || !tokenB || !amtA || !amtB) {
+          ERR('All token and amount fields are required');
+          return;
+        }
+        try {
+          const tx = await swapContract.addLiquidity(
+            tokenA,
+            tokenB,
+            toWei(amtA),
+            toWei(amtB),
+            desired ? toWei(desired) : 0
+          );
+          LOG(`Add liquidity tx: ${tx.hash}`);
+          await tx.wait();
+          LOG('Liquidity added');
+          document.getElementById('addLiqResult').textContent = 'Successfully added liquidity';
+        } catch (e) { ERR('Failed to add liquidity: ' + e.message); }
+      };
+
+      // =============================================================
+      // Remove Liquidity
+      // =============================================================
+      document.getElementById('rmLiqBtn').onclick = async () => {
+        const tokenA = document.getElementById('rmTokenA').value;
+        const tokenB = document.getElementById('rmTokenB').value;
+        const liq = document.getElementById('removeLiq').value;
+        if (!tokenA || !tokenB || !liq) {
+          ERR('Please fill all fields');
+          return;
+        }
+        try {
+          const tx = await swapContract.removeLiquidity(
+            tokenA,
+            tokenB,
+            toWei(liq)
+          );
+          LOG(`Remove liquidity tx: ${tx.hash}`);
+          await tx.wait();
+          LOG('Liquidity removed');
+          document.getElementById('rmLiqResult').textContent = 'Successfully removed liquidity';
+        } catch (e) { ERR('Failed to remove liquidity: ' + e.message); }
+      };
+
+      // =============================================================
+      // Swap Tokens
+      // =============================================================
+      document.getElementById('swapBtn').onclick = async () => {
+        const tokenIn = document.getElementById('swapFromToken').value;
+        const tokenOut = document.getElementById('swapToToken').value;
+        const amountIn = document.getElementById('swapAmtIn').value;
+        const to = document.getElementById('swapToAddr').value;
+        if (!tokenIn || !tokenOut || !amountIn || !to) {
+          ERR('All fields are required');
+          return;
+        }
+        try {
+          const tx = await swapContract.swapExactTokensForTokens(
+            tokenIn,
+            tokenOut,
+            toWei(amountIn),
+            to
+          );
+          LOG(`Swap tx: ${tx.hash}`);
+          await tx.wait();
+          LOG('Swap completed');
+          document.getElementById('swapResult').textContent = 'Swap successful';
+        } catch (e) { ERR('Swap failed: ' + e.message); }
+      };
+
+      // =============================================================
+      // Auto-detect network (optional sanity check)
+      // =============================================================
+      async function detectNetwork() {
+        if (!provider) return;
+        const chainId = await provider.getNetwork().chainId;
+        const netName = (chainId === 1) ? 'Ethereum Mainnet' :
+                        (chainId === 11155111) ? 'Sepolia Testnet' :
+                        (chainId === 28893) ? 'Arc Testnet' : 'Unknown';
+        LOG(`Network detected: ${netName}`);
+        // Uncomment to restrict to Arc testnet only:
+        // if (chainId !== 28893) ERR('Please switch to Arc Testnet');
+      }
+
+      // =============================================================
+      // Menu & Wallet Modal UI
+      // =============================================================
+      const menuToggle = document.getElementById('menuToggle');
+      const menuBackdrop = document.getElementById('menuBackdrop');
+      const menuPanel = document.getElementById('menuPanel');
+      const menuClose = document.getElementById('menuClose');
+      const walletModal = document.getElementById('walletModal');
+      const walletModalClose = document.getElementById('walletModalClose');
+
+      // Open menu
+      menuToggle.addEventListener('click', () => {
+        menuBackdrop.style.opacity = '1';
+        menuBackdrop.style.visibility = 'visible';
+        menuPanel.classList.add('open');
+      });
+      // Close menu via backdrop or close button
+      menuBackdrop.addEventListener('click', () => {
+        menuBackdrop.style.opacity = '0';
+        menuBackdrop.style.visibility = 'hidden';
+        menuPanel.classList.remove('open');
+      });
+      menuClose.addEventListener('click', () => {
+        menuBackdrop.style.opacity = '0';
+        menuBackdrop.style.visibility = 'hidden';
+        menuPanel.classList.remove('open');
+      });
+
+      // Wallet modal (simple placeholder)
+      // In a real dApp you'd connect directly via MetaMask; this modal is just UI.
+      const walletBtn = document.getElementById('walletBtn');
+      walletBtn.addEventListener('click', () => {
+        walletModal.style.display = 'flex';
+      });
+      walletModalClose.addEventListener('click', () => {
+        walletModal.style.display = 'none';
+      });
+      window.addEventListener('click', (e) => {
+        if (e.target === walletModal) walletModal.style.display = 'none';
+      });
+
+      // Language selector (placeholder - does not actually change language)
+      const langSelect = document.getElementById('langSelect');
+      const menuLangSelect = document.getElementById('menuLangSelect');
+      // For demo, just log change
+      const handleLangChange = (e) => {
+        LOG(`Language changed to: ${e.target.value}`);
+        // In a real app, you would reload i18n content here.
+      };
+      langSelect.addEventListener('change', handleLangChange);
+      menuLangSelect.addEventListener('change', handleLangChange);
+
+      // =============================================================
+      // Scroll Reveal Animation (simple IntersectionObserver fix)
+      // =============================================================
+      const revealElements = document.querySelectorAll('.reveal-block');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            // Reveal inner items with staggered delay
+            const items = Array.from(entry.target.querySelectorAll('.reveal-item'));
+            items.forEach((item, idx) => {
+              setTimeout(() => item.classList.add('visible'), 100 * idx);
+            });
+          }
+        });
+      }, { threshold: 0.1 });
+      revealElements.forEach(el => observer.observe(el));
+
+      // Also observe reveal-items directly for staggered effect if needed
+      const revealItems = document.querySelectorAll('.reveal-item');
+      revealItems.forEach(item => {
+        // Initially hidden via CSS; will be revealed by observer above
+      });
+
+      // Initialize typewriter effect if present
+      const typewriter = document.querySelector('.typewriter');
+      if (typewriter) {
+        const text = typewriter.textContent.trim();
+        typewriter.textContent = '';
+        let i = 0;
+        const type = () => {
+          if (i < text.length) {
+            typewriter.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, 100);
+          } else {
+            // Show cursor after typing
+            const cursor = document.querySelector('.tw-cursor');
+            if (cursor) cursor.style.opacity = '1';
+          }
+        };
+        type();
+      }
+    });
   </script>
 </body>
 </html>

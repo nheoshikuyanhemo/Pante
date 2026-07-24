@@ -1,0 +1,87 @@
+/* ---------- Root variables (mirip Uniswap) ---------- */
+:root {
+  --uniswap-blue:   #0F172A;   /* navy-blue */
+  --uniswap-white:  #FFFFFF;
+  --uniswap-gray:   #F3F4F6;
+  --uniswap-blue-dark:#0B1120;
+  --uniswap-blue-light:#334155;
+}
+
+/* ---------- Global reset & base ---------- */
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--uniswap-white);
+  color: #111;
+}
+
+/* ---------- Header ---------- */
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0.75rem 2rem;
+  background: var(--uniswap-blue-dark);
+  color: var(--uniswap-white);
+}
+.logo-box img { height:48px; }
+.header-nav a {
+  color: var(--uniswap-white);
+  text-decoration:none;
+  margin-right:1.5rem;
+  font-weight:500;
+}
+.header-nav a:hover { text-decoration:underline; }
+
+.header-right .lang-switch,
+.header-right .wallet-btn {
+  margin-left:1rem;
+}
+
+/* ---------- Buttons (Uniswap style) ---------- */
+.btn {
+  display:inline-block;
+  padding:0.5rem 1rem;
+  border-radius:0.5rem;
+  font-weight:600;
+  text-align:center;
+  text-decoration:none;
+  transition:background .2s, transform .1s;
+}
+.btn-primary {
+  background: var(--uniswap-blue);
+  color:#fff;
+}
+.btn-primary:hover { background: var(--uniswap-blue-dark); }
+.btn-secondary {
+  background: var(--uniswap-white);
+  color: var(--uniswap-blue);
+  border:1px solid var(--uniswap-blue);
+}
+.btn-secondary:hover { background: var(--uniswap-gray); }
+
+/* ---------- Log / toast ---------- */
+.log {
+  background:#f0f0f0;
+  padding:1rem;
+  border-radius:6px;
+  max-height:300px;
+  overflow-y:auto;
+}
+.success { color:green; }
+.error   { color:red; }
+
+/* ---------- Reveal animation (keeps existing) ---------- */
+.reveal-block { opacity:0; transform:translateY(20px); }
+.reveal-block.visible { opacity:1; transform:none; }
+.reveal-item { opacity:0; transform:translateY(10px); transition:opacity .3s, transform .3s; }
+.reveal-item.visible { opacity:1; transform:none; }
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 768px) {
+  .header { padding:0.75rem 1rem; }
+  .header-nav { display:none; }
+  .menu-trigger { display:flex; }
+}

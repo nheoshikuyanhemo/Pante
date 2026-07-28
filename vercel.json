@@ -1,6 +1,20 @@
 {
   "rewrites": [
     { "source": "/dex.html", "destination": "/html/dex.html" },
-    { "source": "/dex", "destination": "/html/dex.html" }
+    { "source": "/dex.html/", "destination": "/html/dex.html" },
+    { "source": "/dex", "destination": "/html/dex.html" },
+    { "source": "/dex/", "destination": "/html/dex.html" },
+    { "source": "/nft.html", "destination": "/html/nft.html" },
+    { "source": "/nft.html/", "destination": "/html/nft.html" },
+    { "source": "/nft", "destination": "/html/nft.html" },
+    { "source": "/nft/", "destination": "/html/nft.html" },
+    { "source": "/about.html", "destination": "/html/about.html" },
+    { "source": "/about.html/", "destination": "/html/about.html" },
+    { "source": "/about", "destination": "/html/about.html" },
+    { "source": "/about/", "destination": "/html/about.html" },
+    { "source": "/whitepaper.html", "destination": "/html/whitepaper.html" },
+    { "source": "/whitepaper.html/", "destination": "/html/whitepaper.html" },
+    { "source": "/whitepaper", "destination": "/html/whitepaper.html" },
+    { "source": "/whitepaper/", "destination": "/html/whitepaper.html" }
   ]
 }

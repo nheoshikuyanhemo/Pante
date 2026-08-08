@@ -464,7 +464,7 @@
     });
 
     // Wallet modal
-    walletBtn.addEventListener('click', () => walletModal.style.display = 'flex');
+    connectBtn.addEventListener('click', () => walletModal.style.display = 'flex');
     walletModalClose.addEventListener('click', () => walletModal.style.display = 'none');
     window.addEventListener('click', (e) => {
       if (e.target === walletModal) walletModal.style.display = 'none';

@@ -3,27 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PanteSwap DEX</title>
-  <!-- Load ethers.js from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="/css/style.css">
+  <title>Pante – DEX</title>
+  <link rel="stylesheet" href="/html/css/style.css">
+  <link rel="stylesheet" href="/html/css/dex-nft.css">
 </head>
 <body>
-  <!-- Animated RGB line -->
-  <div class="moving-line"></div>
-
+  <!-- Header (same as index) -->
   <header class="bordered header">
     <button class="menu-trigger" id="menuTrigger" title="Menu">
       <span class="dot"></span><span class="dot"></span><span class="dot"></span>
     </button>
 
     <nav class="header-nav">
-      <a href="/" class="nav-link" data-i18n="nav.home">Home</a>
-      <a href="/dex" class="nav-link active" data-i18n="nav.dex">DEX</a>
-      <a href="/nft" class="nav-link" data-i18n="nav.nft">NFT</a>
-      <a href="/about" class="nav-link" data-i18n="nav.about">About</a>
-      <a href="/whitepaper" class="nav-link" data-i18n="nav.whitepaper">Whitepaper</a>
+      <a href="#home" class="nav-link active" data-i18n="nav.home">Home</a>
+      <a href="#dex" class="nav-link">DEX</a>
+      <a href="#nft" class="nav-link">NFT</a>
+      <a href="#about" class="nav-link" data-i18n="nav.about">About</a>
+      <a href="#whitepaper" class="nav-link">Whitepaper</a>
     </nav>
 
     <div class="header-right">
@@ -48,151 +44,63 @@
       </div>
       <button class="wallet-btn" id="walletBtn">Connect Wallet</button>
       <div class="logo-box">
-        <a href="/"><img src="/assets/logo.png" alt="Pante Logo" class="logo-img"></a>
+        <a href="#home"><img src="/html/assets/logo.png" alt="Pante Logo" class="logo-img"></a>
       </div>
     </div>
   </header>
 
-  <div class="menu-backdrop" id="menuBackdrop"></div>
-  <aside class="menu-panel" id="menuPanel">
-    <div class="menu-panel__head">
-      <span class="menu-panel__title" data-i18n="menu.title">// PANTE</span>
-      <button class="menu-close" id="menuClose">✕</button>
-    </div>
-    <ul class="menu-contents">
-      <li><a href="/"><span class="mc-title typewriter" data-i18n="menu.home" data-type="Home" data-speed="30" data-delay="200"></span><span class="mc-desc typewriter" data-i18n="menu.home.desc" data-type="Landing — banner, tagline & core features." data-speed="14" data-delay="350"></span></a></li>
-      <li><a href="/dex"><span class="mc-title typewriter" data-i18n="menu.dex" data-type="DEX" data-speed="30" data-delay="500"></span><span class="mc-desc typewriter" data-i18n="menu.dex.desc" data-type="Swap tokens on our decentralized exchange" data-speed="14" data-delay="650"></span></a></li>
-      <li><a href="/nft"><span class="mc-title typewriter" data-i18n="menu.nft" data-type="NFT Marketplace" data-speed="30" data-delay="800"></span><span class="mc-desc typewriter" data-i18n="menu.nft.desc" data-type="Cat-themed NFT creation & trading" data-speed="14" data-delay="950"></span></a></li>
-      <li><a href="/about"><span class="mc-title typewriter" data-i18n="menu.about" data-type="About" data-speed="30" data-delay="1100"></span><span class="mc-desc typewriter" data-i18n="menu.about.desc" data-type="Vision, utility & ecosystem links." data-speed="14" data-delay="1250"></span></a></li>
-      <li><a href="/whitepaper"><span class="mc-title typewriter" data-i18n="menu.whitepaper" data-type="Whitepaper" data-speed="30" data-delay="1400"></span><span class="mc-desc typewriter" data-i18n="menu.whitepaper.desc" data-type="Tokenomics, roadmap, DEX, staking & security." data-speed="14" data-delay="1550"></span></a></li>
-      <li><a href="https://x.com/pante_coin" target="_blank"><span class="mc-title typewriter" data-i18n="menu.x" data-type="X (Twitter)" data-speed="30" data-delay="1700"></span><span class="mc-desc typewriter" data-i18n="menu.x.desc" data-type="Official announcements & community." data-speed="14" data-delay="1850"></span></a></li>
-      <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title typewriter" data-i18n="menu.github" data-type="GitHub" data-speed="30" data-delay="2000"></span><span class="mc-desc typewriter" data-i18n="menu.github.desc" data-type="Source code & development repository." data-speed="14" data-delay="2150"></span></a></li>
-    </ul>
-  </aside>
+  <!-- Hero Banner -->
+  <section class="hero bordered reveal-block" id="hero">
+    <img src="/html/assets/banner.png" alt="Hero Banner" class="hero-banner">
+    <h1 class="typewriter" data-type="DEX Platform" data-speed="45"></h1>
+    <p class="typewriter" data-type="Swap tokens & provide liquidity on our decentralized exchange." data-speed="22"></p>
+  </section>
 
-  <!-- Wallet Modal -->
-  <div class="wallet-modal" id="walletModal">
-    <div class="wallet-modal__box">
-      <div class="wallet-modal__head">
-        <span>Select Wallet</span>
-        <button class="wallet-modal__close" id="walletModalClose">&times;</button>
-      </div>
-      <div class="wallet-modal__list">
-        <div class="wallet-modal__item">
-          <span class="wi-icon">🦊</span>
-          <span class="wi-name">MetaMask</span>
-          <span class="wi-tag">Extension</span>
-        </div>
-        <div class="wallet-modal__item">
-          <span class="wi-icon">📱</span>
-          <span class="wi-name">WalletConnect</span>
-          <span class="wi-tag">Mobile</span>
-        </div>
-      </div>
-      <div class="wallet-modal__hint">Connect your wallet to interact with the dApp</div>
-    </div>
-  </div>
-
+  <!-- Main Content -->
   <main>
-    <!-- Hero Section -->
-    <section class="hero bordered reveal-block" id="hero">
-      <div class="reveal-item">
-        <h1 class="typewriter" data-i18n="hero.title" data-type="PanteSwap" data-speed="45"></h1>
-        <p class="typewriter" data-i18n="hero.tagline" data-type="Decentralized Exchange on Arc Network" data-speed="22"></p>
-        <a href="#dex-section" class="dex-btn">Launch DEX</a>
-      </div>
-    </section>
+    <section id="content">
+      <h2 class="section-title typewriter" data-i18n="dex.title" data-type="Decentralized Exchange" data-speed="55"></h2>
+      <p class="typewriter" data-i18n="dex.desc" data-type="Swap tokens on our DEX with low fees and high liquidity." data-speed="18"></p>
 
-    <!-- Token Info Section -->
-    <section class="vision bordered reveal-block" id="token-info">
-      <div class="reveal-item">
-        <h2 class="section-title typewriter" data-i18n="token.title" data-type="Token Information (PANTE)" data-speed="55"></h2>
-        <p class="typewriter" data-i18n="token.contract" data-type="Contract: 0x42e73bD665FF561fAdE39F014411aB7234b16DB1" data-speed="18"></p>
-        <p class="typewriter" data-i18n="token.name" data-type="Name: Pante Token" data-speed="18"></p>
-        <p class="typewriter" data-i18n="token.symbol" data-type="Symbol: PANTE" data-speed="18"></p>
-        <p class="typewriter" data-i18n="token.decimals" data-type="Decimals: 18" data-speed="18"></p>
-        <div style="margin-top:1rem;">
-          <button id="refreshBalanceBtn" class="btn btn-primary">Check Balance</button>
-          <span id="tokenBalance" style="margin-left:1rem;font-weight:600;">--</span>
+      <div class="dex-container">
+        <!-- Price Chart -->
+        <div class="chart-container">
+          <!-- Chart placeholder -->
+          <div id="price-chart"></div>
         </div>
-        <div style="margin-top:1rem;">
-          <button id="transferBtn" class="btn btn-secondary">Transfer PANTE</button>
-          <div id="transferForm" style="display:none; margin-top:0.5rem;">
-            <label>To Address: <input type="text" id="toAddress" placeholder="0x..."></label><br>
-            <label>Amount: <input type="text" id="amount" placeholder="Amount in PANTE"></label><br>
-            <button id="doTransfer" class="btn btn-primary">Send</button>
+
+        <!-- Token List -->
+        <div class="token-list">
+          <h3 class="typewriter" data-type="Available Tokens" data-speed="30">Available Tokens</h3>
+          <ul class="token-pairs">
+            <li class="pair">Token A / Token B</li>
+            <li class="pair">Token C / Token D</li>
+            <!-- Add more pairs as needed -->
+          </ul>
+        </div>
+
+        <!-- Swap Interface -->
+        <div class="swap-section">
+          <h3 class="typewriter" data-type="Swap Tokens" data-speed="30">Swap Tokens</h3>
+          <div class="swap-input">
+            <input type="text" placeholder="Select Token" readonly>
+          </div>
+          <div class="swap-actions">
+            <button id="swap-btn">Swap</button>
+            <input type="number" placeholder="Amount" min="0.01">
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- DEX Interaction Section -->
-    <section class="features bordered reveal-block" id="dex-section">
-      <h2 class="section-title" data-i18n="dex.title">PanteSwap DEX Interaction</h2>
-      <p style="margin-bottom:1rem;">DEX Contract: <strong>0x0568e0909055Bb4b9362EA8bc7397b844adAde60</strong></p>
-
-      <div class="feature-grid">
-        <!-- Add Liquidity -->
-        <div class="feature-card reveal-item">
-          <h3 class="typewriter" data-i18n="dex.addLiq" data-type="Add Liquidity" data-speed="40"></h3>
-          <label>Token A (e.g., PANTE address): <input type="text" id="addTokenA" placeholder="0x..."></label><br>
-          <label>Token B (e.g., stablecoin address): <input type="text" id="addTokenB" placeholder="0x..."></label><br>
-          <label>Amount A: <input type="text" id="addAmtA" placeholder="Amount"></label><br>
-          <label>Amount B: <input type="text" id="addAmtB" placeholder="Amount"></label><br>
-          <label>Desired Liquidity (optional): <input type="text" id="desiredLiq" placeholder="LP tokens"></label><br>
-          <button id="addLiqBtn" class="btn btn-primary">Add Liquidity</button>
-          <div id="addLiqResult" style="margin-top:0.5rem;"></div>
-        </div>
-
-        <!-- Remove Liquidity -->
-        <div class="feature-card reveal-item">
-          <h3 class="typewriter" data-i18n="dex.removeLiq" data-type="Remove Liquidity" data-speed="40"></h3>
-          <label>Liquidity Amount to remove: <input type="text" id="removeLiq" placeholder="LP tokens"></label><br>
-          <label>Token A: <input type="text" id="rmTokenA" placeholder="0x..."></label><br>
-          <label>Token B: <input type="text" id="rmTokenB" placeholder="0x..."></label><br>
-          <button id="rmLiqBtn" class="btn btn-primary">Remove Liquidity</button>
-          <div id="rmLiqResult" style="margin-top:0.5rem;"></div>
-        </div>
-
-        <!-- Swap Tokens -->
-        <div class="feature-card reveal-item">
-          <h3 class="typewriter" data-i18n="dex.swap" data-type="Swap Tokens" data-speed="40"></h3>
-          <label>Swap From Token: <input type="text" id="swapFromToken" placeholder="0x..."></label><br>
-          <label>Swap To Token: <input type="text" id="swapToToken" placeholder="0x..."></label><br>
-          <label>Amount In: <input type="text" id="swapAmtIn" placeholder="Amount"></label><br>
-          <label>Recipient Address: <input type="text" id="swapToAddr" placeholder="0x..."></label><br>
-          <button id="swapBtn" class="btn btn-primary">Swap</button>
-          <div id="swapResult" style="margin-top:0.5rem;"></div>
+        <!-- Liquidity Info -->
+        <div class="liquidity-info">
+          <h3 class="typewriter" data-type="Liquidity Mining" data-speed="30">Liquidity Mining</h3>
+          <p>Earn rewards by providing liquidity to our pools. <span class="typewriter" data-type="APY">-- APY</span></p>
         </div>
       </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="ecosystem bordered reveal-block" id="about">
-      <h2 class="section-title typewriter" data-i18n="about.title" data-type="About PanteSwap" data-speed="55"></h2>
-      <p class="typewriter" data-i18n="about.text" data-type="PanteSwap is a decentralized exchange on the Arc Network, offering fast, low-cost token swaps and liquidity provision." data-speed="18"></p>
-    </section>
-
-    <!-- Roadmap Section -->
-    <section class="ecosystem bordered reveal-block" id="roadmap">
-      <h2 class="section-title typewriter" data-i18n="roadmap.title" data-type="Roadmap" data-speed="55"></h2>
-      <ul class="eco-list">
-        <li class="typewriter" data-i18n="roadmap.1" data-type="✅ Token Deployment" data-speed="20"></li>
-        <li class="typewriter" data-i18n="roadmap.2" data-type="✅ DEX Contract Deployment" data-speed="20"></li>
-        <li class="typewriter" data-i18n="roadmap.3" data-type="🔄 Frontend Integration" data-speed="20"></li>
-        <li class="typewriter" data-i18n="roadmap.4" data-type="⏳ Liquidity Mining" data-speed="20"></li>
-        <li class="typewriter" data-i18n="roadmap.5" data-type="⏳ Governance DAO" data-speed="20"></li>
-        <li class="typewriter" data-i18n="roadmap.6" data-type="⏳ Cross-chain Bridge" data-speed="20"></li>
-      </ul>
-    </section>
-
-    <!-- Activity Log Section -->
-    <section class="ecosystem bordered reveal-block" id="log-section">
-      <h2 class="section-title typewriter" data-i18n="log.title" data-type="Activity Log" data-speed="55"></h2>
-      <div id="log" class="log"></div>
     </section>
   </main>
 
+  <!-- Footer (same as index) -->
   <footer class="bordered footer" id="footer">
     <div class="footer-social">
       <a href="https://x.com/pante_coin" target="_blank" rel="noopener" title="X (Twitter)" class="footer-icon">
@@ -205,341 +113,11 @@
     <p data-i18n="footer">© 2026 Pante. All Rights Reserved.</p>
   </footer>
 
-  <script>
-    // =============================================================
-    // Helper: Logging
-    // =============================================================
-    const LOG = (msg) => {
-      const el = document.getElementById('log');
-      const line = document.createElement('div');
-      line.textContent = msg;
-      line.className = 'success';
-      el.appendChild(line);
-      el.scrollTop = el.scrollHeight;
-    };
-    const ERR = (msg) => {
-      const el = document.getElementById('log');
-      const line = document.createElement('div');
-      line.textContent = msg;
-      line.className = 'error';
-      el.appendChild(line);
-      el.scrollTop = el.scrollHeight;
-    };
-
-    // =============================================================
-    // State variables
-    // =============================================================
-    let provider, signer, tokenContract, swapContract;
-
-    // =============================================================
-    // DOM Elements
-    // =============================================================
-    const connectBtn = document.getElementById('walletBtn');
-    const walletInfo = document.createElement('div');
-    walletInfo.id = 'walletInfo';
-    walletInfo.style.marginLeft = '1rem';
-    walletInfo.style.fontSize = '0.9rem';
-    walletInfo.style.color = '#a0a0b8';
-    document.querySelector('.header-right').appendChild(walletInfo);
-
-    // =============================================================
-    // Connect Wallet
-    // =============================================================
-    connectBtn.onclick = async () => {
-      if (!window.ethereum) {
-        ERR('MetaMask not detected');
-        return;
-      }
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      signer = provider.getSigner();
-      const addr = await signer.getAddress();
-      walletInfo.textContent = `Connected: ${addr}`;
-      LOG(`Connected to ${addr}`);
-
-      // Initialize contracts AFTER signer is available
-      initContracts();
-      detectNetwork();
-
-      connectBtn.textContent = 'Connected';
-      connectBtn.classList.add('connected');
-    };
-
-    // =============================================================
-    // Contract ABIs & Addresses
-    // =============================================================
-    const tokenAddress = "0x42e73bD665FF561fAdE39F014411aB7234b16DB1";
-    const tokenAbi = [
-      "function name() view returns (string)",
-      "function symbol() view returns (string)",
-      "function decimals() view returns (uint8)",
-      "function totalSupply() view returns (uint256)",
-      "function balanceOf(address) view returns (uint256)",
-      "function transfer(address,uint256) returns (bool)",
-      "function allowance(address,address) view returns (uint256)",
-      "function approve(address,uint256) returns (bool)",
-      "function transferFrom(address,address,uint256) returns (bool)"
-    ];
-
-    const swapAbi = [
-      "function swapExactTokensForTokens(address tokenIn, address tokenOut, uint256 amountIn, address to) external returns (uint256 amountOut)",
-      "function addLiquidity(address tokenA, address tokenB, uint256 amountA, uint256 amountB, uint128 liquidityDesired) external",
-      "function removeLiquidity(address tokenA, address tokenB, uint128 liquidity) external",
-      "function setFeeBP(uint256 newFeeBP) external",
-      "event Swapped(address indexed pair, address indexed sender, uint256 amountIn, uint256 amountOut)"
-    ];
-
-    function initContracts() {
-      tokenContract = new ethers.Contract(tokenAddress, tokenAbi, signer);
-      swapContract = new ethers.Contract(
-        "0x0568e0909055Bb4b9362EA8bc7397b844adAde60",
-        swapAbi,
-        signer
-      );
-      LOG('✅ Contracts loaded');
-    }
-
-    // =============================================================
-    // Helper: Parse amounts with 18 decimals
-    // =============================================================
-    const toWei = (raw) => ethers.utils.parseUnits(raw, 18);
-    const fromWei = (wei) => ethers.utils.formatUnits(wei, 18);
-
-    // =============================================================
-    // Balance Check
-    // =============================================================
-    document.getElementById('refreshBalanceBtn').onclick = async () => {
-      if (!signer) { ERR('Connect wallet first'); return; }
-      if (!tokenContract) { ERR('Contracts not initialized'); return; }
-      const bal = await tokenContract.balanceOf(await signer.getAddress());
-      document.getElementById('tokenBalance').textContent = bal.toString() + " PANTE";
-      LOG(`Balance: ${bal.toString()} PANTE`);
-    };
-
-    // =============================================================
-    // Transfer PANTE
-    // =============================================================
-    document.getElementById('transferBtn').onclick = () => {
-      if (!signer) { ERR('Connect wallet first'); return; }
-      document.getElementById('transferForm').style.display = 'block';
-    };
-    document.getElementById('doTransfer').onclick = async () => {
-      if (!signer) { ERR('Connect wallet first'); return; }
-      const to = document.getElementById('toAddress').value;
-      const amt = document.getElementById('amount').value;
-      if (!to || !amt) { ERR('Please fill both address and amount'); return; }
-      try {
-        const tx = await tokenContract.transfer(to, ethers.utils.parseUnits(amt, 18));
-        LOG(`Transfer tx: ${tx.hash}`);
-        await tx.wait();
-        LOG('Transfer completed');
-        document.getElementById('transferForm').style.display = 'none';
-      } catch (e) { ERR('Transfer failed: ' + e.message); }
-    };
-
-    // =============================================================
-    // Add Liquidity
-    // =============================================================
-    document.getElementById('addLiqBtn').onclick = async () => {
-      if (!signer) { ERR('Connect wallet first'); return; }
-      if (!swapContract) { ERR('Contracts not initialized'); return; }
-      const tokenA = document.getElementById('addTokenA').value;
-      const tokenB = document.getElementById('addTokenB').value;
-      const amtA = document.getElementById('addAmtA').value;
-      const amtB = document.getElementById('addAmtB').value;
-      const desired = document.getElementById('desiredLiq').value;
-      if (!tokenA || !tokenB || !amtA || !amtB) {
-        ERR('All token and amount fields are required');
-        return;
-      }
-      try {
-        const tx = await swapContract.addLiquidity(
-          tokenA,
-          tokenB,
-          toWei(amtA),
-          toWei(amtB),
-          desired ? toWei(desired) : 0
-        );
-        LOG(`Add liquidity tx: ${tx.hash}`);
-        await tx.wait();
-        LOG('Liquidity added');
-        document.getElementById('addLiqResult').textContent = 'Successfully added liquidity';
-      } catch (e) { ERR('Failed to add liquidity: ' + e.message); }
-    };
-
-    // =============================================================
-    // Remove Liquidity
-    // =============================================================
-    document.getElementById('rmLiqBtn').onclick = async () => {
-      if (!signer) { ERR('Connect wallet first'); return; }
-      if (!swapContract) { ERR('Contracts not initialized'); return; }
-      const tokenA = document.getElementById('rmTokenA').value;
-      const tokenB = document.getElementById('rmTokenB').value;
-      const liq = document.getElementById('removeLiq').value;
-      if (!tokenA || !tokenB || !liq) {
-        ERR('Please fill all fields');
-        return;
-      }
-      try {
-        const tx = await swapContract.removeLiquidity(
-          tokenA,
-          tokenB,
-          toWei(liq)
-        );
-        LOG(`Remove liquidity tx: ${tx.hash}`);
-        await tx.wait();
-        LOG('Liquidity removed');
-        document.getElementById('rmLiqResult').textContent = 'Successfully removed liquidity';
-      } catch (e) { ERR('Failed to remove liquidity: ' + e.message); }
-    };
-
-    // =============================================================
-    // Swap Tokens
-    // =============================================================
-    document.getElementById('swapBtn').onclick = async () => {
-      if (!signer) { ERR('Connect wallet first'); return; }
-      if (!swapContract) { ERR('Contracts not initialized'); return; }
-      const tokenIn = document.getElementById('swapFromToken').value;
-      const tokenOut = document.getElementById('swapToToken').value;
-      const amountIn = document.getElementById('swapAmtIn').value;
-      const to = document.getElementById('swapToAddr').value;
-      if (!tokenIn || !tokenOut || !amountIn || !to) {
-        ERR('All fields are required');
-        return;
-      }
-      try {
-        const tx = await swapContract.swapExactTokensForTokens(
-          tokenIn,
-          tokenOut,
-          toWei(amountIn),
-          to
-        );
-        LOG(`Swap tx: ${tx.hash}`);
-        await tx.wait();
-        LOG('Swap completed');
-        document.getElementById('swapResult').textContent = 'Swap successful';
-      } catch (e) { ERR('Swap failed: ' + e.message); }
-    };
-
-    // =============================================================
-    // Auto-detect network (optional sanity check)
-    // =============================================================
-    async function detectNetwork() {
-      if (!signer) return;
-      const chainId = await provider.getNetwork().then(n => n.chainId);
-      const netName = (chainId === 1) ? 'Ethereum Mainnet' :
-                      (chainId === 11155111) ? 'Sepolia Testnet' :
-                      (chainId === 28893) ? 'Arc Testnet' : 'Unknown';
-      LOG(`Network detected: ${netName}`);
-      // Uncomment to force Arc Testnet only:
-      // if (chainId !== 28893) ERR('Please switch to Arc Testnet');
-    }
-
-    // =============================================================
-    // Menu & Wallet Modal UI
-    // =============================================================
-    const menuTrigger = document.getElementById('menuTrigger');
-    const menuBackdrop = document.getElementById('menuBackdrop');
-    const menuPanel = document.getElementById('menuPanel');
-    const menuClose = document.getElementById('menuClose');
-    const walletModal = document.getElementById('walletModal');
-    const walletModalClose = document.getElementById('walletModalClose');
-
-    // Open menu
-    menuTrigger.addEventListener('click', () => {
-      menuBackdrop.style.opacity = '1';
-      menuBackdrop.style.visibility = 'visible';
-      menuPanel.classList.add('open');
-    });
-    // Close menu via backdrop or close button
-    menuBackdrop.addEventListener('click', () => {
-      menuBackdrop.style.opacity = '0';
-      menuBackdrop.style.visibility = 'hidden';
-      menuPanel.classList.remove('open');
-    });
-    menuClose.addEventListener('click', () => {
-      menuBackdrop.style.opacity = '0';
-      menuBackdrop.style.visibility = 'hidden';
-      menuPanel.classList.remove('open');
-    });
-
-    // Wallet modal
-    connectBtn.addEventListener('click', () => walletModal.style.display = 'flex');
-    walletModalClose.addEventListener('click', () => walletModal.style.display = 'none');
-    window.addEventListener('click', (e) => {
-      if (e.target === walletModal) walletModal.style.display = 'none';
-    });
-
-    // Language selector (placeholder)
-    const langSelect = document.getElementById('langSelect');
-    const handleLangChange = (e) => LOG(`Language changed to: ${e.target.value}`);
-    langSelect.addEventListener('change', handleLangChange);
-
-    // Smooth scroll for header nav links
-    document.querySelectorAll('.header-nav .nav-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href');
-        if (targetId === '/' || targetId === '/index.html') return; // let normal navigation happen
-        const target = document.querySelector(targetId);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-          document.querySelectorAll('.header-nav .nav-link').forEach(l => l.classList.remove('active'));
-          link.classList.add('active');
-        }
-      });
-    });
-
-    // Smooth scroll for mobile menu links
-    document.querySelectorAll('.menu-contents a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (href.startsWith('http') || href === '/' || href === '/index.html') return; // external or home
-        e.preventDefault();
-        const target = document.querySelector(href);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-          // Close mobile menu
-          menuBackdrop.style.opacity = '0';
-          menuBackdrop.style.visibility = 'hidden';
-          menuPanel.classList.remove('open');
-        }
-      });
-    });
-
-    // =============================================================
-    // Scroll Reveal Animation
-    // =============================================================
-    const revealElements = document.querySelectorAll('.reveal-block');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          const items = Array.from(entry.target.querySelectorAll('.reveal-item'));
-          items.forEach((item, idx) => {
-            setTimeout(() => item.classList.add('visible'), 100 * idx);
-          });
-        }
-      });
-    }, { threshold: 0.1 });
-    revealElements.forEach(el => observer.observe(el));
-
-    // =============================================================
-    // Typewriter effect
-    // =============================================================
-    document.querySelectorAll('.typewriter[data-type]').forEach(el => {
-      const text = el.getAttribute('data-type');
-      el.textContent = '';
-      let i = 0;
-      const type = () => {
-        if (i < text.length) {
-          el.textContent += text.charAt(i);
-          i++;
-          setTimeout(type, el.getAttribute('data-speed') || 100);
-        }
-      };
-      setTimeout(type, el.getAttribute('data-delay') || 0);
-    });
-  </script>
+  <!-- Scripts -->
+  <script src="/html/js/i18n.js"></script>
+  <script src="/html/js/script.js"></script>
+  <script type="module" src="/html/js/wallet-reown.js"></script>
+  <script src="/html/js/dex-chart.js"></script>
+  <script src="/html/js/dex-actions.js"></script>
 </body>
 </html>

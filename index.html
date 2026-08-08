@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pante – Meme with Utility</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/dex-nft.css">
+  <link rel="stylesheet" href="/html/css/style.css">
+  <link rel="stylesheet" href="/html/css/dex-nft.css">
 </head>
 <body>
   <!-- Animated RGB line -->
@@ -17,36 +17,36 @@
     </button>
 
     <nav class="header-nav">
-      <a href="index.html" class="nav-link" data-i18n="nav.home">Home</a>
-      <a href="dex.html" class="nav-link" data-i18n="nav.dex">DEX</a>
-      <a href="nft.html" class="nav-link" data-i18n="nav.nft">NFT</a>
-      <a href="about.html" class="nav-link" data-i18n="nav.about">About</a>
-      <a href="whitepaper.html" class="nav-link" data-i18n="nav.whitepaper">Whitepaper</a>
+      <a href="#home" class="nav-link active" data-i18n="nav.home">Home</a>
+      <a href="#dex" class="nav-link" data-i18n="nav.dex">DEX</a>
+      <a href="#nft" class="nav-link" data-i18n="nav.nft">NFT</a>
+      <a href="#about" class="nav-link" data-i18n="nav.about">About</a>
+      <a href="#whitepaper" class="nav-link" data-i18n="nav.whitepaper">Whitepaper</a>
     </nav>
 
     <div class="header-right">
       <div class="lang-switch">
         <select id="langSelect" aria-label="Select language">
-          <option value="en">🇬🇧 EN</option>
-          <option value="zh">🇨🇳 中文</option>
-          <option value="id">🇮🇩 ID</option>
-          <option value="vi">🇻🇳 VI</option>
-          <option value="hi">🇮🇳 हि</option>
-          <option value="es">🇪🇸 ES</option>
-          <option value="fr">🇫🇷 FR</option>
-          <option value="de">🇩🇪 DE</option>
-          <option value="pt">🇧🇷 PT</option>
-          <option value="ru">🇷🇺 RU</option>
-          <option value="ja">🇯🇵 日</option>
-          <option value="ko">🇰🇷 KO</option>
-          <option value="ar">🇸🇦 ع</option>
-          <option value="tr">🇹🇷 TR</option>
-          <option value="tl">🇵🇭 TL</option>
+          <option value="en">���🇬���🇧 EN</option>
+          <option value="zh">���🇨���🇳 中文</option>
+          <option value="id">���🇮���🇩 ID</option>
+          <option value="vi">���🇻���🇳 VI</option>
+          <option value="hi">���🇮���🇳 हि</option>
+          <option value="es">���🇪���🇸 ES</option>
+          <option value="fr">���🇫���🇷 FR</option>
+          <option value="de">���🇩���🇪 DE</option>
+          <option value="pt">���🇧���🇷 PT</option>
+          <option value="ru">���🇷���🇺 RU</option>
+          <option value="ja">���🇯���🇵 日</option>
+          <option value="ko">���🇰���🇷 KO</option>
+          <option value="ar">���🇸���🇦 ع</option>
+          <option value="tr">���🇹���🇷 TR</option>
+          <option value="tl">���🇵���🇭 TL</option>
         </select>
       </div>
       <button class="wallet-btn" id="walletBtn">Connect Wallet</button>
       <div class="logo-box">
-        <a href="index.html"><img src="assets/logo.png" alt="Pante Logo" class="logo-img"></a>
+        <a href="#home"><img src="/html/assets/logo.png" alt="Pante Logo" class="logo-img"></a>
       </div>
     </div>
   </header>
@@ -55,14 +55,14 @@
   <aside class="menu-panel" id="menuPanel">
     <div class="menu-panel__head">
       <span class="menu-panel__title" data-i18n="menu.title">// PANTE</span>
-      <button class="menu-close" id="menuClose">✕</button>
+      <button class="menu-close" id="menuClose">��✕</button>
     </div>
     <ul class="menu-contents">
-      <li><a href="index.html"><span class="mc-title typewriter" data-i18n="menu.home" data-type="Home" data-speed="30" data-delay="200"></span><span class="mc-desc typewriter" data-i18n="menu.home.desc" data-type="Landing — banner, tagline & core features." data-speed="14" data-delay="350"></span></a></li>
-      <li><a href="dex.html"><span class="mc-title typewriter" data-i18n="menu.dex" data-type="DEX" data-speed="30" data-delay="500"></span><span class="mc-desc typewriter" data-i18n="menu.dex.desc" data-type="Swap tokens on our decentralized exchange" data-speed="14" data-delay="650"></span></a></li>
-      <li><a href="nft.html"><span class="mc-title typewriter" data-i18n="menu.nft" data-type="NFT Marketplace" data-speed="30" data-delay="800"></span><span class="mc-desc typewriter" data-i18n="menu.nft.desc" data-type="Cat-themed NFT creation & trading" data-speed="14" data-delay="950"></span></a></li>
-      <li><a href="about.html"><span class="mc-title typewriter" data-i18n="menu.about" data-type="About" data-speed="30" data-delay="1100"></span><span class="mc-desc typewriter" data-i18n="menu.about.desc" data-type="Vision, utility & ecosystem links." data-speed="14" data-delay="1250"></span></a></li>
-      <li><a href="whitepaper.html"><span class="mc-title typewriter" data-i18n="menu.whitepaper" data-type="Whitepaper" data-speed="30" data-delay="1400"></span><span class="mc-desc typewriter" data-i18n="menu.whitepaper.desc" data-type="Tokenomics, roadmap, DEX, staking & security." data-speed="14" data-delay="1550"></span></a></li>
+      <li><a href="#home"><span class="mc-title typewriter" data-i18n="menu.home" data-type="Home" data-speed="30" data-delay="200"></span><span class="mc-desc typewriter" data-i18n="menu.home.desc" data-type="Landing — banner, tagline & core features." data-speed="14" data-delay="350"></span></a></li>
+      <li><a href="#dex"><span class="mc-title typewriter" data-i18n="menu.dex" data-type="DEX" data-speed="30" data-delay="500"></span><span class="mc-desc typewriter" data-i18n="menu.dex.desc" data-type="Swap tokens on our decentralized exchange" data-speed="14" data-delay="650"></span></a></li>
+      <li><a href="#nft"><span class="mc-title typewriter" data-i18n="menu.nft" data-type="NFT Marketplace" data-speed="30" data-delay="800"></span><span class="mc-desc typewriter" data-i18n="menu.nft.desc" data-type="Cat-themed NFT creation & trading" data-speed="14" data-delay="950"></span></a></li>
+      <li><a href="#about"><span class="mc-title typewriter" data-i18n="menu.about" data-type="About" data-speed="30" data-delay="1100"></span><span class="mc-desc typewriter" data-i18n="menu.about.desc" data-type="Vision, utility & ecosystem links." data-speed="14" data-delay="1250"></span></a></li>
+      <li><a href="#whitepaper"><span class="mc-title typewriter" data-i18n="menu.whitepaper" data-type="Whitepaper" data-speed="30" data-delay="1400"></span><span class="mc-desc typewriter" data-i18n="menu.whitepaper.desc" data-type="Tokenomics, roadmap, DEX, staking & security." data-speed="14" data-delay="1550"></span></a></li>
       <li><a href="https://x.com/pante_coin" target="_blank"><span class="mc-title typewriter" data-i18n="menu.x" data-type="X (Twitter)" data-speed="30" data-delay="1700"></span><span class="mc-desc typewriter" data-i18n="menu.x.desc" data-type="Official announcements & community." data-speed="14" data-delay="1850"></span></a></li>
       <li><a href="https://github.com/nheoshikuyanhemo/Pante" target="_blank"><span class="mc-title typewriter" data-i18n="menu.github" data-type="GitHub" data-speed="30" data-delay="2000"></span><span class="mc-desc typewriter" data-i18n="menu.github.desc" data-type="Source code & development repository." data-speed="14" data-delay="2150"></span></a></li>
     </ul>
@@ -70,7 +70,7 @@
 
   <!-- ========== HERO ========== -->
   <section class="hero bordered reveal-block" id="hero">
-    <img src="assets/banner.png" alt="Hero Banner" class="hero-banner">
+    <img src="/html/assets/banner.png" alt="Hero Banner" class="hero-banner">
     <h1 class="typewriter" data-i18n="hero.title" data-type="Pante: Meme with Utility & Sustainable Development" data-speed="45"></h1>
     <p class="typewriter" data-i18n="hero.tagline" data-type="Explore the future of memes — designed for utility, growth, and community-driven development." data-speed="22"></p>
   </section>
@@ -131,8 +131,8 @@
     <p data-i18n="footer">© 2026 Pante. All Rights Reserved.</p>
   </footer>
 
-  <script src="js/i18n.js"></script>
-  <script src="js/script.js"></script>
-  <script type="module" src="js/wallet-reown.js"></script>
+  <script src="/html/js/i18n.js"></script>
+  <script src="/html/js/script.js"></script>
+  <script type="module" src="/html/js/wallet-reown.js"></script>
 </body>
 </html>

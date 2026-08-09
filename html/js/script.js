@@ -223,3 +223,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+
+// ===== AUTO-OPEN REVEAL BLOCKS ON LOAD (fix black screen) =====
+document.addEventListener('DOMContentLoaded', () => {
+  // Give a tiny delay so assets load before forcing visibility
+  setTimeout(() => {
+    document.querySelectorAll('.reveal-block').forEach(block => {
+      // Only open if not already visible (prevents double toggle)
+      if (!block.classList.contains('visible')) {
+        openBlock(block);
+      }
+    });
+  }, 200);
+});

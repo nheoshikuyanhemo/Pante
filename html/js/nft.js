@@ -437,47 +437,75 @@
   }
 
   // ===== WALLET =====
-  async function connectWallet() {
-    if (typeof window.ethereum === 'undefined') {
-      alert('Please install MetaMask to use NFT features');
-      return;
-    }
+    async function connectWallet() {
+      // Use unified wallet API from wallet-reown.js
+      if (window.PanteWallet && typeof window.PanteWallet.open === 'function') {
+        await window.PanteWallet.open();
+        // Wallet status will be updated via paintConnected event
+        return;
+      }
     
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const addr = accounts[0];
-      const short = addr.slice(0, 6) + '...' + addr.slice(-4);
-      
-      if (elements.walletBtn) {
-        elements.walletBtn.textContent = short;
-        elements.walletBtn.classList.add('connected');
+      // Fallback to MetaMask if Reown not available
+      if (typeof window.ethereum === 'undefined') {
+        alert('Please install MetaMask to use NFT features');
+        return;
       }
-      if (elements.walletStatus) {
-        elements.walletStatus.textContent = `Connected: ${short}`;
-        elements.walletStatus.classList.add('connected');
+
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const addr = accounts[0];
+        const short = addr.slice(0, 6) + '...' + addr.slice(-4);
+
+        if (elements.walletBtn) {
+          elements.walletBtn.textContent = short;
+          elements.walletBtn.classList.add('connected');
+        }
+        if (elements.walletStatus) {
+          elements.walletStatus.textContent = `Connected: ${short}`;
+          elements.walletStatus.classList.add('connected');
+        }
+
+        checkMintReady();
+        renderMyNFTs();
+      } catch (e) {
+        alert('Wallet connection rejected');
       }
-      
-      checkMintReady();
-      renderMyNFTs();
-    } catch (e) {
-      alert('Wallet connection rejected');
     }
-  }
-  
-  function updateWalletStatus() {
-    if (window.ethereum && window.ethereum.selectedAddress) {
-      const short = window.ethereum.selectedAddress.slice(0, 6) + '...' + window.ethereum.selectedAddress.slice(-4);
-      if (elements.walletBtn) {
-        elements.walletBtn.textContent = short;
-        elements.walletBtn.classList.add('connected');
+
+    function updateWalletStatus() {
+      // Use unified wallet API from wallet-reown.js
+      if (window.PanteWallet && typeof window.PanteWallet.getIsConnected === 'function') {
+        const connected = window.PanteWallet.getIsConnected();
+        const address = window.PanteWallet.getAddress();
+        if (connected && address) {
+          const short = address.slice(0, 6) + '...' + address.slice(-4);
+          if (elements.walletBtn) {
+            elements.walletBtn.textContent = short;
+            elements.walletBtn.classList.add('connected');
+          }
+          if (elements.walletStatus) {
+            elements.walletStatus.textContent = `Connected: ${short}`;
+            elements.walletStatus.classList.add('connected');
+          }
+          checkMintReady();
+          return;
+        }
       }
-      if (elements.walletStatus) {
-        elements.walletStatus.textContent = `Connected: ${short}`;
-        elements.walletStatus.classList.add('connected');
+    
+      // Fallback to MetaMask
+      if (window.ethereum && window.ethereum.selectedAddress) {
+        const short = window.ethereum.selectedAddress.slice(0, 6) + '...' + window.ethereum.selectedAddress.slice(-4);
+        if (elements.walletBtn) {
+          elements.walletBtn.textContent = short;
+          elements.walletBtn.classList.add('connected');
+        }
+        if (elements.walletStatus) {
+          elements.walletStatus.textContent = `Connected: ${short}`;
+          elements.walletStatus.classList.add('connected');
+        }
+        checkMintReady();
       }
-      checkMintReady();
     }
-  }
 
   // ===== I18N HELPER =====
   function t(key) {

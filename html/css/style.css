@@ -259,6 +259,57 @@ html { scroll-behavior: smooth; }
   max-width: 130px;
 }
 .lang-switch select:hover { background: #2a2a3e; }
+.chain-selector {
+  display: inline-flex;
+  align-items: center;
+}
+.chain-icon-btn {
+  background: transparent;
+  border: 1px solid rgba(255,149,0,0.3);
+  border-radius: 6px;
+  padding: 4px;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+.chain-icon-btn:hover {
+  border-color: #ff9500;
+  background: rgba(255,149,0,0.1);
+}
+.chain-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #f0f0ff;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  text-align: left;
+  transition: background 0.2s;
+}
+.chain-menu-item:hover {
+  background: rgba(255,149,0,0.15);
+}
+.chain-menu-item span:first-child {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.chain-menu-item span:last-child {
+  margin-left: auto;
+  color: #ff9500;
+}
 .wallet-btn {
   background: linear-gradient(135deg, #ff9500, #ff6a00);
   color: #fff;

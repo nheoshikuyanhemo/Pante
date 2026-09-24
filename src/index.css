@@ -13,8 +13,11 @@
   --pante-bg: #0d0d1a;
   --pante-surface: #14141f;
   --pante-surface-2: #1e1e2e;
+  --pante-deep: #0a0a14;
   --pante-ink: #f0f0ff;
+  --pante-text: #f0f0ff;
   --pante-muted: #a0a0b8;
+  --pante-border: rgba(255,149,0,0.3);
   --pante-green: #00ff88;
   --pante-red: #ff4444;
 }

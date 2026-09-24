@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e1e2e"/>
+      <stop offset="100%" stop-color="#0d0d1a"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#ff9500" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#ff9500" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+  <circle cx="100" cy="100" r="100" fill="url(#glow)"/>
+  <!-- Outer ring -->
+  <circle cx="100" cy="100" r="94" fill="none" stroke="#ff9500" stroke-width="3" opacity="0.8"/>
+  <!-- P letter -->
+  <text x="100" y="125" font-family="Courier New, monospace" font-size="90" font-weight="900"
+        fill="#ff9500" text-anchor="middle" letter-spacing="-4">P</text>
+  <!-- Arc arc below -->
+  <path d="M 38 150 Q 100 175 162 150" fill="none" stroke="#ff9500" stroke-width="2.5" opacity="0.5"/>
+  <!-- PANTE text -->
+  <text x="100" y="170" font-family="Courier New, monospace" font-size="16" font-weight="700"
+        fill="#ff9500" text-anchor="middle" letter-spacing="6" opacity="0.85">PANTE</text>
+</svg>

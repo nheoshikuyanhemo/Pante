@@ -40,8 +40,6 @@ export default defineConfig({
     // Warn at 1MB, not default 500kB
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
-      // Make sure contracts/out ABIs are never bundled
-      external: (id) => id.startsWith('contracts/'),
       output: {
         manualChunks: {
           // Core React

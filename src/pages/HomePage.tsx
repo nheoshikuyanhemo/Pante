@@ -403,7 +403,7 @@ export function HomePage() {
       {/* HERO */}
       <RevealSection className="pante-hero">
         <img
-          src="https://raw.githubusercontent.com/nheoshikuyanhemo/Pante/main/html/assets/banner.png"
+          src="/pante-banner.svg"
           alt="Pante Banner" className="pante-hero-banner"
         />
         <h1>Pante: Meme with Utility &amp; Sustainable Development</h1>

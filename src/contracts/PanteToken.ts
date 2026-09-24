@@ -15,8 +15,7 @@
 import { PANTETOKEN_ABI } from './artifacts'
 
 export { PANTETOKEN_ABI }
-export const PANTE_LOGO =
-  'https://raw.githubusercontent.com/nheoshikuyanhemo/Pante/refs/heads/main/html/assets/logo.png'
+export const PANTE_LOGO = '/pante-logo.svg'
 
 /** Returns the deployed PanteToken address, or null if not yet deployed. */
 export function resolvePanteAddress(): `0x${string}` | null {

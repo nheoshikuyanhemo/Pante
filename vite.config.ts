@@ -33,6 +33,26 @@ export default defineConfig({
       'vite-plugin-node-polyfills/shims/global',
       'vite-plugin-node-polyfills/shims/process',
     ],
+    // Exclude Foundry/Solidity artifacts — they are not browser modules
+    exclude: ['contracts'],
+  },
+  build: {
+    // Warn at 1MB, not default 500kB
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      // Make sure contracts/out ABIs are never bundled
+      external: (id) => id.startsWith('contracts/'),
+      output: {
+        manualChunks: {
+          // Core React
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          // Wagmi + viem stack
+          'wagmi-vendor': ['wagmi', 'viem', 'connectkit', '@tanstack/react-query'],
+          // UI libs
+          'ui-vendor': ['framer-motion', 'lucide-react', 'sonner', 'clsx', 'tailwind-merge'],
+        },
+      },
+    },
   },
   server: {
     allowedHosts: true,

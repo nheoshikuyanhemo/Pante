@@ -25,6 +25,13 @@ import {
   Droplets, ArrowRight, Coins, Settings, Image, Upload, Globe,
 } from 'lucide-react'
 import { PANTE_LOGO, resolvePanteAddress } from '../contracts/PanteToken'
+import {
+  PANTETOKEN_ABI,       PANTETOKEN_BYTECODE,
+  PANTEPRESALE_ABI,     PANTEPRESALE_BYTECODE,
+  PANTELIQUIDITYMIGRATOR_ABI, PANTELIQUIDITYMIGRATOR_BYTECODE,
+  PANTELIQUIDITYLOCKER_ABI,   PANTELIQUIDITYLOCKER_BYTECODE,
+  PANTEVESTING_ABI,     PANTEVESTING_BYTECODE,
+} from '../contracts/artifacts'
 import { buildTxExplorerUrl, getUsdc } from '@/onchain-facts'
 import { toast } from 'sonner'
 
@@ -109,12 +116,19 @@ const VESTING_ABI = parseAbi([
   'function cliffEnd() view returns (uint256)',
 ])
 
-// ── Bytecodes — loaded from Foundry artifacts at runtime ─────────────────
-// We use a dynamic import so the dev page doesn't blow up before forge build.
-interface FoundryArtifact { bytecode: { object: string }; abi: unknown[] }
-async function getArtifact(name: string): Promise<{ bytecode: `0x${string}`; abi: unknown[] }> {
-  const mod = await import(`../../contracts/out/${name}.sol/${name}.json`) as { default: FoundryArtifact }
-  return { bytecode: mod.default.bytecode.object as `0x${string}`, abi: mod.default.abi }
+// ── Bytecodes — inlined from Foundry artifacts (no runtime file system access) ──
+const ARTIFACT_MAP: Record<string, { bytecode: `0x${string}`; abi: unknown[] }> = {
+  PanteToken:              { bytecode: PANTETOKEN_BYTECODE,              abi: [...PANTETOKEN_ABI] },
+  PantePresale:            { bytecode: PANTEPRESALE_BYTECODE,            abi: [...PANTEPRESALE_ABI] },
+  PanteLiquidityMigrator:  { bytecode: PANTELIQUIDITYMIGRATOR_BYTECODE,  abi: [...PANTELIQUIDITYMIGRATOR_ABI] },
+  PanteLiquidityLocker:    { bytecode: PANTELIQUIDITYLOCKER_BYTECODE,    abi: [...PANTELIQUIDITYLOCKER_ABI] },
+  PanteVesting:            { bytecode: PANTEVESTING_BYTECODE,            abi: [...PANTEVESTING_ABI] },
+}
+
+function getArtifact(name: string): { bytecode: `0x${string}`; abi: unknown[] } {
+  const art = ARTIFACT_MAP[name]
+  if (!art) throw new Error(`Unknown contract: ${name}`)
+  return art
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────
@@ -202,7 +216,7 @@ function DeployPanel({ addrs, setAddr }: { addrs: Record<string, string>; setAdd
     setDeploying(name)
     log_(`Fetching ${name} artifact…`)
     try {
-      const artifact = await getArtifact(name)
+      const artifact = getArtifact(name)
       log_(`Artifact loaded. Deploying ${name}…`)
 
       // Use wagmi's low-level deployContract via eth_sendTransaction
@@ -287,7 +301,7 @@ function DeployPanel({ addrs, setAddr }: { addrs: Record<string, string>; setAdd
     <div className="dev-panel">
       <div className="dev-panel-desc">
         Deploy smart contracts directly from your connected wallet. Each contract is compiled from
-        the Foundry artifacts in <code>contracts/out/</code>. Run <code>forge build</code> first if
+        the embedded contract bytecode. Run <code>forge build</code> and regenerate <code>src/contracts/artifacts.ts</code> if
         you changed the Solidity source.
       </div>
 

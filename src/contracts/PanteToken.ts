@@ -12,8 +12,9 @@
  * Logo (used in presale, DEX, and metadata panel):
  *   https://raw.githubusercontent.com/nheoshikuyanhemo/Pante/refs/heads/main/html/assets/logo.png
  */
-import artifact from '../../contracts/out/PanteToken.sol/PanteToken.json'
+import { PANTETOKEN_ABI } from './artifacts'
 
+export { PANTETOKEN_ABI }
 export const PANTE_LOGO =
   'https://raw.githubusercontent.com/nheoshikuyanhemo/Pante/refs/heads/main/html/assets/logo.png'
 
@@ -54,7 +55,7 @@ export function isPanteDeployed(): boolean {
   return resolvePanteAddress() !== null
 }
 
-export const PANTE_TOKEN_ABI = artifact.abi
+export const PANTE_TOKEN_ABI = PANTETOKEN_ABI
 
 /**
  * Legacy compat — components that already import PANTE_TOKEN.address will
@@ -67,7 +68,7 @@ export const PANTE_TOKEN = {
     if (!addr) throw new Error('PanteToken not yet deployed — go to /dev first')
     return addr
   },
-  abi: artifact.abi,
+  get abi() { return PANTETOKEN_ABI },
   chain: 5042002, // Arc Testnet
 } as const
 

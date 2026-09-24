@@ -28,7 +28,7 @@ function DexPreLaunch() {
     <div className="pante-page">
       <section className="pante-hero pante-reveal visible">
         <img
-          src="/pante-banner.svg"
+          src="/pante-banner.png"
           alt="Pante DEX Banner" className="pante-hero-banner"
         />
         <h1>DEX Platform</h1>
@@ -342,7 +342,7 @@ export function DexPage() {
       {/* Hero */}
       <section className="pante-hero pante-reveal visible">
         <img
-          src="/pante-banner.svg"
+          src="/pante-banner.png"
           alt="Pante DEX Banner" className="pante-hero-banner"
         />
         <h1>DEX Platform</h1>

@@ -68,7 +68,7 @@ export function PanteHeader() {
           <div className="pante-logo-box">
             <Link to="/">
               <img
-                src="/pante-logo.svg"
+                src="/pante-logo.png"
                 alt="Pante Logo"
                 className="pante-logo"
               />

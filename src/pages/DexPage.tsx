@@ -1,28 +1,22 @@
-import { useState } from 'react'
-import { useAccount, useReadContract } from 'wagmi'
-import { ExternalLink, TrendingUp, Droplets, BarChart2, ShoppingCart } from 'lucide-react'
-import { PanteFooter } from '../components/PanteFooter'
+import { useState, useEffect, useRef } from 'react'
+import { useAccount } from 'wagmi'
+import { ExternalLink, ShoppingCart, TrendingUp, Droplets } from 'lucide-react'
 import {
   PANTE_ADDRESS, PANTE_CHAIN_ID, PANTE_DECIMALS, PANTE_LOGO,
   PANTE_ERC20_ABI, SYNTHRA_LAUNCHPAD_URL, SYNTHRA_SWAP_URL,
-  SYNTHRA_POOL_URL, ARC_EXPLORER_URL,
+  SYNTHRA_POOL_URL,
 } from '../contracts/PanteToken'
+import { useReadContract } from 'wagmi'
 
 type Tab = 'buy' | 'swap' | 'pool'
 
-const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
-  { id: 'buy',  label: 'Buy / Launchpad', icon: <ShoppingCart size={15} /> },
-  { id: 'swap', label: 'Swap',            icon: <TrendingUp size={15} /> },
-  { id: 'pool', label: 'Liquidity Pool',  icon: <Droplets size={15} /> },
+const TABS: { id: Tab; label: string; icon: React.ReactNode; url: string }[] = [
+  { id: 'buy',  label: 'Buy / Launchpad', icon: <ShoppingCart size={14} />, url: SYNTHRA_LAUNCHPAD_URL },
+  { id: 'swap', label: 'Swap',            icon: <TrendingUp   size={14} />, url: SYNTHRA_SWAP_URL },
+  { id: 'pool', label: 'Add Liquidity',   icon: <Droplets     size={14} />, url: SYNTHRA_POOL_URL },
 ]
 
-const SYNTHRA_URLS: Record<Tab, string> = {
-  buy:  SYNTHRA_LAUNCHPAD_URL,
-  swap: SYNTHRA_SWAP_URL,
-  pool: SYNTHRA_POOL_URL,
-}
-
-// ── PANTE Balance badge ────────────────────────────────────────────────────
+// ── Live PANTE balance in tab bar ─────────────────────────────────────────
 function BalanceBadge() {
   const { address, isConnected } = useAccount()
   const { data: balRaw } = useReadContract({
@@ -31,123 +25,96 @@ function BalanceBadge() {
     chainId: PANTE_CHAIN_ID, query: { enabled: !!address },
   })
   if (!isConnected || balRaw == null) return null
-  const bal = (Number(balRaw) / 10 ** PANTE_DECIMALS).toLocaleString(undefined, { maximumFractionDigits: 4 })
+  const bal = (Number(balRaw) / 10 ** PANTE_DECIMALS).toLocaleString(undefined, { maximumFractionDigits: 2 })
   return (
-    <div className="pante-dex-balance-badge">
+    <span className="pante-dex-balance-badge">
       <img src={PANTE_LOGO} alt="PANTE" className="pante-badge-logo" />
-      <span>{bal} PANTE</span>
-    </div>
+      {bal} PANTE
+    </span>
   )
 }
 
-// ── Synthra iframe — key forces remount on tab change (no setState-in-effect) ─
-function SynthraPanel({ tab }: { tab: Tab }) {
-  const url = SYNTHRA_URLS[tab]
+// ── Synthra iframe — fullscreen, wallet bridge via postMessage ────────────
+function SynthraFrame({ tab }: { tab: Tab }) {
+  const { address, isConnected } = useAccount()
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const activeTab = TABS.find(t => t.id === tab)!
+
+  // Bridge wallet state to Synthra iframe via postMessage
+  // Synthra listens for EIP-1193 compatible events
+  useEffect(() => {
+    const iframe = iframeRef.current
+    if (!iframe || !iframe.contentWindow) return
+    const msg = isConnected && address
+      ? { type: 'WALLET_CONNECTED', address, chainId: PANTE_CHAIN_ID }
+      : { type: 'WALLET_DISCONNECTED' }
+    try {
+      iframe.contentWindow.postMessage(msg, 'https://app.synthra.org')
+    } catch {
+      // cross-origin postMessage may be blocked depending on Synthra CSP
+    }
+  }, [isConnected, address])
+
   return (
-    <div className="pante-synthra-wrap" key={tab}>
-      <iframe
-        src={url}
-        title={`Synthra ${tab}`}
-        className="pante-synthra-iframe loaded"
-        allow="clipboard-write"
-        sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"
-      />
-      <div className="pante-synthra-overlay-link">
-        <a href={url} target="_blank" rel="noopener" className="pante-explorer-link">
+    <div className="pante-dex-fullframe-wrap">
+      <div className="pante-dex-frame-bar">
+        <span className="pante-dex-frame-url">
+          <span className="pante-dex-frame-dot" />
+          app.synthra.org
+        </span>
+        <BalanceBadge />
+        <a
+          href={activeTab.url}
+          target="_blank"
+          rel="noopener"
+          className="pante-dex-frame-open"
+        >
           Open in Synthra <ExternalLink size={12} />
         </a>
       </div>
+      <iframe
+        ref={iframeRef}
+        key={tab}
+        src={activeTab.url}
+        title={`Synthra — ${activeTab.label}`}
+        className="pante-dex-fullframe"
+        allow="clipboard-write; clipboard-read"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"
+      />
     </div>
   )
 }
 
-// ── Token info sidebar ─────────────────────────────────────────────────────
-function TokenSidebar() {
-  return (
-    <div className="pante-dex-sidebar">
-      <div className="pante-dex-card">
-        <div className="pante-dex-card-header">
-          <img src={PANTE_LOGO} alt="PANTE" className="pante-badge-logo" style={{ width: 22, height: 22 }} />
-          $PANTE Info
-        </div>
-        <ul className="pante-pair-list">
-          {[
-            { label: 'Network',  value: 'Arc Mainnet',     cls: 'pante-pair-rate' },
-            { label: 'Chain ID', value: String(PANTE_CHAIN_ID) },
-            { label: 'Supply',   value: '1,000,000,000' },
-            { label: 'Decimals', value: '18' },
-          ].map(({ label, value, cls }) => (
-            <li key={label} className="pante-pair-item">
-              <span style={{ fontSize: '0.82rem' }}>{label}</span>
-              <span className={cls ?? ''}>{value}</span>
-            </li>
-          ))}
-          <li className="pante-pair-item">
-            <span style={{ fontSize: '0.78rem' }}>Contract</span>
-            <a href={ARC_EXPLORER_URL} target="_blank" rel="noopener"
-              className="pante-pair-rate" style={{ fontSize: '0.75rem' }}>
-              {PANTE_ADDRESS.slice(0, 8)}…{PANTE_ADDRESS.slice(-6)}
-              <ExternalLink size={10} style={{ marginLeft: 3, display: 'inline', verticalAlign: 'middle' }} />
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div className="pante-dex-card" style={{ marginTop: '1rem' }}>
-        <div className="pante-dex-card-header"><BarChart2 size={15} /> Quick Links</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingTop: '0.5rem' }}>
-          {[
-            { href: SYNTHRA_LAUNCHPAD_URL, label: 'Launchpad' },
-            { href: SYNTHRA_SWAP_URL,      label: 'Synthra Swap' },
-            { href: SYNTHRA_POOL_URL,      label: 'Add Liquidity' },
-            { href: ARC_EXPLORER_URL,      label: 'Arc Explorer' },
-          ].map(({ href, label }) => (
-            <a key={label} href={href} target="_blank" rel="noopener"
-              className="pante-dex-btn pante-dex-btn--secondary"
-              style={{ fontSize: '0.82rem', padding: '0.5rem 0.75rem' }}>
-              {label} <ExternalLink size={12} />
-            </a>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ── Main DEX Page ──────────────────────────────────────────────────────────
+// ── Main DEX page ─────────────────────────────────────────────────────────
 export function DexPage() {
   const [tab, setTab] = useState<Tab>('buy')
 
   return (
-    <div className="pante-page">
-      <section className="pante-hero pante-reveal visible">
-        <img src="/pante-banner.png" alt="Pante DEX Banner" className="pante-hero-banner" />
-        <div className="pante-hero-badge">
-          <span className="pante-dot-live" /> Powered by Synthra · Arc Mainnet
+    <div className="pante-dex-fullpage">
+      {/* Tab bar */}
+      <div className="pante-dex-tabbar">
+        <div className="pante-dex-tabbar-logo">
+          <img src={PANTE_LOGO} alt="PANTE" className="pante-badge-logo" style={{ width: 22, height: 22 }} />
+          <span>Pante DEX</span>
         </div>
-        <h1>Pante DEX</h1>
-        <p>Trade $PANTE on Arc Mainnet. Buy from the launchpad, swap, or provide liquidity.</p>
-      </section>
-
-      <section className="pante-dex-section">
-        <div className="pante-dex-tabs">
+        <div className="pante-dex-tabs" style={{ border: 'none', margin: 0, flex: 1, justifyContent: 'center' }}>
           {TABS.map(t => (
-            <button key={t.id}
+            <button
+              key={t.id}
               className={`pante-tab-btn${tab === t.id ? ' active' : ''}`}
-              onClick={() => setTab(t.id)}>
+              onClick={() => setTab(t.id)}
+            >
               {t.icon} {t.label}
             </button>
           ))}
-          <div style={{ marginLeft: 'auto' }}><BalanceBadge /></div>
         </div>
-
-        <div className="pante-dex-panel">
-          <SynthraPanel tab={tab} />
-          <TokenSidebar />
+        <div className="pante-dex-tabbar-right">
+          <span style={{ fontSize: '0.78rem', color: 'var(--pante-muted)' }}>Arc Mainnet</span>
         </div>
-      </section>
+      </div>
 
-      <PanteFooter />
+      {/* Full-screen Synthra iframe */}
+      <SynthraFrame tab={tab} />
     </div>
   )
 }

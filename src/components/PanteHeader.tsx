@@ -1,27 +1,92 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { ConnectKitButton } from 'connectkit'
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
+import { injected } from 'wagmi/connectors'
 import {
   SYNTHRA_LAUNCHPAD_URL, SYNTHRA_SWAP_URL, ARC_EXPLORER_URL,
 } from '../contracts/PanteToken'
+import { ARC_MAINNET_CHAIN_ID } from '../config'
 
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/dex', label: 'DEX' },
-  { href: SYNTHRA_LAUNCHPAD_URL, label: 'Buy PANTE', external: true },
+  { href: SYNTHRA_LAUNCHPAD_URL, label: 'Buy PANTE', external: true, cta: true },
   { href: 'https://x.com/pante_coin', label: 'X', external: true },
   { href: 'https://github.com/nheoshikuyanhemo/Pante', label: 'GitHub', external: true },
 ]
 
 const MENU_ITEMS = [
-  { to: '/',    label: 'Home',        desc: 'Landing page — token info & how to buy.' },
-  { to: '/dex', label: 'DEX',         desc: 'Trade PANTE on Synthra DEX — swap, buy, pool.' },
-  { href: SYNTHRA_LAUNCHPAD_URL, label: 'Buy PANTE',   desc: 'Synthra Launchpad — buy $PANTE directly.', external: true },
-  { href: SYNTHRA_SWAP_URL,      label: 'Swap',         desc: 'Swap tokens for PANTE on Synthra.', external: true },
-  { href: ARC_EXPLORER_URL,      label: 'Contract',     desc: 'View PANTE contract on Arc Explorer.', external: true },
-  { href: 'https://x.com/pante_coin',                  label: 'X (Twitter)', desc: 'Official announcements & community.', external: true },
-  { href: 'https://github.com/nheoshikuyanhemo/Pante', label: 'GitHub',      desc: 'Source code & development.', external: true },
+  { to: '/',    label: 'Home',      desc: 'Token info, how to buy, and more.' },
+  { to: '/dex', label: 'DEX',       desc: 'Trade PANTE on Synthra — swap, buy, pool.' },
+  { href: SYNTHRA_LAUNCHPAD_URL, label: 'Buy PANTE',  desc: 'Synthra Launchpad — buy $PANTE directly.', external: true },
+  { href: SYNTHRA_SWAP_URL,      label: 'Swap',        desc: 'Swap tokens for PANTE on Synthra.', external: true },
+  { href: ARC_EXPLORER_URL,      label: 'Contract',    desc: 'View PANTE contract on Arc Explorer.', external: true },
+  { href: 'https://x.com/pante_coin',                  label: 'X (Twitter)', desc: 'Announcements & community.', external: true },
+  { href: 'https://github.com/nheoshikuyanhemo/Pante', label: 'GitHub',      desc: 'Source code.', external: true },
 ]
+
+// ── Wallet button — auto-switch to Arc mainnet on connect ──────────────────
+function WalletButton() {
+  const { address, isConnected, chainId } = useAccount()
+  const { connect, isPending: isConnecting } = useConnect()
+  const { disconnect } = useDisconnect()
+  const { switchChain, isPending: isSwitching } = useSwitchChain()
+  const [showMenu, setShowMenu] = useState(false)
+
+  const onWrongChain = isConnected && chainId !== ARC_MAINNET_CHAIN_ID
+
+  // Auto-switch to Arc mainnet as soon as wallet connects
+  useEffect(() => {
+    if (isConnected && chainId !== ARC_MAINNET_CHAIN_ID) {
+      switchChain({ chainId: ARC_MAINNET_CHAIN_ID })
+    }
+  }, [isConnected, chainId, switchChain])
+
+  if (!isConnected) {
+    return (
+      <button
+        className="pante-wallet-btn"
+        disabled={isConnecting}
+        onClick={() => connect({ connector: injected() })}
+      >
+        {isConnecting ? 'Connecting…' : 'Connect Wallet'}
+      </button>
+    )
+  }
+
+  if (onWrongChain) {
+    return (
+      <button
+        className="pante-wallet-btn pante-wallet-btn--wrong-chain"
+        disabled={isSwitching}
+        onClick={() => switchChain({ chainId: ARC_MAINNET_CHAIN_ID })}
+      >
+        {isSwitching ? 'Switching…' : 'Switch to Arc'}
+      </button>
+    )
+  }
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <button
+        className="pante-wallet-btn connected"
+        onClick={() => setShowMenu(v => !v)}
+      >
+        {address?.slice(0, 6)}…{address?.slice(-4)}
+        <span style={{ marginLeft: 4, fontSize: '0.7rem', opacity: 0.7 }}>▾</span>
+      </button>
+      {showMenu && (
+        <div className="pante-wallet-menu">
+          <div className="pante-wallet-addr">{address}</div>
+          <div className="pante-wallet-chain">Arc Mainnet ✓</div>
+          <button className="pante-wallet-disconnect" onClick={() => { disconnect(); setShowMenu(false) }}>
+            Disconnect
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export function PanteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -40,7 +105,7 @@ export function PanteHeader() {
           {NAV_LINKS.map((link) =>
             link.external ? (
               <a key={link.label} href={link.href} target="_blank" rel="noopener"
-                className={`pante-nav-link${link.label === 'Buy PANTE' ? ' pante-nav-link--cta' : ''}`}>
+                className={`pante-nav-link${link.cta ? ' pante-nav-link--cta' : ''}`}>
                 {link.label}
               </a>
             ) : (
@@ -53,15 +118,7 @@ export function PanteHeader() {
         </nav>
 
         <div className="pante-header-right">
-          <div className="pante-wallet-wrap">
-            <ConnectKitButton.Custom>
-              {({ isConnected, show, address }) => (
-                <button onClick={show} className={`pante-wallet-btn${isConnected ? ' connected' : ''}`}>
-                  {isConnected ? `${address?.slice(0, 6)}…${address?.slice(-4)}` : 'Connect Wallet'}
-                </button>
-              )}
-            </ConnectKitButton.Custom>
-          </div>
+          <WalletButton />
           <div className="pante-logo-box">
             <Link to="/">
               <img src="/pante-logo.png" alt="Pante Logo" className="pante-logo" />

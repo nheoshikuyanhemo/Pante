@@ -393,6 +393,93 @@ body {
 .pante-spin { animation: pante-spin 0.9s linear infinite; }
 @keyframes pante-spin { to { transform: rotate(360deg); } }
 
+/* ── Wallet dropdown menu ────────────────────────────────────────── */
+.pante-wallet-btn--wrong-chain {
+  background: linear-gradient(135deg, #ff4444, #cc0000) !important;
+}
+.pante-wallet-menu {
+  position: absolute; top: calc(100% + 6px); right: 0;
+  background: var(--pante-surface);
+  border: 1px solid var(--pante-orange-border);
+  border-radius: 8px; padding: 0.75rem;
+  min-width: 240px; z-index: 200;
+  display: flex; flex-direction: column; gap: 0.4rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.pante-wallet-addr {
+  font-size: 0.72rem; font-family: 'Courier New', monospace;
+  color: var(--pante-muted); word-break: break-all;
+  padding: 0.3rem 0.5rem;
+  background: rgba(255,255,255,0.03); border-radius: 4px;
+}
+.pante-wallet-chain {
+  font-size: 0.78rem; color: var(--pante-green); font-weight: 600;
+  padding: 0.2rem 0.5rem;
+}
+.pante-wallet-disconnect {
+  background: rgba(255,68,68,0.12); color: var(--pante-red);
+  border: 1px solid rgba(255,68,68,0.25); border-radius: 5px;
+  padding: 0.4rem 0.75rem; font-family: 'Courier New', monospace;
+  font-size: 0.82rem; cursor: pointer; text-align: center;
+  transition: background 0.2s;
+}
+.pante-wallet-disconnect:hover { background: rgba(255,68,68,0.22); }
+
+/* ── DEX fullscreen layout ───────────────────────────────────────── */
+.pante-dex-fullpage {
+  display: flex; flex-direction: column;
+  height: calc(100dvh - 54px);
+  overflow: hidden;
+}
+.pante-dex-tabbar {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0 1rem;
+  background: var(--pante-surface);
+  border-bottom: 1px solid var(--pante-orange-border);
+  flex-shrink: 0; flex-wrap: wrap; min-height: 48px;
+}
+.pante-dex-tabbar-logo {
+  display: flex; align-items: center; gap: 0.4rem;
+  color: var(--pante-orange); font-weight: 700; font-size: 0.9rem;
+  flex: 0 0 auto;
+}
+.pante-dex-tabbar-right { flex: 0 0 auto; margin-left: auto; }
+.pante-dex-fullframe-wrap {
+  flex: 1; display: flex; flex-direction: column; overflow: hidden;
+  position: relative; min-height: 0;
+}
+.pante-dex-frame-bar {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.3rem 0.8rem;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.78rem; flex-shrink: 0; flex-wrap: wrap;
+}
+.pante-dex-frame-url {
+  display: flex; align-items: center; gap: 0.35rem; color: var(--pante-muted);
+}
+.pante-dex-frame-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--pante-green);
+  animation: pante-pulse 2s ease-in-out infinite;
+}
+@keyframes pante-pulse {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+}
+.pante-dex-frame-open {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 0.3rem;
+  color: var(--pante-orange); text-decoration: none; font-size: 0.78rem;
+}
+.pante-dex-frame-open:hover { color: #ffb347; }
+.pante-dex-fullframe {
+  flex: 1; width: 100%; border: none; display: block;
+  background: #0d0d1a; min-height: 0;
+}
+@media (max-width: 600px) {
+  .pante-dex-tabbar-logo { display: none; }
+  .pante-dex-tabbar { padding: 0 0.4rem; }
+}
+
 /* ── DEX page ────────────────────────────────────────────────── */
 .pante-dex-tabs {
   display: flex; gap: 0.5rem;

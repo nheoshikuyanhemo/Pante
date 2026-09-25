@@ -23,7 +23,7 @@ export const SYNTHRA_SWAP_URL =
   `https://app.synthra.org/#/swap?chain=arc&inputCurrency=0x3600000000000000000000000000000000000000&outputCurrency=0xafad8536f3511b3f7bee6f3ba4b74dee699d5645`
 // Add Liquidity: USDC + PANTE pair (v2 pool)
 export const SYNTHRA_POOL_URL =
-  `https://app.synthra.org/#/add/v2/0x3600000000000000000000000000000000000000/0xafad8536f3511b3f7bee6f3ba4b74dee699d5645?chain=arc`
+  'https://app.synthra.org/#/add/0x3600000000000000000000000000000000000000/0xafad8536f3511b3f7bee6f3ba4b74dee699d5645'
 export const ARC_EXPLORER_URL =
   'https://explorer.arc.io/address/0xafad8536f3511b3f7bee6f3ba4b74dee699d5645'
 

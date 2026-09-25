@@ -805,6 +805,163 @@ body {
 }
 .pante-pair-item-label { display: flex; align-items: center; gap: 0.4rem; }
 
+/* ── Live badge ─────────────────────────────────────────────────────────── */
+.pante-hero-badge {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: rgba(0,255,136,0.08); color: var(--pante-green);
+  border: 1px solid rgba(0,255,136,0.25); border-radius: 20px;
+  padding: 0.3rem 0.9rem; font-size: 0.82rem; font-weight: 600;
+  margin-bottom: 1rem;
+}
+.pante-dot-live {
+  display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--pante-green);
+  animation: pante-pulse 2s ease-in-out infinite;
+}
+@keyframes pante-pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.85); }
+}
+.pante-nav-link--cta {
+  background: linear-gradient(135deg,#ff9500,#ff6a00);
+  color: #fff !important;
+  border-color: transparent !important;
+}
+.pante-nav-link--cta:hover { opacity: 0.9; background: linear-gradient(135deg,#ff9500,#ff6a00) !important; }
+
+/* ── Contract card ──────────────────────────────────────────────────────── */
+.pante-contract-section { max-width: 900px; margin: 0 auto; padding: 2.5rem 2rem; border-bottom: 1px solid var(--pante-orange-border); }
+.pante-contract-card {
+  background: var(--pante-surface);
+  border: 1px solid var(--pante-orange-border);
+  border-radius: 10px; padding: 1.25rem 1.5rem;
+  display: flex; flex-direction: column; gap: 0.7rem;
+  margin-bottom: 1.5rem;
+}
+.pante-contract-row {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 0.4rem;
+  padding-bottom: 0.6rem; border-bottom: 1px solid rgba(255,149,0,0.1);
+  font-size: 0.9rem;
+}
+.pante-contract-row:last-child { border-bottom: none; padding-bottom: 0; }
+.pante-contract-label { color: var(--pante-muted); font-size: 0.82rem; white-space: nowrap; }
+.pante-contract-value { color: var(--pante-ink); font-weight: 600; }
+.pante-contract-addr-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.pante-copy-btn {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  background: var(--pante-orange-dim); color: var(--pante-orange);
+  border: 1px solid var(--pante-orange-border); border-radius: 5px;
+  padding: 0.25rem 0.65rem; font-size: 0.82rem; font-family: 'Courier New', monospace;
+  cursor: pointer; transition: background 0.2s;
+}
+.pante-copy-btn:hover { background: rgba(255,149,0,0.25); }
+
+/* ── Token stats row ────────────────────────────────────────────────────── */
+.pante-token-stats {
+  display: flex; gap: 0.75rem; flex-wrap: wrap;
+}
+.pante-ts-card {
+  background: var(--pante-surface);
+  border: 1px solid var(--pante-orange-border);
+  border-radius: 8px; padding: 0.8rem 1rem;
+  display: flex; flex-direction: column; gap: 0.2rem;
+  flex: 1; min-width: 130px;
+}
+.pante-ts-card--highlight { border-color: var(--pante-orange); background: var(--pante-orange-dim); }
+.pante-ts-label { font-size: 0.72rem; color: var(--pante-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.pante-ts-value { font-size: 1rem; font-weight: 700; color: var(--pante-ink); }
+
+/* ── Buy section ────────────────────────────────────────────────────────── */
+.pante-buy-section { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; border-bottom: 1px solid var(--pante-orange-border); }
+.pante-buy-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+  gap: 1.25rem; margin-top: 1.5rem;
+}
+.pante-buy-card {
+  background: var(--pante-surface);
+  border: 1px solid var(--pante-orange-border);
+  border-radius: 12px; padding: 1.75rem 1.5rem;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0.85rem; text-align: center;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.pante-buy-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(255,149,0,0.12); border-color: var(--pante-orange); }
+.pante-buy-card--primary { border-color: var(--pante-orange); background: linear-gradient(135deg, rgba(255,149,0,0.06) 0%, var(--pante-surface) 60%); }
+.pante-buy-logo { width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--pante-orange); object-fit: cover; }
+.pante-buy-icon { color: var(--pante-orange); }
+.pante-buy-card h3 { color: var(--pante-orange); font-size: 1.1rem; margin: 0; }
+.pante-buy-card p  { color: var(--pante-muted); font-size: 0.9rem; line-height: 1.55; margin: 0; flex: 1; }
+
+/* ── How to buy steps ───────────────────────────────────────────────────── */
+.pante-howto-section { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; border-bottom: 1px solid var(--pante-orange-border); }
+.pante-steps-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 1rem; margin-top: 1.5rem;
+}
+.pante-step-card {
+  background: var(--pante-surface); border: 1px solid var(--pante-orange-border);
+  border-radius: 10px; padding: 1.4rem 1.2rem;
+  display: flex; flex-direction: column; gap: 0.6rem;
+}
+.pante-step-num { color: var(--pante-orange); font-size: 2rem; font-weight: 900; line-height: 1; }
+.pante-step-card h3 { color: var(--pante-ink); font-size: 1rem; margin: 0; }
+.pante-step-card p  { color: var(--pante-muted); font-size: 0.87rem; line-height: 1.55; margin: 0; }
+
+/* ── Arc section ────────────────────────────────────────────────────────── */
+.pante-arc-section { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; border-bottom: 1px solid var(--pante-orange-border); }
+.pante-arc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1rem; margin-top: 1.5rem; }
+.pante-arc-card {
+  background: var(--pante-surface); border: 1px solid var(--pante-orange-border);
+  border-radius: 10px; padding: 1.4rem 1.2rem;
+  text-align: center; display: flex; flex-direction: column; gap: 0.6rem;
+  transition: transform 0.2s;
+}
+.pante-arc-card:hover { transform: translateY(-3px); }
+.pante-arc-icon { font-size: 2rem; }
+.pante-arc-card h3 { color: var(--pante-orange); font-size: 1rem; margin: 0; }
+.pante-arc-card p  { color: var(--pante-muted); font-size: 0.87rem; line-height: 1.5; margin: 0; }
+.pante-feature-icon { color: var(--pante-orange); margin-bottom: 0.25rem; }
+
+/* ── DEX page — Synthra iframe ──────────────────────────────────────────── */
+.pante-synthra-wrap {
+  position: relative;
+  border: 1px solid var(--pante-orange-border);
+  border-radius: 12px; overflow: hidden;
+  background: var(--pante-surface);
+  min-height: 680px;
+  display: flex; flex-direction: column;
+}
+.pante-synthra-iframe {
+  width: 100%; border: none; flex: 1;
+  min-height: 650px; opacity: 0;
+  transition: opacity 0.4s;
+}
+.pante-synthra-iframe.loaded { opacity: 1; }
+.pante-synthra-loading {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1rem; color: var(--pante-muted);
+}
+.pante-synthra-spinner {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 3px solid var(--pante-orange-border);
+  border-top-color: var(--pante-orange);
+  animation: pante-spin 0.9s linear infinite;
+}
+.pante-synthra-overlay-link {
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--pante-orange-border);
+  display: flex; justify-content: flex-end;
+  background: var(--pante-surface);
+}
+.pante-dex-balance-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--pante-orange-dim); color: var(--pante-orange);
+  border: 1px solid var(--pante-orange-border); border-radius: 20px;
+  padding: 0.25rem 0.8rem; font-size: 0.82rem; font-weight: 600;
+}
+
 /* ── Progress bar (presale raised) ─────────────────────────────────────── */
 .pante-progress-bar {
   height: 10px; background: rgba(255,255,255,0.07);

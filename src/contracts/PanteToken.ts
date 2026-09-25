@@ -1,74 +1,36 @@
 /**
- * PanteToken contract config.
- *
- * The token address is ONLY available after the Dev deploys PanteToken from /dev.
- * Before deploy: `resolveAddress()` returns null — every page must handle this
- * and show a "Token not yet launched" state instead of connecting to a stale address.
- *
- * After deploy from /dev:
- *   DevPage saves the address into localStorage['pante_dev_contracts'].PanteToken
- *   and every page picks it up automatically on the next render.
- *
- * Logo (used in presale, DEX, and metadata panel):
- *   https://raw.githubusercontent.com/nheoshikuyanhemo/Pante/refs/heads/main/html/assets/logo.png
+ * PANTE Token — Arc Mainnet (chain 5042)
+ * Contract: 0xafad8536f3511b3f7bee6f3ba4b74dee699d5645
+ * Deployed via Synthra Launchpad
  */
-import { PANTETOKEN_ABI } from './artifacts'
 
-export { PANTETOKEN_ABI }
+export const PANTE_ADDRESS = '0xafad8536f3511b3f7bee6f3ba4b74dee699d5645' as const
+export const PANTE_CHAIN_ID = 5042 // Arc Mainnet
+export const PANTE_DECIMALS = 18
+export const PANTE_SYMBOL = 'PANTE'
+export const PANTE_NAME = 'Pante'
+export const PANTE_TOTAL_SUPPLY = '1000000000' // 1 billion
 export const PANTE_LOGO = '/pante-logo.png'
 
-/** Returns the deployed PanteToken address, or null if not yet deployed. */
-export function resolvePanteAddress(): `0x${string}` | null {
-  try {
-    const stored = localStorage.getItem('pante_dev_contracts')
-    if (stored) {
-      const parsed = JSON.parse(stored) as Record<string, string>
-      const addr = parsed['PanteToken']
-      if (addr && /^0x[0-9a-fA-F]{40}$/.test(addr)) {
-        return addr as `0x${string}`
-      }
-    }
-  } catch {
-    // localStorage unavailable
-  }
-  return null
-}
+/** Synthra DEX links */
+export const SYNTHRA_LAUNCHPAD_URL =
+  'https://app.synthra.org/#/launchpad/5042/0xafad8536f3511b3f7bee6f3ba4b74dee699d5645?chain=arc'
+export const SYNTHRA_SWAP_URL =
+  'https://app.synthra.org/#/swap?chain=arc&outputCurrency=0xafad8536f3511b3f7bee6f3ba4b74dee699d5645'
+export const SYNTHRA_POOL_URL =
+  'https://app.synthra.org/#/pools?chain=arc&token=0xafad8536f3511b3f7bee6f3ba4b74dee699d5645'
+export const ARC_EXPLORER_URL =
+  'https://explorer.arc.io/address/0xafad8536f3511b3f7bee6f3ba4b74dee699d5645'
 
-/** Returns the deployed PantePresale address, or null if not yet deployed. */
-export function resolvePresaleAddress(): `0x${string}` | null {
-  try {
-    const stored = localStorage.getItem('pante_dev_contracts')
-    if (stored) {
-      const parsed = JSON.parse(stored) as Record<string, string>
-      const addr = parsed['PantePresale']
-      if (addr && /^0x[0-9a-fA-F]{40}$/.test(addr)) {
-        return addr as `0x${string}`
-      }
-    }
-  } catch { /* ignore */ }
-  return null
-}
-
-/** Returns true if the PanteToken has been deployed from /dev. */
-export function isPanteDeployed(): boolean {
-  return resolvePanteAddress() !== null
-}
-
-export const PANTE_TOKEN_ABI = PANTETOKEN_ABI
-
-/**
- * Legacy compat — components that already import PANTE_TOKEN.address will
- * still work: address is a getter that throws if not yet deployed, so pages
- * should check isPanteDeployed() / resolvePanteAddress() first.
- */
-export const PANTE_TOKEN = {
-  get address(): `0x${string}` {
-    const addr = resolvePanteAddress()
-    if (!addr) throw new Error('PanteToken not yet deployed — go to /dev first')
-    return addr
-  },
-  get abi() { return PANTETOKEN_ABI },
-  chain: 5042002, // Arc Testnet
-} as const
-
-export type PanteTokenAddress = `0x${string}`
+/** Minimal ERC-20 ABI for balance reads */
+export const PANTE_ERC20_ABI = [
+  { name: 'balanceOf', type: 'function', stateMutability: 'view',
+    inputs: [{ name: 'account', type: 'address' }],
+    outputs: [{ name: '', type: 'uint256' }] },
+  { name: 'totalSupply', type: 'function', stateMutability: 'view',
+    inputs: [], outputs: [{ name: '', type: 'uint256' }] },
+  { name: 'symbol', type: 'function', stateMutability: 'view',
+    inputs: [], outputs: [{ name: '', type: 'string' }] },
+  { name: 'decimals', type: 'function', stateMutability: 'view',
+    inputs: [], outputs: [{ name: '', type: 'uint8' }] },
+] as const

@@ -17,9 +17,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-// ConnectKit removed — using native wagmi wallet connect with Arc mainnet auto-switch
 import { Toaster } from 'sonner'
-import { config } from './config'
+import { wagmiAdapter } from './config'
 import App from './App'
 import './index.css'
 
@@ -69,7 +68,7 @@ const StudioWatermark = () => (
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <WagmiProvider config={config}>
+    <WagmiProvider config={wagmiAdapter.wagmiConfig}>
       <QueryClientProvider client={queryClient}>
           <App />
           <StudioWatermark />

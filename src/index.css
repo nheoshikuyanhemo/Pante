@@ -394,6 +394,11 @@ body {
 .pante-spin { animation: pante-spin 0.9s linear infinite; }
 @keyframes pante-spin { to { transform: rotate(360deg); } }
 
+/* ── Reown AppKit button overrides ──────────────────────────────── */
+appkit-button {
+  --wui-font-family: 'Courier New', Courier, monospace;
+}
+
 /* ── Wallet dropdown menu ────────────────────────────────────────── */
 .pante-wallet-btn--wrong-chain {
   background: linear-gradient(135deg, #ff4444, #cc0000) !important;

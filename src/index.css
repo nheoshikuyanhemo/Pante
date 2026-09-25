@@ -428,15 +428,15 @@ body {
 /* ── DEX fullscreen layout ───────────────────────────────────────── */
 .pante-dex-fullpage {
   display: flex; flex-direction: column;
-  height: calc(100dvh - 54px);
+  height: calc(100dvh - 54px); /* 54px = header */
   overflow: hidden;
 }
 .pante-dex-tabbar {
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 0 1rem;
+  display: flex; align-items: center; gap: 0.35rem;
+  padding: 0 0.75rem;
   background: var(--pante-surface);
   border-bottom: 1px solid var(--pante-orange-border);
-  flex-shrink: 0; flex-wrap: wrap; min-height: 48px;
+  flex-shrink: 0; flex-wrap: nowrap; min-height: 36px; height: 36px;
 }
 .pante-dex-tabbar-logo {
   display: flex; align-items: center; gap: 0.4rem;
@@ -489,10 +489,12 @@ body {
 .pante-tab-btn {
   background: none; border: none;
   color: var(--pante-muted); cursor: pointer;
-  padding: 0.65rem 1.4rem;
+  padding: 0 0.7rem;
+  height: 36px; line-height: 36px;
   font-family: 'Courier New', monospace;
-  font-size: 0.95rem;
+  font-size: 0.78rem; white-space: nowrap;
   border-bottom: 2px solid transparent;
+  display: inline-flex; align-items: center; gap: 0.25rem;
   transition: color 0.2s, border-color 0.2s;
 }
 .pante-tab-btn.active { color: var(--pante-orange); border-bottom-color: var(--pante-orange); }

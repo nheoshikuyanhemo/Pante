@@ -9,7 +9,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
-    dedupe: ['react', 'react-dom'],
+    dedupe: ['react', 'react-dom', 'viem'],
   },
   optimizeDeps: {
     include: [
@@ -23,31 +23,53 @@ export default defineConfig({
       'wagmi/connectors',
       'viem',
       'viem/chains',
-      'connectkit',
       'framer-motion',
       'lucide-react',
       'sonner',
       'clsx',
       'tailwind-merge',
-      'vite-plugin-node-polyfills/shims/buffer',
-      'vite-plugin-node-polyfills/shims/global',
-      'vite-plugin-node-polyfills/shims/process',
     ],
-    // Exclude Foundry/Solidity artifacts — they are not browser modules
-    exclude: ['contracts'],
+    exclude: ['contracts', 'connectkit'],
   },
   build: {
-    // Warn at 1MB, not default 500kB
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Core React
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          // Wagmi + viem stack
-          'wagmi-vendor': ['wagmi', 'viem', 'connectkit', '@tanstack/react-query'],
+        // Force new hashes by changing chunk names
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+        manualChunks(id) {
+          // React core — must be first and isolated
+          if (id.includes('node_modules/react/') ||
+              id.includes('node_modules/react-dom/') ||
+              id.includes('node_modules/react-router-dom/') ||
+              id.includes('node_modules/scheduler/')) {
+            return 'react-vendor'
+          }
+          // viem — large, stable
+          if (id.includes('node_modules/viem/') ||
+              id.includes('node_modules/@noble/') ||
+              id.includes('node_modules/@scure/')) {
+            return 'viem-vendor'
+          }
+          // wagmi — depends on viem
+          if (id.includes('node_modules/wagmi/') ||
+              id.includes('node_modules/@wagmi/')) {
+            return 'wagmi-vendor'
+          }
+          // tanstack query
+          if (id.includes('node_modules/@tanstack/')) {
+            return 'query-vendor'
+          }
           // UI libs
-          'ui-vendor': ['framer-motion', 'lucide-react', 'sonner', 'clsx', 'tailwind-merge'],
+          if (id.includes('node_modules/framer-motion/') ||
+              id.includes('node_modules/lucide-react/') ||
+              id.includes('node_modules/sonner/') ||
+              id.includes('node_modules/clsx/') ||
+              id.includes('node_modules/tailwind-merge/')) {
+            return 'ui-vendor'
+          }
         },
       },
     },

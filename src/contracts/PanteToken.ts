@@ -12,13 +12,18 @@ export const PANTE_NAME = 'Pante'
 export const PANTE_TOTAL_SUPPLY = '1000000000' // 1 billion
 export const PANTE_LOGO = '/pante-logo.png'
 
-/** Synthra DEX links */
+/** Arc Mainnet USDC (ERC-20 view, 6 decimals) */
+export const ARC_USDC_ADDRESS = '0x3600000000000000000000000000000000000000'
+
+/** Synthra DEX links — USDC ↔ PANTE pre-filled */
 export const SYNTHRA_LAUNCHPAD_URL =
   'https://app.synthra.org/#/launchpad/5042/0xafad8536f3511b3f7bee6f3ba4b74dee699d5645?chain=arc'
+// Swap: USDC → PANTE (inputCurrency = USDC on Arc, outputCurrency = PANTE)
 export const SYNTHRA_SWAP_URL =
-  'https://app.synthra.org/#/swap?chain=arc&outputCurrency=0xafad8536f3511b3f7bee6f3ba4b74dee699d5645'
+  `https://app.synthra.org/#/swap?chain=arc&inputCurrency=0x3600000000000000000000000000000000000000&outputCurrency=0xafad8536f3511b3f7bee6f3ba4b74dee699d5645`
+// Add Liquidity: USDC + PANTE pair (v2 pool)
 export const SYNTHRA_POOL_URL =
-  'https://app.synthra.org/#/pools?chain=arc&token=0xafad8536f3511b3f7bee6f3ba4b74dee699d5645'
+  `https://app.synthra.org/#/add/v2/0x3600000000000000000000000000000000000000/0xafad8536f3511b3f7bee6f3ba4b74dee699d5645?chain=arc`
 export const ARC_EXPLORER_URL =
   'https://explorer.arc.io/address/0xafad8536f3511b3f7bee6f3ba4b74dee699d5645'
 

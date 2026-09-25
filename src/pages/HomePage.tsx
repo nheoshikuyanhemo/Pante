@@ -163,9 +163,9 @@ export function HomePage() {
           <div className="pante-buy-card">
             <div className="pante-buy-icon"><TrendingUp size={32} /></div>
             <h3>Synthra Swap</h3>
-            <p>Swap USDC or other Arc tokens for PANTE on Synthra's DEX after listing.</p>
+            <p>Swap USDC → PANTE directly. Arc mainnet pair pre-selected, ready to trade.</p>
             <a href={SYNTHRA_SWAP_URL} target="_blank" rel="noopener" className="pante-dex-btn pante-dex-btn--secondary">
-              Swap on Synthra <ExternalLink size={14} />
+              USDC → PANTE <ExternalLink size={14} />
             </a>
           </div>
           <div className="pante-buy-card">

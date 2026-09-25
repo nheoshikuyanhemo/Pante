@@ -11,9 +11,9 @@ import { useReadContract } from 'wagmi'
 type Tab = 'buy' | 'swap' | 'pool'
 
 const TABS: { id: Tab; label: string; icon: React.ReactNode; url: string }[] = [
-  { id: 'buy',  label: 'Buy / Launchpad', icon: <ShoppingCart size={14} />, url: SYNTHRA_LAUNCHPAD_URL },
-  { id: 'swap', label: 'Swap',            icon: <TrendingUp   size={14} />, url: SYNTHRA_SWAP_URL },
-  { id: 'pool', label: 'Add Liquidity',   icon: <Droplets     size={14} />, url: SYNTHRA_POOL_URL },
+  { id: 'buy',  label: 'Buy / Launchpad',       icon: <ShoppingCart size={14} />, url: SYNTHRA_LAUNCHPAD_URL },
+  { id: 'swap', label: 'Swap USDC → PANTE',    icon: <TrendingUp   size={14} />, url: SYNTHRA_SWAP_URL },
+  { id: 'pool', label: 'USDC + PANTE Liquidity', icon: <Droplets   size={14} />, url: SYNTHRA_POOL_URL },
 ]
 
 // ── Live PANTE balance in tab bar ─────────────────────────────────────────

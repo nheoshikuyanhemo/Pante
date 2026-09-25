@@ -199,6 +199,7 @@ body {
   text-align: center;
   padding: 3rem 2rem 2.5rem;
   border-bottom: 1px solid var(--pante-orange-border);
+  max-width: 900px; margin: 0 auto; width: 100%;
 }
 .pante-hero-banner {
   width: 100%; max-height: 55vh; object-fit: contain;
@@ -428,8 +429,11 @@ body {
 /* ── DEX fullscreen layout ───────────────────────────────────────── */
 .pante-dex-fullpage {
   display: flex; flex-direction: column;
-  height: calc(100dvh - 54px); /* 54px = header */
+  height: calc(100dvh - 54px);
   overflow: hidden;
+}
+@media (max-width: 640px) {
+  .pante-dex-fullpage { height: calc(100dvh - 58px); }
 }
 .pante-dex-tabbar {
   display: flex; align-items: center; gap: 0.35rem;
@@ -449,11 +453,12 @@ body {
   position: relative; min-height: 0;
 }
 .pante-dex-frame-bar {
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.3rem 0.8rem;
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.25rem 0.8rem;
   background: rgba(255,255,255,0.02);
   border-bottom: 1px solid rgba(255,255,255,0.05);
-  font-size: 0.78rem; flex-shrink: 0; flex-wrap: wrap;
+  font-size: 0.78rem; flex-shrink: 0;
+  flex-wrap: nowrap; overflow: hidden;
 }
 .pante-dex-frame-url {
   display: flex; align-items: center; gap: 0.35rem; color: var(--pante-muted);
@@ -929,9 +934,11 @@ body {
 }
 .pante-contract-row {
   display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 0.4rem;
-  padding-bottom: 0.6rem; border-bottom: 1px solid rgba(255,149,0,0.1);
+  flex-wrap: wrap; gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,149,0,0.1);
   font-size: 0.9rem;
+  min-height: 2.2rem;
 }
 .pante-contract-row:last-child { border-bottom: none; padding-bottom: 0; }
 .pante-contract-label { color: var(--pante-muted); font-size: 0.82rem; white-space: nowrap; }

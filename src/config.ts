@@ -29,7 +29,7 @@ export const ARC_MAINNET_CHAIN_ID = 5042
 
 // ── WalletConnect projectId ──────────────────────────────────────────────────
 // Registered at cloud.reown.com for pante.vercel.app
-const WC_PROJECT_ID = '2f05ae7f1116030fde2d36508f472bfb'
+const WC_PROJECT_ID = '17e1a3b695d76f2fe901e769d20b1a86'
 
 // ── Reown AppKit networks ────────────────────────────────────────────────────
 // AppKit requires @reown/appkit/networks shape — wrap our custom chain
